@@ -11,11 +11,13 @@
     "require": {
         "php": "^8.3",
         "laravel/framework": "^13.0",
-        "laravel/tinker": "^3.0"
+        "laravel/tinker": "^3.0",
+        "midtrans/midtrans-php": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
         "laravel/boost": "^2.0",
+        "laravel/breeze": "*",
         "laravel/pail": "^1.2.5",
         "laravel/pint": "^1.27",
         "mockery/mockery": "^1.6",
