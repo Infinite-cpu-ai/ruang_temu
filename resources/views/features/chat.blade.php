@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.landing')
 
 @section('content')
 <div class="max-w-7xl mx-auto h-[calc(100vh-160px)] py-6 px-4 sm:px-6 lg:px-8">
