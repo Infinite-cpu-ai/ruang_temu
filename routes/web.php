@@ -20,7 +20,7 @@ Route::get('/pricing', [FeatureController::class, 'pricing'])->name('features.pr
 // Protected Routes (Require Authentication)
 Route::middleware(['auth', 'verified'])->group(function () {
     // Chat Routes
-    Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
+    Route::get('/chat/{architect_id?}', [ChatController::class, 'index'])->name('chat.index');
     Route::post('/chat/send', [ChatController::class, 'sendMessage'])->name('chat.send');
     Route::get('/chat/messages/{receiverId}', [ChatController::class, 'fetchMessages'])->name('chat.fetch');
 
