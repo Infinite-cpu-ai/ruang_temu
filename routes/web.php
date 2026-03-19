@@ -8,6 +8,7 @@ use App\Http\Controllers\ProfileController;
 
 // Public Static Pages
 Route::get('/', function () { return view('home'); })->name('home');
+Route::get('/needs', function () { return view('needs'); })->name('needs');
 Route::get('/about', function () { return view('about'); })->name('about');
 Route::get('/contact', function () { return view('contact'); })->name('contact');
 
