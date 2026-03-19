@@ -2,10 +2,8 @@
     <div class="pt-8 pb-4">
         <div
             id="feature-carousel"
-            class="flex items-center justify-center gap-10 overflow-x-auto no-scrollbar cursor-grab select-none snap-x snap-mandatory px-6 py-6"
+            class="flex items-center gap-10 overflow-x-auto no-scrollbar cursor-grab select-none snap-x snap-mandatory py-6"
         >
-            <div class="feature-spacer shrink-0 w-24 snap-center" aria-hidden="true"></div>
-
             <button
                 type="button"
                 class="feature-item shrink-0 snap-center"
@@ -47,7 +45,6 @@
                 </div>
             </button>
 
-            <div class="feature-spacer shrink-0 w-24 snap-center" aria-hidden="true"></div>
         </div>
     </div>
 
@@ -148,15 +145,12 @@
             });
         }
 
-        function syncSpacers() {
-            const spacers = Array.from(slider.querySelectorAll('.feature-spacer'));
-            if (spacers.length !== 2) return;
+        function syncSidePadding() {
             const sample = items[0]?.querySelector('.feature-circle');
             const sampleWidth = sample ? sample.getBoundingClientRect().width : 56;
-            const width = Math.max(0, (slider.clientWidth / 2) - (sampleWidth / 2));
-            spacers.forEach((s) => {
-                s.style.width = width + 'px';
-            });
+            const pad = Math.max(0, (slider.clientWidth / 2) - (sampleWidth / 2));
+            slider.style.paddingLeft = pad + 'px';
+            slider.style.paddingRight = pad + 'px';
         }
 
         function findClosestToCenter() {
@@ -237,15 +231,19 @@
         });
 
         window.addEventListener('load', () => {
-            syncSpacers();
+            syncSidePadding();
             const defaultBtn = items.find((b) => b.dataset.feature === 'profil') || items[0];
             const scrollTo = defaultBtn.offsetLeft - (slider.clientWidth / 2) + (defaultBtn.offsetWidth / 2);
             slider.scrollLeft = scrollTo;
             setActive(defaultBtn.dataset.feature);
+            scheduleCenterCheck();
         });
 
         window.addEventListener('resize', () => {
-            syncSpacers();
+            syncSidePadding();
+            const current = items.find((b) => b.dataset.feature === (activeId || 'profil')) || items[0];
+            const scrollTo = current.offsetLeft - (slider.clientWidth / 2) + (current.offsetWidth / 2);
+            slider.scrollLeft = scrollTo;
             scheduleCenterCheck();
         });
     })();
