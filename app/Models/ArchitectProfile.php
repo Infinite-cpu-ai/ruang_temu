@@ -8,11 +8,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class ArchitectProfile extends Model
 {
     protected $fillable = [
-        'user_id', 'specialization', 'price_per_m2', 
-        'rating', 'location', 'style', 'portfolio_images'
+        'user_id',
+        'specialization',
+        'project_types',
+        'price_per_m2',
+        'rating',
+        'location',
+        'style',
+        'portfolio_images',
     ];
 
     protected $casts = [
+        'project_types' => 'array',
         'portfolio_images' => 'array', // Automatically cast JSON to array
     ];
 
