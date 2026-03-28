@@ -114,12 +114,12 @@
 
         order.forEach((id, pos) => {
             const btn      = btnMap[id];
-            const isCenter = pos === 1;
+            const isCenter = pos === 1; // Index 1 selalu yang di tengah
+            
+            // Menggunakan class CSS kamu: is-active dan is-side
             btn.classList.toggle('is-active', isCenter);
             btn.classList.toggle('is-side',   !isCenter);
-            btn.querySelectorAll('path').forEach(p => {
-                p.setAttribute('stroke-width', isCenter ? '2' : '1.5');
-            });
+            
             track.appendChild(btn);
         });
 
@@ -141,11 +141,22 @@
         }, 200);
     }
 
+    // --- INI BAGIAN YANG DIPERBAIKI ---
     function setActive(clickedId) {
         const idx = order.indexOf(clickedId);
+        
+        // Jika yang diklik sudah di tengah, abaikan
         if (idx === 1) return;
-        if (idx === 0) order = [order[1], order[2], order[0]];
-        else           order = [order[2], order[0], order[1]];
+        
+        // Jika klik item KIRI (index 0), geser array ke Kanan
+        if (idx === 0) {
+            order = [order[2], order[0], order[1]];
+        } 
+        // Jika klik item KANAN (index 2), geser array ke Kiri
+        else {
+            order = [order[1], order[2], order[0]];
+        }
+        
         renderOrder();
         updateText(order[1]);
     }
