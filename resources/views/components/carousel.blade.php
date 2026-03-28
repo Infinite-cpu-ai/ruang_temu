@@ -1,50 +1,81 @@
+<style>
+    .carousel-track {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 2.5rem;
+        padding: 1.5rem 0;
+    }
+
+    .feature-item {
+        cursor: pointer;
+        flex-shrink: 0;
+        transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
+                    opacity 0.35s ease;
+    }
+
+    .feature-circle {
+        width: 3.5rem;
+        height: 3.5rem;
+        border-radius: 9999px;
+        border: 1px solid #e5e7eb;
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #9ca3af;
+        transition: all 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .feature-item.is-active .feature-circle {
+        transform: scale(1.25);
+        border-color: #111827;
+        color: #111827;
+        box-shadow: 0 10px 25px -5px rgba(0,0,0,0.15), 0 4px 10px -5px rgba(0,0,0,0.1);
+    }
+
+    .feature-item.is-side .feature-circle {
+        transform: scale(1.0);
+        opacity: 0.45;
+    }
+
+    #feature-title, #feature-desc {
+        transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+    #feature-title.changing, #feature-desc.changing {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+</style>
+
 <div class="w-full max-w-5xl mx-auto px-6">
     <div class="pt-8 pb-4">
-        <div
-            id="feature-carousel"
-            class="flex items-center gap-10 overflow-x-auto no-scrollbar cursor-grab select-none snap-x snap-mandatory py-6"
-        >
-            <button
-                type="button"
-                class="feature-item shrink-0 snap-center"
-                data-feature="pricing"
-                aria-label="Pricing"
-            >
-                <div class="feature-circle w-14 h-14 rounded-full border border-gray-200 bg-white flex items-center justify-center text-gray-700 transition-transform duration-200 scale-100">
+        <div id="feature-carousel" class="carousel-track">
+            <button type="button" class="feature-item" data-feature="pricing" aria-label="Pricing">
+                <div class="feature-circle">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                 </div>
             </button>
 
-            <button
-                type="button"
-                class="feature-item shrink-0 snap-center"
-                data-feature="profil"
-                aria-label="Profil Arsitek"
-            >
-                <div class="feature-circle w-14 h-14 rounded-full border border-gray-200 bg-white flex items-center justify-center text-gray-700 transition-transform duration-200 scale-100">
+            <button type="button" class="feature-item" data-feature="profil" aria-label="Profil Arsitek">
+                <div class="feature-circle">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                     </svg>
                 </div>
             </button>
 
-            <button
-                type="button"
-                class="feature-item shrink-0 snap-center"
-                data-feature="cari"
-                aria-label="Cari Arsitek"
-            >
-                <div class="feature-circle w-14 h-14 rounded-full border border-gray-200 bg-white flex items-center justify-center text-gray-700 transition-transform duration-200 scale-100">
+            <button type="button" class="feature-item" data-feature="cari" aria-label="Cari Arsitek">
+                <div class="feature-circle">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                     </svg>
                 </div>
             </button>
-
         </div>
     </div>
 
@@ -89,162 +120,95 @@
 </div>
 
 <script>
-    (function () {
-        const slider = document.getElementById('feature-carousel');
-        const items = Array.from(slider.querySelectorAll('.feature-item'));
-        const titleEl = document.getElementById('feature-title');
-        const descEl = document.getElementById('feature-desc');
-        const primaryEl = document.getElementById('feature-primary');
+(function () {
+    const track = document.getElementById('feature-carousel');
+    const titleEl = document.getElementById('feature-title');
+    const descEl = document.getElementById('feature-desc');
+    const primaryEl = document.getElementById('feature-primary');
 
-        const features = {
-            cari: {
-                title: 'Cari Arsitek',
-                desc: 'Penjelasan Features: Cari Arsitek sesuai Budget, Type Proyek, (hunian/Restaurant), Lokasi, Style',
-                href: @json(route('features.cari')),
-            },
-            profil: {
-                title: 'Profil Arsitek',
-                desc: 'Penjelasan Features: Portofolio, spesialisasi, harga per m2, Rating Arsitek',
-                href: @json(route('features.profil', 1)),
-            },
-            pricing: {
-                title: 'Pricing',
-                desc: 'Penjelasan Features: Terdapat simulasi harga, Harga per m2, commercial, hunian, restauran, Bundle package dll',
-                href: @json(route('features.pricing')),
-            },
-        };
+    const features = {
+        cari: {
+            title: 'Cari Arsitek',
+            desc: 'Penjelasan Features: Cari Arsitek sesuai Budget, Type Proyek, (hunian/Restaurant), Lokasi, Style',
+            href: @json(route('features.cari')),
+        },
+        profil: {
+            title: 'Profil Arsitek',
+            desc: 'Penjelasan Features: Portofolio, spesialisasi, harga per m2, Rating Arsitek',
+            href: @json(route('features.profil', 1)),
+        },
+        pricing: {
+            title: 'Pricing',
+            desc: 'Penjelasan Features: Terdapat simulasi harga, Harga per m2, commercial, hunian, restauran, Bundle package dll',
+            href: @json(route('features.pricing')),
+        },
+    };
 
-        let isDown = false;
-        let startX = 0;
-        let scrollLeft = 0;
-        let isDragging = false;
-        let raf = null;
-        let activeId = null;
+    // order[1] selalu = yang di tengah (aktif)
+    let order = ['pricing', 'profil', 'cari'];
 
-        function setActive(id) {
-            if (!features[id] || activeId === id) return;
-            activeId = id;
+    function renderOrder() {
+        // Build map: feature id → button element
+        const btnMap = {};
+        track.querySelectorAll('.feature-item').forEach(btn => {
+            btnMap[btn.dataset.feature] = btn;
+        });
 
-            const f = features[id];
+        // Re-append dalam urutan baru (DOM reorder = animasi posisi berubah via flexbox)
+        order.forEach((id, pos) => {
+            const btn = btnMap[id];
+            const isCenter = pos === 1;
+
+            track.appendChild(btn);
+            btn.classList.toggle('is-active', isCenter);
+            btn.classList.toggle('is-side', !isCenter);
+
+            btn.querySelectorAll('path').forEach(p => {
+                p.setAttribute('stroke-width', isCenter ? '2.5' : '1.5');
+            });
+        });
+    }
+
+    function updateText(id) {
+        const f = features[id];
+        if (!f) return;
+
+        titleEl.classList.add('changing');
+        descEl.classList.add('changing');
+
+        setTimeout(() => {
             titleEl.textContent = f.title;
             descEl.textContent = f.desc;
             primaryEl.setAttribute('href', f.href);
+            titleEl.classList.remove('changing');
+            descEl.classList.remove('changing');
+        }, 200);
+    }
 
-            items.forEach((btn) => {
-                const circle = btn.querySelector('.feature-circle');
-                const isActive = btn.dataset.feature === id;
+    function setActive(clickedId) {
+        const idx = order.indexOf(clickedId);
+        if (idx === 1) return; // sudah di tengah
 
-                btn.setAttribute('aria-current', isActive ? 'true' : 'false');
-
-                circle.classList.toggle('scale-125', isActive);
-                circle.classList.toggle('scale-100', !isActive);
-                circle.classList.toggle('shadow-lg', isActive);
-                circle.classList.toggle('border-gray-300', isActive);
-                circle.classList.toggle('text-gray-900', isActive);
-                circle.classList.toggle('text-gray-700', !isActive);
-            });
+        // Rotasi array supaya clickedId ke index 1
+        if (idx === 0) {
+            // klik kiri → [0,1,2] jadi [1,2,0]
+            order = [order[1], order[2], order[0]];
+        } else if (idx === 2) {
+            // klik kanan → [0,1,2] jadi [2,0,1]
+            order = [order[2], order[0], order[1]];
         }
 
-        function syncSidePadding() {
-            const sample = items[0]?.querySelector('.feature-circle');
-            const sampleWidth = sample ? sample.getBoundingClientRect().width : 56;
-            const pad = Math.max(0, (slider.clientWidth / 2) - (sampleWidth / 2));
-            slider.style.paddingLeft = pad + 'px';
-            slider.style.paddingRight = pad + 'px';
-        }
+        renderOrder();
+        updateText(order[1]);
+    }
 
-        function findClosestToCenter() {
-            const centerX = slider.scrollLeft + slider.clientWidth / 2;
-            let closest = null;
-            let closestDist = Infinity;
+    // Pasang listener
+    track.querySelectorAll('.feature-item').forEach(btn => {
+        btn.addEventListener('click', () => setActive(btn.dataset.feature));
+    });
 
-            items.forEach((btn) => {
-                const rectLeft = btn.offsetLeft;
-                const width = btn.offsetWidth;
-                const itemCenter = rectLeft + width / 2;
-                const dist = Math.abs(itemCenter - centerX);
-
-                if (dist < closestDist) {
-                    closestDist = dist;
-                    closest = btn;
-                }
-            });
-
-            if (closest) {
-                setActive(closest.dataset.feature);
-            }
-        }
-
-        function scheduleCenterCheck() {
-            if (raf) return;
-            raf = requestAnimationFrame(() => {
-                raf = null;
-                findClosestToCenter();
-            });
-        }
-
-        slider.addEventListener('scroll', scheduleCenterCheck, { passive: true });
-
-        slider.addEventListener('mousedown', (e) => {
-            isDown = true;
-            isDragging = false;
-            slider.classList.add('cursor-grabbing');
-            slider.classList.remove('cursor-grab');
-            slider.classList.remove('snap-mandatory');
-            startX = e.pageX - slider.offsetLeft;
-            scrollLeft = slider.scrollLeft;
-        });
-
-        slider.addEventListener('mouseleave', () => {
-            isDown = false;
-            slider.classList.remove('cursor-grabbing');
-            slider.classList.add('cursor-grab');
-            slider.classList.add('snap-mandatory');
-        });
-
-        window.addEventListener('mouseup', () => {
-            isDown = false;
-            slider.classList.remove('cursor-grabbing');
-            slider.classList.add('cursor-grab');
-            slider.classList.add('snap-mandatory');
-        });
-
-        slider.addEventListener('mousemove', (e) => {
-            if (!isDown) return;
-            e.preventDefault();
-            const x = e.pageX - slider.offsetLeft;
-            const walk = (x - startX) * 1.8;
-            if (Math.abs(walk) > 5) {
-                isDragging = true;
-            }
-            slider.scrollLeft = scrollLeft - walk;
-        });
-
-        items.forEach((btn) => {
-            btn.addEventListener('click', () => {
-                if (isDragging) return;
-                const target = btn;
-                const scrollTo = target.offsetLeft - (slider.clientWidth / 2) + (target.offsetWidth / 2);
-                slider.scrollTo({ left: scrollTo, behavior: 'smooth' });
-                setActive(target.dataset.feature);
-            });
-        });
-
-        window.addEventListener('load', () => {
-            syncSidePadding();
-            const defaultBtn = items.find((b) => b.dataset.feature === 'profil') || items[0];
-            const scrollTo = defaultBtn.offsetLeft - (slider.clientWidth / 2) + (defaultBtn.offsetWidth / 2);
-            slider.scrollLeft = scrollTo;
-            setActive(defaultBtn.dataset.feature);
-            scheduleCenterCheck();
-        });
-
-        window.addEventListener('resize', () => {
-            syncSidePadding();
-            const current = items.find((b) => b.dataset.feature === (activeId || 'profil')) || items[0];
-            const scrollTo = current.offsetLeft - (slider.clientWidth / 2) + (current.offsetWidth / 2);
-            slider.scrollLeft = scrollTo;
-            scheduleCenterCheck();
-        });
-    })();
+    // Init
+    renderOrder();
+    updateText('profil');
+})();
 </script>
