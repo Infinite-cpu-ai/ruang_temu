@@ -8,11 +8,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Message extends Model
 {
     protected $fillable = [
-        'sender_id', 'receiver_id', 'message', 'is_read'
+        'sender_id', 'receiver_id', 'message', 'is_read', 'delivered_at', 'read_at',
     ];
 
     protected $casts = [
         'is_read' => 'boolean',
+        'delivered_at' => 'datetime',
+        'read_at' => 'datetime',
     ];
 
     public function sender(): BelongsTo

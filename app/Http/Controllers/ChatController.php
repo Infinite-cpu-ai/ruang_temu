@@ -2,72 +2,168 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\MessageReceiptUpdated;
 use App\Events\MessageSent;
+use App\Http\Requests\MarkMessageDeliveredRequest;
+use App\Http\Requests\SendChatMessageRequest;
 use App\Models\Message;
+use App\Models\Project;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ChatController extends Controller
 {
-    public function index($architect_id = null)
+    public function index(?string $architect_id = null)
     {
         $user = Auth::user();
+        $selectedId = $architect_id !== null && $architect_id !== '' ? (int) $architect_id : null;
 
-        // Find contacts (people who sent or received messages from auth user)
-        $sentTo = Message::where('sender_id', $user->id)->pluck('receiver_id');
-        $receivedFrom = Message::where('receiver_id', $user->id)->pluck('sender_id');
+        $sentTo = Message::query()->where('sender_id', $user->id)->pluck('receiver_id');
+        $receivedFrom = Message::query()->where('receiver_id', $user->id)->pluck('sender_id');
+        $messageContactIds = $sentTo->merge($receivedFrom)->unique()->values();
 
-        $contactIds = $sentTo->merge($receivedFrom)->unique();
+        if ($user->role === 'user') {
+            $contactIds = $user->followingArchitects()
+                ->pluck('follows.architect_id')
+                ->values();
 
-        // If clicking on an architect profile, force them into the contact list
-        if ($architect_id && ! $contactIds->contains($architect_id)) {
-            $contactIds->push($architect_id);
+            if ($selectedId !== null && ! $contactIds->contains($selectedId)) {
+                $selectedId = null;
+            }
+        } elseif ($user->role === 'architect') {
+            $contactIds = $messageContactIds;
+            $clientIdsFromProjects = Project::query()
+                ->where('architect_id', $user->id)
+                ->pluck('user_id');
+            $contactIds = $contactIds->merge($clientIdsFromProjects)->unique()->values();
+
+            if ($selectedId !== null && ! $contactIds->contains($selectedId)) {
+                $contactIds->push($selectedId);
+            }
+        } else {
+            $contactIds = $messageContactIds;
+
+            if ($selectedId !== null && ! $contactIds->contains($selectedId)) {
+                $contactIds->push($selectedId);
+            }
         }
 
-        $contacts = User::whereIn('id', $contactIds)->with('architectProfile')->get();
+        $contactIds = $contactIds
+            ->map(fn ($id) => (int) $id)
+            ->filter(fn (int $id) => $id !== (int) $user->id)
+            ->unique()
+            ->values();
 
-        // Default target is the selected architect or the first contact
-        $targetId = $architect_id ?? $contacts->first()?->id;
-        $targetUser = $targetId ? User::with('architectProfile')->find($targetId) : null;
+        $contacts = User::query()
+            ->whereIn('id', $contactIds)
+            ->with('architectProfile')
+            ->orderBy('name')
+            ->get();
 
-        // Fetch messages if a target is selected
-        $messages = [];
+        $targetId = $selectedId ?? $contacts->first()?->id;
+        $targetUser = $targetId ? User::query()->with('architectProfile')->find($targetId) : null;
+
+        $messages = collect();
         if ($targetUser) {
-            $messages = Message::where(function ($query) use ($user, $targetUser) {
-                $query->where('sender_id', $user->id)
-                    ->where('receiver_id', $targetUser->id);
-            })->orWhere(function ($query) use ($user, $targetUser) {
-                $query->where('sender_id', $targetUser->id)
-                    ->where('receiver_id', $user->id);
-            })->orderBy('created_at', 'asc')->get();
+            $this->markIncomingMessagesProgress($user, $targetUser);
+
+            $messages = Message::query()
+                ->where(function ($query) use ($user, $targetUser) {
+                    $query->where('sender_id', $user->id)
+                        ->where('receiver_id', $targetUser->id);
+                })
+                ->orWhere(function ($query) use ($user, $targetUser) {
+                    $query->where('sender_id', $targetUser->id)
+                        ->where('receiver_id', $user->id);
+                })
+                ->orderBy('created_at', 'asc')
+                ->get();
         }
 
         return view('features.chat', compact('contacts', 'targetUser', 'messages'));
     }
 
-    public function sendMessage(Request $request)
+    public function sendMessage(SendChatMessageRequest $request)
     {
-        $request->validate([
-            'receiver_id' => 'required|exists:users,id',
-            'message' => 'required|string',
-        ]);
-
         $message = Message::create([
             'sender_id' => Auth::id(),
-            'receiver_id' => $request->receiver_id,
-            'message' => $request->message,
+            'receiver_id' => $request->validated('receiver_id'),
+            'message' => $request->validated('message'),
             'is_read' => false,
+            'delivered_at' => null,
+            'read_at' => null,
         ]);
 
-        // Broadcast the event
         broadcast(new MessageSent($message))->toOthers();
 
         return response()->json($message);
     }
 
-    public function fetchMessages($receiverId)
+    public function markDelivered(MarkMessageDeliveredRequest $request)
     {
-        // ... handled directly in index for simplicity right now
+        $message = Message::query()->findOrFail($request->validated('message_id'));
+
+        if ((int) $message->receiver_id !== (int) Auth::id()) {
+            abort(403);
+        }
+
+        if ($message->delivered_at === null) {
+            $message->delivered_at = now();
+            $message->save();
+            broadcast(new MessageReceiptUpdated($message));
+        }
+
+        return response()->noContent();
+    }
+
+    public function fetchMessages(int $receiverId)
+    {
+        $user = Auth::user();
+
+        $messages = Message::query()
+            ->where(function ($query) use ($user, $receiverId) {
+                $query->where('sender_id', $user->id)
+                    ->where('receiver_id', $receiverId);
+            })
+            ->orWhere(function ($query) use ($user, $receiverId) {
+                $query->where('sender_id', $receiverId)
+                    ->where('receiver_id', $user->id);
+            })
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+        return response()->json($messages);
+    }
+
+    private function markIncomingMessagesProgress(User $user, User $targetUser): void
+    {
+        $messages = Message::query()
+            ->where('sender_id', $targetUser->id)
+            ->where('receiver_id', $user->id)
+            ->where(function ($query) {
+                $query->whereNull('delivered_at')
+                    ->orWhereNull('read_at');
+            })
+            ->get();
+
+        foreach ($messages as $message) {
+            $dirty = false;
+
+            if ($message->delivered_at === null) {
+                $message->delivered_at = now();
+                $dirty = true;
+            }
+
+            if ($message->read_at === null) {
+                $message->read_at = now();
+                $message->is_read = true;
+                $dirty = true;
+            }
+
+            if ($dirty) {
+                $message->save();
+                broadcast(new MessageReceiptUpdated($message));
+            }
+        }
     }
 }

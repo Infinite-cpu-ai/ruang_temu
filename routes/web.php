@@ -104,10 +104,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/reviews/{review}', [ClientReviewController::class, 'update'])->name('reviews.update');
     });
 
-    // Chat Routes
-    Route::get('/chat/{architect_id?}', [ChatController::class, 'index'])->name('chat.index');
+    // Chat Routes (specific paths before optional /chat/{id})
     Route::post('/chat/send', [ChatController::class, 'sendMessage'])->name('chat.send');
+    Route::post('/chat/receipt/delivered', [ChatController::class, 'markDelivered'])->name('chat.receipt.delivered');
     Route::get('/chat/messages/{receiverId}', [ChatController::class, 'fetchMessages'])->name('chat.fetch');
+    Route::get('/chat/{architect_id?}', [ChatController::class, 'index'])->name('chat.index');
 
     // Checkout / Payment Routes
     Route::get('/checkout/{architectId}', [CheckoutController::class, 'index'])->name('checkout.index');

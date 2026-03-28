@@ -16,8 +16,18 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
+        $user = $request->user();
+        $followedArchitects = collect();
+        if ($user->role === 'user') {
+            $followedArchitects = $user->followingArchitects()
+                ->with('architectProfile')
+                ->orderBy('name')
+                ->get();
+        }
+
         return view('profile.edit', [
-            'user' => $request->user(),
+            'user' => $user,
+            'followedArchitects' => $followedArchitects,
         ]);
     }
 

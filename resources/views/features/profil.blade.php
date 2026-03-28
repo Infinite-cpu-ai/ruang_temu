@@ -54,7 +54,7 @@
                 </a>
 
                 <a
-                    href="{{ route('chat.index', ['architect_id' => $architect->id]) }}"
+                    href="{{ route('chat.index', $architect->id) }}"
                     class="inline-flex items-center justify-center gap-3 rounded-full bg-black text-white/90 px-10 py-2.5 text-[11px] font-medium shadow-sm hover:bg-gray-900 transition w-56 max-w-full"
                 >
                     <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-white/10">
