@@ -16,6 +16,7 @@ class ArchitectProfile extends Model
         'location',
         'style',
         'portfolio_images',
+        'profile_image',
     ];
 
     protected $casts = [

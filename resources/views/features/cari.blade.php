@@ -64,6 +64,9 @@
     </form>
 
     <!-- List Arsitek -->
+    @php
+        $portfolioPlaceholder = asset('images/portofolios/portofolio_placeholder.png');
+    @endphp
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         @forelse($architects as $architect)
             @php
@@ -76,16 +79,13 @@
                 $location = data_get($architect, 'architectProfile.location', '-');
                 $style = data_get($architect, 'architectProfile.style', '-');
                 $portfolio = data_get($architect, 'architectProfile.portfolio_images', []);
-                $thumb = is_array($portfolio) && count($portfolio) > 0 ? $portfolio[0] : null;
+                $firstPortfolio = is_array($portfolio) && count($portfolio) > 0 ? $portfolio[0] : null;
+                $thumb = filled($firstPortfolio) ? $firstPortfolio : $portfolioPlaceholder;
             @endphp
 
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition">
-                <div class="h-48 bg-gray-100 flex items-center justify-center text-gray-400 overflow-hidden">
-                    @if($thumb)
-                        <img src="{{ $thumb }}" alt="Thumbnail" class="w-full h-full object-cover" />
-                    @else
-                        <span class="text-sm font-medium">[Thumbnail Portofolio]</span>
-                    @endif
+                <div class="h-48 bg-gray-100 overflow-hidden">
+                    <img src="{{ $thumb }}" alt="Portofolio {{ $name }}" class="w-full h-full object-cover" />
                 </div>
                 <div class="p-6">
                     <h3 class="text-xl font-extrabold text-gray-900 mb-1">{{ $name }}</h3>

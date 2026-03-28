@@ -11,10 +11,16 @@
             </div>
             <div class="flex-1 overflow-y-auto">
                 @forelse($contacts as $contact)
+                    @php
+                        $contactAvatar = asset('images/profiles/profile_placeholder.png');
+                        if (filled(data_get($contact->architectProfile, 'profile_image'))) {
+                            $contactAvatar = $contact->architectProfile->profile_image;
+                        }
+                    @endphp
                     <a href="{{ route('chat.index', $contact->id) }}" class="block p-4 border-b border-gray-100 {{ $targetUser?->id === $contact->id ? 'bg-indigo-50' : 'hover:bg-gray-100' }} cursor-pointer transition">
                         <div class="flex items-center">
-                            <div class="w-10 h-10 bg-indigo-200 rounded-full flex-shrink-0 flex items-center justify-center font-bold text-indigo-700">
-                                {{ substr($contact->name, 0, 1) }}
+                            <div class="w-10 h-10 rounded-full flex-shrink-0 overflow-hidden border border-gray-200 bg-gray-50">
+                                <img src="{{ $contactAvatar }}" alt="" class="w-full h-full object-cover" />
                             </div>
                             <div class="ml-3">
                                 <p class="text-sm font-semibold text-gray-900">{{ $contact->name }}</p>
@@ -33,9 +39,17 @@
         <!-- Chat Window (Right Sidebar) -->
         <div class="w-2/3 flex flex-col bg-white">
             @if($targetUser)
+            @php
+                $headerAvatar = asset('images/profiles/profile_placeholder.png');
+                if (filled(data_get($targetUser->architectProfile, 'profile_image'))) {
+                    $headerAvatar = $targetUser->architectProfile->profile_image;
+                }
+            @endphp
             <div class="p-4 border-b border-gray-200 flex items-center justify-between bg-white shadow-sm z-10">
                 <div class="flex items-center">
-                    <div class="w-10 h-10 bg-indigo-200 rounded-full flex items-center justify-center font-bold text-indigo-700">{{ substr($targetUser->name, 0, 1) }}</div>
+                    <div class="w-10 h-10 rounded-full overflow-hidden border border-gray-200 bg-gray-50 shrink-0">
+                        <img src="{{ $headerAvatar }}" alt="" class="w-full h-full object-cover" />
+                    </div>
                     <div class="ml-3">
                         <p class="text-sm font-bold text-gray-900">{{ $targetUser->name }}</p>
                         <p class="text-xs text-green-500 font-medium">Active (WebSocket)</p>

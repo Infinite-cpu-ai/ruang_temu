@@ -1,116 +1,136 @@
 @extends('layouts.landing')
 
 @section('content')
-<div class="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-    <div class="text-center mb-12">
-        <h1 class="text-3xl font-bold text-gray-900">Estimasi Biaya Desain</h1>
-        <p class="text-gray-500 mt-2">Ketahui perkiraan biaya desain arsitektur sebelum memulai proyek impian Anda.</p>
+
+<div class="max-w-3xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
+
+    {{-- Header --}}
+    <div class="text-center mb-14">
+        <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-900">Estimasi Biaya</h1>
+        <p class="text-gray-400 text-sm mt-3 max-w-md mx-auto">
+            Perkiraan biaya jasa desain arsitektur sebelum kamu memulai proyek.
+        </p>
     </div>
 
-    <div class="bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10 text-sm">
-            <div class="p-6 bg-indigo-50/50 rounded-xl border border-indigo-100 hover:shadow-md transition">
-                <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4 text-indigo-600">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-                </div>
-                <h3 class="font-bold text-indigo-900 text-xl mb-2">Rumah Hunian</h3>
-                <p class="text-indigo-700/80 leading-relaxed">Estimasi desain rumah tinggal umumnya lebih terjangkau. Fokus pada kenyamanan keluarga, sirkulasi udara/cahaya, dan zonasi privat vs publik.</p>
-                <div class="mt-5 pt-4 border-t border-indigo-200/50">
-                    <p class="font-bold text-indigo-900 flex items-center">
-                        <svg class="w-5 h-5 mr-2 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        Rataan: Rp 100k - 250k / m²
-                    </p>
-                </div>
+    {{-- Tipe Proyek --}}
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12">
+
+        <div class="type-card">
+            <div class="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-600 mb-4">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                </svg>
             </div>
-            <div class="p-6 bg-emerald-50/50 rounded-xl border border-emerald-100 hover:shadow-md transition">
-                <div class="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center mb-4 text-emerald-600">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
-                </div>
-                <h3 class="font-bold text-emerald-900 text-xl mb-2">Komersial / Ruang Usaha</h3>
-                <p class="text-emerald-700/80 leading-relaxed">Fokus pada alur pengunjung (flow), efisiensi ruang komersil, utilitas kompleks, ME (Mechanical Electrical) & identitas branding (Facade).</p>
-                <div class="mt-5 pt-4 border-t border-emerald-200/50">
-                    <p class="font-bold text-emerald-900 flex items-center">
-                        <svg class="w-5 h-5 mr-2 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        Rataan: Rp 200k - 500k / m²
-                    </p>
-                </div>
+            <h3 class="font-bold text-gray-900 text-lg mb-1">Rumah Hunian</h3>
+            <p class="text-gray-400 text-sm leading-relaxed mb-4">
+                Fokus pada kenyamanan keluarga, sirkulasi udara dan cahaya, serta zonasi privat dan publik.
+            </p>
+            <div class="pt-4 border-t border-gray-100">
+                <p class="text-sm font-semibold text-gray-700">Rp 100.000 – 250.000 / m²</p>
             </div>
         </div>
 
-        <div class="border-t border-gray-100 pt-10">
-            <div class="text-center mb-8">
-                <h2 class="text-2xl font-bold text-gray-900">Kalkulator Cepat</h2>
-                <p class="text-gray-500 text-sm mt-1">Gunakan slider atau input angka untuk melihat estimasi</p>
+        <div class="type-card">
+            <div class="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-600 mb-4">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                </svg>
             </div>
-            
-            <div class="flex flex-col md:flex-row gap-6 justify-center max-w-2xl mx-auto">
-                <div class="w-full md:w-1/2">
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Harga Jasa Arsitek / m²</label>
-                    <div class="relative rounded-md shadow-sm">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <span class="text-gray-500 sm:text-sm">Rp</span>
-                        </div>
-                        <input type="number" id="calc-price" class="pl-10 block w-full border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 py-3" value="150000" step="10000">
-                    </div>
-                </div>
-                <div class="w-full md:w-1/2">
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Luas Bangunan (m²)</label>
-                    <div class="relative rounded-md shadow-sm">
-                        <input type="number" id="calc-area" class="block w-full border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 py-3 pr-10" value="100" min="10">
-                        <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
-                            <span class="text-gray-500 sm:text-sm">m²</span>
-                        </div>
-                    </div>
+            <h3 class="font-bold text-gray-900 text-lg mb-1">Komersial / Ruang Usaha</h3>
+            <p class="text-gray-400 text-sm leading-relaxed mb-4">
+                Fokus pada alur pengunjung, efisiensi ruang, utilitas ME, dan identitas branding pada fasad.
+            </p>
+            <div class="pt-4 border-t border-gray-100">
+                <p class="text-sm font-semibold text-gray-700">Rp 200.000 – 500.000 / m²</p>
+            </div>
+        </div>
+
+    </div>
+
+    {{-- Kalkulator --}}
+    <div class="border border-gray-100 rounded-2xl p-8" style="box-shadow: 0px 4px 10px rgba(0,0,0,0.06);">
+
+        <div class="text-center mb-8">
+            <h2 class="text-2xl font-extrabold tracking-tight text-gray-900">Kalkulator Cepat</h2>
+            <p class="text-gray-400 text-sm mt-1">Masukkan angka untuk melihat estimasi biaya</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-xl mx-auto">
+
+            <div>
+                <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+                    Harga Jasa / m²
+                </label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-3 flex items-center text-gray-400 text-sm pointer-events-none">Rp</span>
+                    <input type="number" id="calc-price"
+                        class="calc-input pl-10"
+                        value="150000" step="10000">
                 </div>
             </div>
 
-            <div class="mt-10 max-w-xl mx-auto text-center bg-gray-900 rounded-2xl py-8 px-4 shadow-2xl relative overflow-hidden">
-                <!-- Decorative background elements -->
-                <div class="absolute top-0 left-0 w-full h-full overflow-hidden opacity-10 pointer-events-none">
-                    <div class="absolute -top-10 -right-10 w-40 h-40 bg-indigo-500 rounded-full blur-3xl"></div>
-                    <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-emerald-500 rounded-full blur-3xl"></div>
+            <div>
+                <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+                    Luas Bangunan
+                </label>
+                <div class="relative">
+                    <input type="number" id="calc-area"
+                        class="calc-input pr-12"
+                        value="100" min="10">
+                    <span class="absolute inset-y-0 right-3 flex items-center text-gray-400 text-sm pointer-events-none">m²</span>
                 </div>
-                
-                <p class="text-sm text-gray-400 font-medium tracking-wider uppercase relative z-10">Estimasi Total Biaya Desain</p>
-                <div class="flex items-center justify-center mt-3 relative z-10">
-                    <span class="text-2xl text-gray-400 font-medium mr-2">Rp</span>
-                    <h3 class="text-5xl font-extrabold text-white tracking-tight" id="calc-total">15.000.000</h3>
-                </div>
-                <p class="text-xs text-gray-500 mt-4 relative z-10">*Harga ini hanya estimasi kasar dan tidak mengikat</p>
             </div>
-            
-            <div class="mt-8 text-center">
-                <a href="{{ route('features.cari') }}" class="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 transition">
-                    Cari Arsitek Sekarang
-                    <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                </a>
-            </div>
+
         </div>
+
+        {{-- Result --}}
+        <div class="mt-8 max-w-xl mx-auto text-center bg-gray-900 rounded-2xl py-8 px-6 relative overflow-hidden">
+            {{-- subtle glow --}}
+            <div class="absolute inset-0 pointer-events-none opacity-10">
+                <div class="absolute -top-8 -right-8 w-36 h-36 bg-white rounded-full blur-3xl"></div>
+                <div class="absolute -bottom-8 -left-8 w-36 h-36 bg-white rounded-full blur-3xl"></div>
+            </div>
+
+            <p class="text-xs text-gray-500 font-medium tracking-widest uppercase relative z-10">Estimasi Total</p>
+            <div class="flex items-baseline justify-center mt-3 gap-2 relative z-10">
+                <span class="text-xl text-gray-400 font-medium">Rp</span>
+                <h3 class="text-5xl font-extrabold text-white tracking-tight" id="calc-total">15.000.000</h3>
+            </div>
+            <p class="text-xs text-gray-600 mt-4 relative z-10">*Estimasi kasar, tidak mengikat</p>
+        </div>
+
+        {{-- CTA --}}
+        <div class="mt-8 text-center">
+            <a href="{{ route('features.cari') }}"
+               class="inline-flex items-center justify-center gap-3 rounded-full bg-black text-white px-10 py-3 text-sm font-medium shadow-sm hover:bg-gray-900 transition"
+            >
+                <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-white/10">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22 2L11 13"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22 2l-7 20-4-9-9-4 20-7z"/>
+                    </svg>
+                </span>
+                Cari Arsitek Sekarang
+            </a>
+        </div>
+
     </div>
 </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const priceInput = document.getElementById('calc-price');
-        const areaInput = document.getElementById('calc-area');
-        const totalOutput = document.getElementById('calc-total');
+        const areaInput  = document.getElementById('calc-area');
+        const totalEl    = document.getElementById('calc-total');
 
         function calculate() {
             const price = parseFloat(priceInput.value) || 0;
-            const area = parseFloat(areaInput.value) || 0;
-            const total = price * area;
-            
-            // Format number directly without currency symbol since we added "Rp" separately in HTML
-            totalOutput.innerText = new Intl.NumberFormat('id-ID', {
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 0
-            }).format(total);
+            const area  = parseFloat(areaInput.value)  || 0;
+            totalEl.textContent = new Intl.NumberFormat('id-ID').format(price * area);
         }
 
         priceInput.addEventListener('input', calculate);
         areaInput.addEventListener('input', calculate);
-        
-        // Initial calc
         calculate();
     });
 </script>

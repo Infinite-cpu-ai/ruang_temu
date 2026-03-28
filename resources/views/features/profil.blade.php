@@ -9,20 +9,27 @@
     $rating = (float) ($profile?->rating ?? 0);
     $pricePerM2 = (float) ($profile?->price_per_m2 ?? 0);
     $portfolio = is_array($profile?->portfolio_images) ? $profile->portfolio_images : [];
+    $placeholderProfile = asset('images/profiles/profile_placeholder.png');
+    $placeholderPortfolio = asset('images/portofolios/portofolio_placeholder.png');
+    $profilePhotoUrl = filled(data_get($profile, 'profile_image'))
+        ? data_get($profile, 'profile_image')
+        : $placeholderProfile;
+    $portfolioItems = collect($portfolio)->filter(fn ($url) => filled($url))->values();
 @endphp
 
 <section class="pt-10 pb-16">
     <div class="max-w-5xl mx-auto px-6">
         <div class="text-center">
             <div class="flex items-center justify-center gap-10 pb-6">
-                <div class="w-14 h-14 rounded-full border border-gray-200 bg-white"></div>
-                <div class="w-20 h-20 rounded-full border border-gray-300 bg-white shadow-lg flex items-center justify-center">
-                    <svg class="w-8 h-8 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                    </svg>
+                <div class="w-14 h-14 rounded-full border border-gray-200 bg-gray-50 overflow-hidden shrink-0" aria-hidden="true"></div>
+                <div class="w-20 h-20 rounded-full border-2 border-gray-200 bg-white shadow-lg overflow-hidden shrink-0 ring-4 ring-gray-50">
+                    <img
+                        src="{{ $profilePhotoUrl }}"
+                        alt="{{ $architect->name }}"
+                        class="w-full h-full object-cover"
+                    />
                 </div>
-                <div class="w-14 h-14 rounded-full border border-gray-200 bg-white"></div>
+                <div class="w-14 h-14 rounded-full border border-gray-200 bg-gray-50 overflow-hidden shrink-0" aria-hidden="true"></div>
             </div>
 
             <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-900">
@@ -158,17 +165,23 @@
             </div>
 
             <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                @forelse($portfolio as $image)
-                    <div class="aspect-[4/3] rounded-2xl border border-gray-100 bg-gray-50 overflow-hidden shadow-sm">
-                        <img src="{{ $image }}" alt="Portfolio" class="w-full h-full object-cover" />
-                    </div>
-                @empty
-                    @for($i=1; $i<=6; $i++)
-                        <div class="aspect-[4/3] rounded-2xl border border-gray-100 bg-gray-100/70 flex items-center justify-center text-gray-400 font-semibold shadow-sm">
-                            Portfolio {{ $i }}
+                @if ($portfolioItems->isEmpty())
+                    @foreach (range(1, 6) as $_)
+                        <div class="aspect-[4/3] rounded-2xl border border-gray-100 bg-gray-50 overflow-hidden shadow-sm">
+                            <img
+                                src="{{ $placeholderPortfolio }}"
+                                alt="Portofolio placeholder"
+                                class="w-full h-full object-cover"
+                            />
                         </div>
-                    @endfor
-                @endforelse
+                    @endforeach
+                @else
+                    @foreach ($portfolioItems as $image)
+                        <div class="aspect-[4/3] rounded-2xl border border-gray-100 bg-gray-50 overflow-hidden shadow-sm">
+                            <img src="{{ $image }}" alt="Portofolio" class="w-full h-full object-cover" />
+                        </div>
+                    @endforeach
+                @endif
             </div>
         </div>
     </div>
