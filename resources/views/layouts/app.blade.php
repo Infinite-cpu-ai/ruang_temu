@@ -12,12 +12,7 @@
     
     <!-- Optional: Inter Font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-        /* Hide scrollbar for carousel */
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-    </style>
+    <link rel="stylesheet" href="{{ asset('styles/style.css') }}">
 </head>
 <body class="bg-gray-50 text-gray-900 antialiased flex flex-col min-h-screen">
 

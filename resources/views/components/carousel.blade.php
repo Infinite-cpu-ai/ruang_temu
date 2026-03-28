@@ -1,81 +1,37 @@
-<style>
-    .carousel-track {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 2.5rem;
-        padding: 1.5rem 0;
-    }
-
-    .feature-item {
-        cursor: pointer;
-        flex-shrink: 0;
-        transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
-                    opacity 0.35s ease;
-    }
-
-    .feature-circle {
-        width: 3.5rem;
-        height: 3.5rem;
-        border-radius: 9999px;
-        border: 1px solid #e5e7eb;
-        background: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #9ca3af;
-        transition: all 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    .feature-item.is-active .feature-circle {
-        transform: scale(1.25);
-        border-color: #111827;
-        color: #111827;
-        box-shadow: 0 10px 25px -5px rgba(0,0,0,0.15), 0 4px 10px -5px rgba(0,0,0,0.1);
-    }
-
-    .feature-item.is-side .feature-circle {
-        transform: scale(1.0);
-        opacity: 0.45;
-    }
-
-    #feature-title, #feature-desc {
-        transition: opacity 0.2s ease, transform 0.2s ease;
-    }
-    #feature-title.changing, #feature-desc.changing {
-        opacity: 0;
-        transform: translateY(6px);
-    }
-</style>
-
 <div class="w-full max-w-5xl mx-auto px-6">
     <div class="pt-8 pb-4">
         <div id="feature-carousel" class="carousel-track">
+
+            <div class="ghost-circle"></div>
+
             <button type="button" class="feature-item" data-feature="pricing" aria-label="Pricing">
                 <div class="feature-circle">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                 </div>
             </button>
 
             <button type="button" class="feature-item" data-feature="profil" aria-label="Profil Arsitek">
                 <div class="feature-circle">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                     </svg>
                 </div>
             </button>
 
             <button type="button" class="feature-item" data-feature="cari" aria-label="Cari Arsitek">
                 <div class="feature-circle">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                     </svg>
                 </div>
             </button>
+
+            <div class="ghost-circle"></div>
+
         </div>
     </div>
 
@@ -95,8 +51,8 @@
             >
                 <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-white/10">
                     <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22 2L11 13"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22 2l-7 20-4-9-9-4 20-7z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22 2L11 13"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22 2l-7 20-4-9-9-4 20-7z"/>
                     </svg>
                 </span>
                 Get Started
@@ -109,8 +65,8 @@
             >
                 <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-white/10">
                     <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5a3 3 0 006 0"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5a3 3 0 006 0"/>
                     </svg>
                 </span>
                 Alur Pemesanan
@@ -121,93 +77,85 @@
 
 <script>
 (function () {
-    const track = document.getElementById('feature-carousel');
-    const titleEl = document.getElementById('feature-title');
-    const descEl = document.getElementById('feature-desc');
+    const track     = document.getElementById('feature-carousel');
+    const titleEl   = document.getElementById('feature-title');
+    const descEl    = document.getElementById('feature-desc');
     const primaryEl = document.getElementById('feature-primary');
 
     const features = {
         cari: {
-            title: 'Cari Arsitek',
-            desc: 'Penjelasan Features: Cari Arsitek sesuai Budget, Type Proyek, (hunian/Restaurant), Lokasi, Style',
-            href: @json(route('features.cari')),
+            title : 'Cari Arsitek',
+            desc  : 'Penjelasan Features: Cari Arsitek sesuai Budget, Type Proyek, (hunian/Restaurant), Lokasi, Style',
+            href  : @json(route('features.cari')),
         },
         profil: {
-            title: 'Profil Arsitek',
-            desc: 'Penjelasan Features: Portofolio, spesialisasi, harga per m2, Rating Arsitek',
-            href: @json(route('features.profil', 1)),
+            title : 'Profil Arsitek',
+            desc  : 'Penjelasan Features: Portofolio, spesialisasi, harga per m2, Rating Arsitek',
+            href  : @json(route('features.profil', 1)),
         },
         pricing: {
-            title: 'Pricing',
-            desc: 'Penjelasan Features: Terdapat simulasi harga, Harga per m2, commercial, hunian, restauran, Bundle package dll',
-            href: @json(route('features.pricing')),
+            title : 'Pricing',
+            desc  : 'Penjelasan Features: Terdapat simulasi harga, Harga per m2, commercial, hunian, restauran, Bundle package dll',
+            href  : @json(route('features.pricing')),
         },
     };
 
-    // order[1] selalu = yang di tengah (aktif)
     let order = ['pricing', 'profil', 'cari'];
 
     function renderOrder() {
-        // Build map: feature id → button element
+        const ghosts = Array.from(track.querySelectorAll('.ghost-circle'));
         const btnMap = {};
         track.querySelectorAll('.feature-item').forEach(btn => {
             btnMap[btn.dataset.feature] = btn;
         });
 
-        // Re-append dalam urutan baru (DOM reorder = animasi posisi berubah via flexbox)
+        track.innerHTML = '';
+        track.appendChild(ghosts[0]);
+
         order.forEach((id, pos) => {
-            const btn = btnMap[id];
+            const btn      = btnMap[id];
             const isCenter = pos === 1;
-
-            track.appendChild(btn);
             btn.classList.toggle('is-active', isCenter);
-            btn.classList.toggle('is-side', !isCenter);
-
+            btn.classList.toggle('is-side',   !isCenter);
             btn.querySelectorAll('path').forEach(p => {
-                p.setAttribute('stroke-width', isCenter ? '2.5' : '1.5');
+                p.setAttribute('stroke-width', isCenter ? '2' : '1.5');
             });
+            track.appendChild(btn);
         });
+
+        track.appendChild(ghosts[1]);
+        attachListeners();
     }
 
     function updateText(id) {
         const f = features[id];
         if (!f) return;
-
-        titleEl.classList.add('changing');
-        descEl.classList.add('changing');
-
+        titleEl.classList.add('fading');
+        descEl.classList.add('fading');
         setTimeout(() => {
             titleEl.textContent = f.title;
-            descEl.textContent = f.desc;
+            descEl.textContent  = f.desc;
             primaryEl.setAttribute('href', f.href);
-            titleEl.classList.remove('changing');
-            descEl.classList.remove('changing');
+            titleEl.classList.remove('fading');
+            descEl.classList.remove('fading');
         }, 200);
     }
 
     function setActive(clickedId) {
         const idx = order.indexOf(clickedId);
-        if (idx === 1) return; // sudah di tengah
-
-        // Rotasi array supaya clickedId ke index 1
-        if (idx === 0) {
-            // klik kiri → [0,1,2] jadi [1,2,0]
-            order = [order[1], order[2], order[0]];
-        } else if (idx === 2) {
-            // klik kanan → [0,1,2] jadi [2,0,1]
-            order = [order[2], order[0], order[1]];
-        }
-
+        if (idx === 1) return;
+        if (idx === 0) order = [order[1], order[2], order[0]];
+        else           order = [order[2], order[0], order[1]];
         renderOrder();
         updateText(order[1]);
     }
 
-    // Pasang listener
-    track.querySelectorAll('.feature-item').forEach(btn => {
-        btn.addEventListener('click', () => setActive(btn.dataset.feature));
-    });
+    function attachListeners() {
+        track.querySelectorAll('.feature-item').forEach(btn => {
+            btn.onclick = () => setActive(btn.dataset.feature);
+        });
+    }
 
-    // Init
     renderOrder();
     updateText('profil');
 })();

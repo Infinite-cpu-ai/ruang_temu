@@ -1,18 +1,38 @@
 @extends('layouts.landing')
 
 @section('content')
-<div class="max-w-3xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
-    <h1 class="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
-                        <span class="block xl:inline">LOGO</span>
-                        <span class="block xl:inline">RUANG TEMU</span>
-                    </h1>
-    <div class="bg-white shadow rounded-lg p-8 text-center border border-gray-100">
-        <p class="text-gray-600 mb-4">Punya pertanyaan atau masukan? Jangan ragu untuk menghubungi tim support kami.</p>
-        <div class="space-y-4 text-lg">
-            <p><span class="font-semibold text-gray-900">Email:</span> hello@ruangtemu.com</p>
-            <p><span class="font-semibold text-gray-900">Telepon:</span> +62 812 3456 7890</p>
-            <p><span class="font-semibold text-gray-900">Alamat:</span> Gedung Arsitektur Lt. 3, Jakarta Selatan</p>
-        </div>
+<div class="min-h-screen flex flex-col items-center justify-start pt-32 px-4">
+    
+    {{-- Logo & Brand --}}
+    <div class="text-center mb-10">
+        <h1 class="text-6xl font-black tracking-tight text-gray-900 leading-none">
+            LOGO
+        </h1>
+        <h2 class="text-5xl font-black tracking-tight text-gray-900 leading-none mt-2">
+            RUANG TEMU
+        </h2>
     </div>
+
+    {{-- Contact Info - Horizontal --}}
+    <div class="flex flex-wrap justify-center gap-8 text-gray-400 text-sm mb-12">
+        <span>Instagram: ...</span>
+        <span>Gmail: ...</span>
+        <span>Fax: ...</span>
+        <span>Linkidn: ...</span>
+    </div>
+
+    {{-- CTA Button --}}
+    <a href="#"
+       class="inline-flex items-center gap-3 bg-black text-white text-sm font-medium px-6 py-3 rounded-full hover:bg-gray-800 transition-colors">
+        <span class="w-7 h-7 rounded-full border-2 border-white flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+        </span>
+        Find your needs
+    </a>
+
 </div>
 @endsection
