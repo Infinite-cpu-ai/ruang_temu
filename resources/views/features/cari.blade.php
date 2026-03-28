@@ -74,7 +74,7 @@
                 $name = data_get($architect, 'name', 'Arsitek');
                 $profile = data_get($architect, 'architectProfile');
                 $specialization = data_get($architect, 'architectProfile.specialization', 'Spesialisasi belum diisi');
-                $rating = (float) data_get($architect, 'architectProfile.rating', 0);
+                $rating = (float) data_get($architect, 'reviews_avg_rating', data_get($architect, 'architectProfile.rating', 0));
                 $pricePerM2 = (float) data_get($architect, 'architectProfile.price_per_m2', 0);
                 $location = data_get($architect, 'architectProfile.location', '-');
                 $style = data_get($architect, 'architectProfile.style', '-');
@@ -101,12 +101,7 @@
                     <div class="flex justify-between items-center text-sm text-gray-500 mb-6">
                         <span class="flex items-center gap-1 font-semibold text-gray-900">
                             <span class="text-gray-900">★</span>
-                            <span class="text-gray-700">
-                                {{ $rating > 0 ? number_format($rating, 1) : 'Baru' }}
-                                @if($rating > 0)
-                                    <span class="text-gray-300 font-semibold">/ 5.0</span>
-                                @endif
-                            </span>
+                            <span class="text-gray-700">{{ number_format($rating, 1) }} <span class="text-gray-300 font-semibold">/ 5.0</span></span>
                         </span>
                         <span class="font-semibold text-gray-900">
                             Rp {{ number_format($pricePerM2, 0, ',', '.') }} <span class="text-gray-400 font-medium">/ m²</span>

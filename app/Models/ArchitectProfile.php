@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ArchitectProfile extends Model
 {
@@ -17,6 +19,7 @@ class ArchitectProfile extends Model
         'style',
         'portfolio_images',
         'profile_image',
+        'timeline',
     ];
 
     protected $casts = [
@@ -27,5 +30,15 @@ class ArchitectProfile extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function portfolios(): HasMany
+    {
+        return $this->hasMany(Portfolio::class);
+    }
+
+    public function specializations(): BelongsToMany
+    {
+        return $this->belongsToMany(Specialization::class, 'architect_specialization');
     }
 }

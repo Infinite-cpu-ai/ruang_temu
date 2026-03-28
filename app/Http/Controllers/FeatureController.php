@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreArchitectReviewRequest;
+use App\Models\Project;
+use App\Models\Review;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
 class FeatureController extends Controller
@@ -17,7 +21,8 @@ class FeatureController extends Controller
 
         $architectsQuery = User::query()
             ->where('role', 'architect')
-            ->with('architectProfile');
+            ->with('architectProfile')
+            ->withAvg('reviewsAsArchitect as reviews_avg_rating', 'rating');
 
         if ($location !== '') {
             $architectsQuery->whereHas('architectProfile', function ($q) use ($location) {
@@ -98,9 +103,11 @@ class FeatureController extends Controller
         return view('features.cari', compact('architects'));
     }
 
-    public function profil($id)
+    public function profil(Request $request, $id)
     {
-        $architect = User::where('role', 'architect')->with('architectProfile')->find($id);
+        $architect = User::where('role', 'architect')
+            ->with(['architectProfile', 'reviewsAsArchitect.client'])
+            ->find($id);
 
         if (! $architect) {
             $architect = $this->dummyArchitectById((int) $id);
@@ -110,7 +117,143 @@ class FeatureController extends Controller
             abort(404);
         }
 
-        return view('features.profil', compact('architect'));
+        $reviews = collect();
+        $eligibleProjects = collect();
+        $ratingAverage = 0.0;
+        $followersCount = 0;
+        $isFollowing = false;
+
+        if ($architect instanceof User) {
+            $reviews = $architect->reviewsAsArchitect()
+                ->with(['client'])
+                ->latest()
+                ->get();
+
+            $ratingAverage = (float) $reviews->avg('rating');
+            $followersCount = $architect->followers()->count();
+
+            if ($request->user() && $request->user()->role === 'user') {
+                $eligibleProjects = Project::query()
+                    ->where('user_id', $request->user()->id)
+                    ->where('architect_id', $architect->id)
+                    ->where('status', 'completed')
+                    ->whereDoesntHave('review')
+                    ->latest()
+                    ->get();
+
+                $isFollowing = $request->user()->followingArchitects()
+                    ->where('architect_id', $architect->id)
+                    ->exists();
+            }
+        }
+
+        return view('features.profil', compact('architect', 'reviews', 'eligibleProjects', 'ratingAverage', 'followersCount', 'isFollowing'));
+    }
+
+    public function storeReview(StoreArchitectReviewRequest $request, User $architect): RedirectResponse
+    {
+        if ($architect->role !== 'architect') {
+            abort(404);
+        }
+
+        if ($request->user()?->role !== 'user') {
+            abort(403);
+        }
+
+        $project = Project::query()
+            ->where('id', $request->integer('project_id'))
+            ->where('user_id', $request->user()->id)
+            ->where('architect_id', $architect->id)
+            ->where('status', 'completed')
+            ->first();
+
+        if (! $project) {
+            return redirect()
+                ->route('features.profil', $architect->id)
+                ->with('error', 'Review hanya bisa ditulis untuk proyek yang sudah selesai dan sudah dibayar.');
+        }
+
+        if (Review::query()->where('project_id', $project->id)->exists()) {
+            return redirect()
+                ->route('features.profil', $architect->id)
+                ->with('error', 'Proyek ini sudah memiliki review.');
+        }
+
+        Review::create([
+            'project_id' => $project->id,
+            'client_id' => $request->user()->id,
+            'architect_id' => $architect->id,
+            'rating' => $request->integer('rating'),
+            'comment' => $request->string('comment')->toString(),
+        ]);
+
+        return redirect()
+            ->route('features.profil', $architect->id)
+            ->with('success', 'Review berhasil ditambahkan.');
+    }
+
+    public function updateReview(StoreArchitectReviewRequest $request, User $architect, Review $review): RedirectResponse
+    {
+        if ($architect->role !== 'architect') {
+            abort(404);
+        }
+
+        if ($request->user()?->role !== 'user') {
+            abort(403);
+        }
+
+        if ($review->client_id !== $request->user()->id || $review->architect_id !== $architect->id) {
+            abort(403);
+        }
+
+        $review->update([
+            'rating' => $request->integer('rating'),
+            'comment' => $request->string('comment')->toString(),
+        ]);
+
+        return redirect()
+            ->route('features.profil', $architect->id)
+            ->with('success', 'Review berhasil diperbarui.');
+    }
+
+    public function follow(Request $request, User $architect): RedirectResponse
+    {
+        if ($architect->role !== 'architect') {
+            abort(404);
+        }
+
+        if ($request->user()?->role !== 'user') {
+            abort(403);
+        }
+
+        if ($request->user()->id === $architect->id) {
+            abort(403, 'Tidak bisa mengikuti diri sendiri');
+        }
+
+        if (! $request->user()->followingArchitects()->where('architect_id', $architect->id)->exists()) {
+            $request->user()->followingArchitects()->attach($architect->id);
+        }
+
+        return redirect()
+            ->route('features.profil', $architect->id)
+            ->with('success', 'Berhasil mengikuti arsitek ini.');
+    }
+
+    public function unfollow(Request $request, User $architect): RedirectResponse
+    {
+        if ($architect->role !== 'architect') {
+            abort(404);
+        }
+
+        if ($request->user()?->role !== 'user') {
+            abort(403);
+        }
+
+        $request->user()->followingArchitects()->detach($architect->id);
+
+        return redirect()
+            ->route('features.profil', $architect->id)
+            ->with('success', 'Berhasil berhenti mengikuti arsitek ini.');
     }
 
     public function pricing()
