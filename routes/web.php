@@ -41,12 +41,16 @@ Route::get('/pricing', [FeatureController::class, 'pricing'])->name('features.pr
 // Protected Routes (Require Authentication)
 Route::middleware(['auth', 'verified'])->group(function () {
 
-    // Client review actions from architect public profile page
+    // Client review actions from architect public profile page & checkout
     Route::middleware('can:client')->group(function () {
         Route::post('/arsitek/{architect}/reviews', [FeatureController::class, 'storeReview'])->name('features.reviews.store');
         Route::put('/arsitek/{architect}/reviews/{review}', [FeatureController::class, 'updateReview'])->name('features.reviews.update');
+        Route::get('/arsitek/{architect}/follow', [FeatureController::class, 'followFromLink'])->name('features.follow.link');
         Route::post('/arsitek/{architect}/follow', [FeatureController::class, 'follow'])->name('features.follow');
         Route::post('/arsitek/{architect}/unfollow', [FeatureController::class, 'unfollow'])->name('features.unfollow');
+
+        Route::get('/checkout/{architect}', [CheckoutController::class, 'index'])->name('checkout.index');
+        Route::post('/checkout/process', [CheckoutController::class, 'processPayment'])->name('checkout.process');
     });
 
     // Dashboard Hub
@@ -109,10 +113,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/chat/receipt/delivered', [ChatController::class, 'markDelivered'])->name('chat.receipt.delivered');
     Route::get('/chat/messages/{receiverId}', [ChatController::class, 'fetchMessages'])->name('chat.fetch');
     Route::get('/chat/{architect_id?}', [ChatController::class, 'index'])->name('chat.index');
-
-    // Checkout / Payment Routes
-    Route::get('/checkout/{architectId}', [CheckoutController::class, 'index'])->name('checkout.index');
-    Route::post('/checkout/process', [CheckoutController::class, 'processPayment'])->name('checkout.process');
 
     // Default Breeze Profile Routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

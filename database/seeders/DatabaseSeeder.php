@@ -15,11 +15,23 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        User::factory()->client()->create([
+            'name' => 'Klien Demo',
+            'email' => 'klien@example.com',
+        ]);
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        $architect = User::factory()->architect()->create([
+            'name' => 'Arsitek Demo',
+            'email' => 'arsitek@example.com',
+        ]);
+
+        $architect->architectProfile()->create([
+            'specialization' => 'Hunian & komersial',
+            'project_types' => ['Hunian', 'Komersial'],
+            'price_per_m2' => 175000,
+            'rating' => 4.8,
+            'location' => 'Jakarta',
+            'style' => 'Modern',
         ]);
     }
 }

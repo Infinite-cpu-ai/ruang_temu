@@ -216,6 +216,33 @@ class FeatureController extends Controller
             ->with('success', 'Review berhasil diperbarui.');
     }
 
+    public function followFromLink(Request $request, User $architect): RedirectResponse
+    {
+        if ($architect->role !== 'architect') {
+            abort(404);
+        }
+
+        if (! $request->user()) {
+            return redirect()->guest(route('login'));
+        }
+
+        if ($request->user()->role !== 'user') {
+            abort(403, 'Hanya klien yang dapat mengikuti arsitek.');
+        }
+
+        if ($request->user()->id === $architect->id) {
+            abort(403, 'Tidak bisa mengikuti diri sendiri');
+        }
+
+        if (! $request->user()->followingArchitects()->where('architect_id', $architect->id)->exists()) {
+            $request->user()->followingArchitects()->attach($architect->id);
+        }
+
+        return redirect()
+            ->route('features.profil', $architect->id)
+            ->with('success', 'Berhasil mengikuti arsitek ini.');
+    }
+
     public function follow(Request $request, User $architect): RedirectResponse
     {
         if ($architect->role !== 'architect') {

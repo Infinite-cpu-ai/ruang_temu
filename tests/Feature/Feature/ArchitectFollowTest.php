@@ -41,6 +41,24 @@ test('unauthenticated user cannot follow', function () {
     $response->assertRedirectToRoute('login');
 });
 
+test('unauthenticated user is redirected to login when opening follow link in browser', function () {
+    $architect = User::factory()->create(['role' => 'architect']);
+
+    $this->get(route('features.follow.link', $architect))
+        ->assertRedirectToRoute('login');
+});
+
+test('client can follow via get link', function () {
+    $client = User::factory()->create(['role' => 'user']);
+    $architect = User::factory()->create(['role' => 'architect']);
+
+    $this->actingAs($client)
+        ->get(route('features.follow.link', $architect))
+        ->assertRedirectToRoute('features.profil', $architect->id);
+
+    expect($client->followingArchitects()->where('architect_id', $architect->id)->exists())->toBeTrue();
+});
+
 test('follower count is displayed correctly on architect profile', function () {
     $client1 = User::factory()->create(['role' => 'user']);
     $client2 = User::factory()->create(['role' => 'user']);
@@ -85,4 +103,3 @@ test('isFollowing is true when client has followed architect', function () {
 
     $response->assertViewHas('isFollowing', true);
 });
-

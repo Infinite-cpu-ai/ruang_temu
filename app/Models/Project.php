@@ -10,7 +10,7 @@ class Project extends Model
 {
     protected $fillable = [
         'user_id', 'architect_id', 'property_type',
-        'area_size', 'total_price', 'status', 'snap_token',
+        'area_size', 'price_per_m2', 'total_price', 'status', 'snap_token',
     ];
 
     public function client(): BelongsTo

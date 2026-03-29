@@ -40,12 +40,6 @@ class SendChatMessageRequest extends FormRequest
             $receiver = User::query()->find((int) $this->input('receiver_id'));
             if (! $receiver || $receiver->role !== 'architect') {
                 $validator->errors()->add('receiver_id', 'Penerima harus berupa arsitek.');
-
-                return;
-            }
-
-            if (! $auth->followingArchitects()->where('architect_id', $receiver->id)->exists()) {
-                $validator->errors()->add('receiver_id', 'Anda hanya dapat mengobrol dengan arsitek yang sudah Anda ikuti.');
             }
         });
     }

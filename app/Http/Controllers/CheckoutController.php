@@ -2,48 +2,57 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\User;
+use App\Http\Requests\ProcessCheckoutRequest;
 use App\Models\Project;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class CheckoutController extends Controller
 {
-    // Step 1: Show Order Summary Form
-    public function index($architectId)
+    public function index(User $architect): View
     {
-        // Get architect details for the summary
-        $architect = User::where('role', 'architect')->findOrFail($architectId);
-        
-        return view('features.checkout', compact('architect'));
+        if ($architect->role !== 'architect' || ! $architect->is_active) {
+            abort(404);
+        }
+
+        $architect->load('architectProfile');
+
+        $defaultPricePerM2 = (float) data_get($architect->architectProfile, 'price_per_m2', 0);
+        if ($defaultPricePerM2 <= 0) {
+            $defaultPricePerM2 = 150000;
+        }
+
+        return view('features.checkout', [
+            'architect' => $architect,
+            'defaultPricePerM2' => $defaultPricePerM2,
+        ]);
     }
 
-    // Step 2: Form Submitted -> Generate Snap Token & Return to view to pay
-    public function processPayment(Request $request)
+    public function processPayment(ProcessCheckoutRequest $request)
     {
-        $request->validate([
-            'architect_id' => 'required|exists:users,id',
-            'property_type' => 'required|string',
-            'area_size' => 'required|numeric|min:10',
-            'price_per_m2' => 'required|numeric',
-        ]);
+        $area = (float) $request->validated('area_size');
+        $pricePerM2 = (float) $request->validated('price_per_m2');
+        $totalPrice = round($area * $pricePerM2, 2);
 
-        $totalPrice = $request->area_size * $request->price_per_m2;
-
-        // Create Project in Database
         $project = Project::create([
             'user_id' => Auth::id(),
-            'architect_id' => $request->architect_id,
-            'property_type' => $request->property_type,
-            'area_size' => $request->area_size,
+            'architect_id' => $request->validated('architect_id'),
+            'property_type' => $request->propertyTypeLabel(),
+            'area_size' => (int) round($area),
+            'price_per_m2' => $pricePerM2,
             'total_price' => $totalPrice,
-            'status' => 'paid', // Langsung anggap paid untuk prototype tanpa Midtrans
+            'status' => 'paid',
         ]);
 
-        $architect = User::find($request->architect_id);
+        $architect = User::query()->with('architectProfile')->findOrFail($request->validated('architect_id'));
         $paymentSuccess = true;
 
-        // Return the view again dengan flag sukses
-        return view('features.checkout', compact('architect', 'project', 'paymentSuccess'));
+        return view('features.checkout', [
+            'architect' => $architect,
+            'defaultPricePerM2' => (float) data_get($architect->architectProfile, 'price_per_m2', $pricePerM2),
+            'project' => $project,
+            'paymentSuccess' => $paymentSuccess,
+        ]);
     }
 }

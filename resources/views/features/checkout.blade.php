@@ -1,81 +1,174 @@
 @extends('layouts.landing')
 
 @section('content')
+@php
+    $defaultPrice = $defaultPricePerM2 ?? 150000;
+@endphp
 <div class="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-    <h1 class="text-3xl font-bold text-gray-900 mb-8">Checkout & Pembayaran</h1>
+    <h1 class="text-2xl font-semibold tracking-tight text-gray-900 mb-2">Checkout & pemesanan</h1>
+    <p class="text-sm text-gray-500 mb-8">Isi detail proyek. Harga per m² default mengikuti profil arsitek (dapat diubah).</p>
 
-    <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-200">
-        
-        @if(!isset($paymentSuccess))
-            <!-- STATE 1: FORM PENGISIAN DETAIL PROYEK -->
-            <form action="{{ route('checkout.process') }}" method="POST">
+    <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-gray-100">
+        @if(empty($paymentSuccess))
+            <form
+                action="{{ route('checkout.process') }}"
+                method="POST"
+                x-data="{
+                    area: @json(old('area_size') !== null && old('area_size') !== '' ? (float) old('area_size') : null),
+                    pricePerM2: @json(old('price_per_m2') !== null && old('price_per_m2') !== '' ? (float) old('price_per_m2') : (float) $defaultPrice),
+                    formatIdr(n) {
+                        if (n === null || n === '' || isNaN(Number(n))) return '—';
+                        return new Intl.NumberFormat('id-ID').format(Math.round(Number(n)));
+                    },
+                    get total() {
+                        const a = Number(this.area);
+                        const p = Number(this.pricePerM2);
+                        if (!a || isNaN(a) || isNaN(p)) return null;
+                        return Math.round(a * p);
+                    }
+                }"
+            >
                 @csrf
                 <input type="hidden" name="architect_id" value="{{ $architect->id }}">
-                
-                <!-- Mock Price. In a real app, retrieve from ArchitectProfile -->
-                <input type="hidden" name="price_per_m2" value="150000">
 
-                <h3 class="text-xl font-semibold mb-4 border-b pb-2">Detail Arsitek</h3>
-                <p class="text-gray-700 mb-6">Anda akan memesan jasa dari <strong>{{ $architect->name ?? 'Arsitek Dummy '.request()->route('architectId') }}</strong>.</p>
+                <h2 class="text-base font-semibold text-gray-900 border-b border-gray-100 pb-2 mb-4">Arsitek</h2>
+                <p class="text-sm text-gray-600 mb-6">
+                    Anda memesan jasa dari <strong class="text-gray-900">{{ $architect->name }}</strong>.
+                </p>
 
-                <h3 class="text-xl font-semibold mb-4 border-b pb-2">Detail Properti</h3>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <h2 class="text-base font-semibold text-gray-900 border-b border-gray-100 pb-2 mb-4">Detail proyek</h2>
+
+                @if ($errors->any())
+                    <div class="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 space-y-1">
+                        @foreach ($errors->all() as $error)
+                            <p>{{ $error }}</p>
+                        @endforeach
+                    </div>
+                @endif
+
+                <fieldset class="mb-6">
+                    <legend class="text-sm font-medium text-gray-700 mb-3">Tipe proyek</legend>
+                    <div class="space-y-3">
+                        <label class="flex items-start gap-3 cursor-pointer rounded-xl border border-gray-200 p-4 has-[:checked]:border-gray-900 has-[:checked]:bg-gray-50">
+                            <input
+                                type="radio"
+                                name="property_type"
+                                value="hunian"
+                                class="mt-1 border-gray-300 text-gray-900 focus:ring-gray-900"
+                                {{ old('property_type', 'hunian') === 'hunian' ? 'checked' : '' }}
+                                required
+                            />
+                            <span>
+                                <span class="block text-sm font-medium text-gray-900">Rumah hunian</span>
+                                <span class="block text-xs text-gray-500 mt-0.5">Tempat tinggal / hunian pribadi</span>
+                            </span>
+                        </label>
+                        <label class="flex items-start gap-3 cursor-pointer rounded-xl border border-gray-200 p-4 has-[:checked]:border-gray-900 has-[:checked]:bg-gray-50">
+                            <input
+                                type="radio"
+                                name="property_type"
+                                value="komersial"
+                                class="mt-1 border-gray-300 text-gray-900 focus:ring-gray-900"
+                                {{ old('property_type') === 'komersial' ? 'checked' : '' }}
+                            />
+                            <span>
+                                <span class="block text-sm font-medium text-gray-900">Komersial / ruang usaha</span>
+                                <span class="block text-xs text-gray-500 mt-0.5">Ruko, kantor, toko, atau sejenisnya</span>
+                            </span>
+                        </label>
+                    </div>
+                </fieldset>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Tipe Properti</label>
-                        <select name="property_type" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
-                            <option value="Hunian">Rumah Hunian</option>
-                            <option value="Komersial">Komersial / Restaurant</option>
-                        </select>
+                        <label for="area_size" class="block text-sm font-medium text-gray-700 mb-2">Luas (m²)</label>
+                        <input
+                            id="area_size"
+                            type="number"
+                            name="area_size"
+                            x-model.number="area"
+                            min="1"
+                            step="1"
+                            class="w-full rounded-lg border-gray-200 shadow-sm focus:border-gray-300 focus:ring-2 focus:ring-gray-900/10 text-gray-900"
+                            placeholder="Contoh: 120"
+                            required
+                        />
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Luas Area (m2)</label>
-                        <input type="number" name="area_size" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="Contoh: 100" required min="10">
+                        <label for="price_per_m2" class="block text-sm font-medium text-gray-700 mb-2">Harga per m² (Rp)</label>
+                        <input
+                            id="price_per_m2"
+                            type="number"
+                            name="price_per_m2"
+                            x-model.number="pricePerM2"
+                            min="0"
+                            step="1000"
+                            class="w-full rounded-lg border-gray-200 shadow-sm focus:border-gray-300 focus:ring-2 focus:ring-gray-900/10 text-gray-900"
+                            required
+                        />
+                        <p class="mt-1 text-xs text-gray-500">Default dari profil arsitek: Rp {{ number_format($defaultPrice, 0, ',', '.') }}</p>
                     </div>
                 </div>
 
-                <div class="mt-8 flex justify-end">
-                    <button type="submit" class="bg-indigo-600 text-white px-6 py-3 rounded-md font-medium hover:bg-indigo-700 shadow-sm transition">
-                        Lanjut ke Ringkasan
+                <div class="rounded-xl bg-gray-50 border border-gray-100 px-4 py-3 mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                    <span class="text-sm font-medium text-gray-600">Estimasi total</span>
+                    <span class="text-lg font-semibold text-gray-900" x-text="total != null ? 'Rp ' + formatIdr(total) : '—'"></span>
+                </div>
+
+                <div class="flex justify-end">
+                    <button
+                        type="submit"
+                        class="inline-flex items-center justify-center rounded-full bg-gray-900 px-6 py-3 text-sm font-medium text-white hover:bg-gray-800 transition"
+                    >
+                        Konfirmasi pemesanan
                     </button>
                 </div>
             </form>
-
         @else
-            <!-- STATE 2: SUCCESS -->
             <div class="text-center mb-6">
-                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 mb-4">
-                    <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                <div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-green-100 mb-4">
+                    <svg class="w-7 h-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                 </div>
-                <h3 class="text-2xl font-bold text-gray-900">Pemesanan Berhasil</h3>
-                <p class="text-gray-500">Terima kasih, pembayaran untuk desain Anda telah kami terima.</p>
+                <h3 class="text-xl font-semibold text-gray-900">Pemesanan berhasil</h3>
+                <p class="text-sm text-gray-500 mt-1">Detail di bawah ini tercatat sebagai proyek Anda.</p>
             </div>
-            
-            <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mb-8 space-y-4 text-gray-700">
-                <div class="flex justify-between border-b border-gray-200 pb-2">
-                    <span class="font-medium">Arsitek:</span>
-                    <span>{{ $architect->name ?? 'Arsitek Dummy' }}</span>
+
+            <div class="rounded-xl border border-gray-100 bg-gray-50/80 p-6 mb-8 space-y-3 text-sm text-gray-700">
+                <div class="flex justify-between gap-4 border-b border-gray-200 pb-2">
+                    <span class="text-gray-500">Arsitek</span>
+                    <span class="font-medium text-gray-900 text-right">{{ $architect->name }}</span>
                 </div>
-                <div class="flex justify-between border-b border-gray-200 pb-2">
-                    <span class="font-medium">Tipe Properti:</span>
-                    <span>{{ $project->property_type }}</span>
+                <div class="flex justify-between gap-4 border-b border-gray-200 pb-2">
+                    <span class="text-gray-500">Tipe proyek</span>
+                    <span class="font-medium text-gray-900 text-right">{{ $project->property_type }}</span>
                 </div>
-                <div class="flex justify-between border-b border-gray-200 pb-2">
-                    <span class="font-medium">Luas Area:</span>
-                    <span>{{ $project->area_size }} m2</span>
+                <div class="flex justify-between gap-4 border-b border-gray-200 pb-2">
+                    <span class="text-gray-500">Luas</span>
+                    <span class="font-medium text-gray-900 text-right">{{ number_format($project->area_size, 0, ',', '.') }} m²</span>
                 </div>
-                <div class="flex justify-between text-xl font-bold text-indigo-900 pt-2">
-                    <span>Total Tagihan:</span>
+                <div class="flex justify-between gap-4 border-b border-gray-200 pb-2">
+                    <span class="text-gray-500">Harga per m²</span>
+                    <span class="font-medium text-gray-900 text-right">Rp {{ number_format((float) $project->price_per_m2, 0, ',', '.') }}</span>
+                </div>
+                <div class="flex justify-between gap-4 pt-2 text-base font-semibold text-gray-900">
+                    <span>Total</span>
                     <span>Rp {{ number_format($project->total_price, 0, ',', '.') }}</span>
                 </div>
             </div>
 
-            <div class="flex justify-center space-x-4">
-                <a href="{{ route('home') }}" class="bg-indigo-600 text-white px-8 py-3 rounded-md font-bold hover:bg-indigo-700 shadow-lg transition transform hover:scale-105">
-                    Kembali ke Beranda
+            <div class="flex flex-col sm:flex-row justify-center gap-3">
+                <a href="{{ route('client.projects.index') }}" class="inline-flex justify-center rounded-full bg-gray-900 px-6 py-3 text-sm font-medium text-white hover:bg-gray-800 transition">
+                    Lihat proyek saya
+                </a>
+                <a href="{{ route('home') }}" class="inline-flex justify-center rounded-full border border-gray-200 bg-white px-6 py-3 text-sm font-medium text-gray-900 hover:bg-gray-50 transition">
+                    Kembali ke beranda
                 </a>
             </div>
         @endif
     </div>
 </div>
+
+@if(empty($paymentSuccess))
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+@endif
 @endsection

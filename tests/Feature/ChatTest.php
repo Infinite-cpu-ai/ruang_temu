@@ -6,25 +6,21 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
-it('lists only followed architects for a client', function () {
+it('lists active architects for a client even without prior messages', function () {
     $client = User::factory()->client()->create();
-    $architectFollowed = User::factory()->architect()->create(['name' => 'Arsitek Diikuti']);
-    $architectNotFollowed = User::factory()->architect()->create(['name' => 'Arsitek Lain']);
-
-    $client->followingArchitects()->attach($architectFollowed->id);
+    $architectA = User::factory()->architect()->create(['name' => 'Arsitek Alpha']);
+    $architectB = User::factory()->architect()->create(['name' => 'Arsitek Beta']);
 
     $this->actingAs($client)
         ->get(route('chat.index'))
         ->assertSuccessful()
-        ->assertSee('Arsitek Diikuti')
-        ->assertDontSee('Arsitek Lain');
+        ->assertSee('Arsitek Alpha')
+        ->assertSee('Arsitek Beta');
 });
 
-it('opens a thread with a followed architect', function () {
+it('opens a thread with a chosen architect by id', function () {
     $client = User::factory()->client()->create();
     $architect = User::factory()->architect()->create(['name' => 'Target Arsitek']);
-
-    $client->followingArchitects()->attach($architect->id);
 
     $this->actingAs($client)
         ->get(route('chat.index', $architect->id))
@@ -32,29 +28,30 @@ it('opens a thread with a followed architect', function () {
         ->assertSee('Target Arsitek');
 });
 
-it('does not open a thread with an architect the client does not follow', function () {
+it('does not list or default to non-architect contacts for a client', function () {
     $client = User::factory()->client()->create();
-    $architect = User::factory()->architect()->create(['name' => 'Bukan Diikuti']);
+    $otherClient = User::factory()->client()->create(['name' => 'user1']);
+    $architect = User::factory()->architect()->create(['name' => 'Zebra Arsitek']);
+
+    Message::query()->create([
+        'sender_id' => $client->id,
+        'receiver_id' => $otherClient->id,
+        'message' => 'salah kirim',
+        'is_read' => false,
+        'delivered_at' => null,
+        'read_at' => null,
+    ]);
 
     $this->actingAs($client)
-        ->get(route('chat.index', $architect->id))
+        ->get(route('chat.index'))
         ->assertSuccessful()
-        ->assertDontSee('Bukan Diikuti');
+        ->assertDontSee('user1')
+        ->assertSee('Zebra Arsitek');
 });
 
-it('allows sending a message only to a followed architect', function () {
+it('allows sending a message to any architect user', function () {
     $client = User::factory()->client()->create();
     $architect = User::factory()->architect()->create();
-
-    $this->actingAs($client)
-        ->postJson(route('chat.send'), [
-            'receiver_id' => $architect->id,
-            'message' => 'Halo.',
-        ])
-        ->assertUnprocessable()
-        ->assertJsonValidationErrors(['receiver_id']);
-
-    $client->followingArchitects()->attach($architect->id);
 
     $this->actingAs($client)
         ->postJson(route('chat.send'), [
@@ -71,7 +68,6 @@ it('allows sending a message only to a followed architect', function () {
 it('lets the receiver mark a message as delivered', function () {
     $client = User::factory()->client()->create();
     $architect = User::factory()->architect()->create();
-    $client->followingArchitects()->attach($architect->id);
 
     $message = Message::create([
         'sender_id' => $client->id,
@@ -96,7 +92,6 @@ it('forbids marking delivered when not the receiver', function () {
     $client = User::factory()->client()->create();
     $architect = User::factory()->architect()->create();
     $other = User::factory()->architect()->create();
-    $client->followingArchitects()->attach($architect->id);
 
     $message = Message::create([
         'sender_id' => $client->id,
@@ -117,7 +112,6 @@ it('forbids marking delivered when not the receiver', function () {
 it('marks incoming messages as read when the recipient opens the thread', function () {
     $client = User::factory()->client()->create();
     $architect = User::factory()->architect()->create();
-    $client->followingArchitects()->attach($architect->id);
 
     $message = Message::create([
         'sender_id' => $architect->id,

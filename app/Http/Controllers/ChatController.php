@@ -23,12 +23,25 @@ class ChatController extends Controller
         $messageContactIds = $sentTo->merge($receivedFrom)->unique()->values();
 
         if ($user->role === 'user') {
-            $contactIds = $user->followingArchitects()
-                ->pluck('follows.architect_id')
-                ->values();
+            $activeArchitectIds = User::query()
+                ->where('role', 'architect')
+                ->where('is_active', true)
+                ->pluck('id');
 
-            if ($selectedId !== null && ! $contactIds->contains($selectedId)) {
-                $selectedId = null;
+            $architectPartnerIdsFromMessages = User::query()
+                ->whereIn('id', $messageContactIds)
+                ->where('role', 'architect')
+                ->pluck('id');
+
+            $contactIds = $activeArchitectIds->merge($architectPartnerIdsFromMessages)->unique()->values();
+
+            if ($selectedId !== null) {
+                $picked = User::query()->with('architectProfile')->find($selectedId);
+                if (! $picked || $picked->role !== 'architect') {
+                    $selectedId = null;
+                } elseif (! $contactIds->contains($selectedId)) {
+                    $contactIds->push($selectedId);
+                }
             }
         } elseif ($user->role === 'architect') {
             $contactIds = $messageContactIds;

@@ -36,11 +36,7 @@
                     </a>
                 @empty
                     <div class="p-6 text-center text-sm text-gray-500">
-                        @if(auth()->user()->role === 'user')
-                            Belum ada arsitek yang Anda ikuti. Buka profil arsitek dari halaman pencarian, klik Ikuti, lalu kembali ke obrolan.
-                        @else
-                            Belum ada kontak. Riwayat pesan atau proyek akan muncul di sini.
-                        @endif
+                        Belum ada kontak. Untuk klien, daftar arsitek aktif akan muncul di sini setelah tersedia di sistem.
                     </div>
                 @endforelse
             </div>
