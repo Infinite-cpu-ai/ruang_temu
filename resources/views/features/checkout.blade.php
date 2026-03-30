@@ -3,13 +3,124 @@
 @section('content')
 @php
     $defaultPrice = $defaultPricePerM2 ?? 150000;
+    $midtransReady = $midtransReady ?? true;
 @endphp
 <div class="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
     <h1 class="text-2xl font-semibold tracking-tight text-gray-900 mb-2">Checkout & pemesanan</h1>
-    <p class="text-sm text-gray-500 mb-8">Isi detail proyek. Harga per m² default mengikuti profil arsitek (dapat diubah).</p>
+    <p class="text-sm text-gray-500 mb-8">Isi detail proyek, lalu bayar lewat Midtrans Snap.</p>
 
-    <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-gray-100">
-        @if(empty($paymentSuccess))
+    @if(isset($snapToken) && isset($project))
+        {{-- Snap pembayaran --}}
+        <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-gray-100">
+            <h2 class="text-base font-semibold text-gray-900 mb-2">Pembayaran</h2>
+            <p class="text-sm text-gray-600 mb-2">
+                Proyek #{{ $project->id }} — total <strong class="text-gray-900">Rp {{ number_format($project->total_price, 0, ',', '.') }}</strong>
+            </p>
+            <p class="text-xs text-gray-500 mb-6">Jendela pembayaran Midtrans akan terbuka. Setelah selesai, Anda akan diarahkan ke halaman status.</p>
+
+            <button
+                type="button"
+                id="midtrans-pay-button"
+                class="inline-flex items-center justify-center rounded-full bg-gray-900 px-6 py-3 text-sm font-medium text-white hover:bg-gray-800 transition"
+            >
+                Bayar sekarang
+            </button>
+            <p class="mt-4 text-xs text-gray-400">
+                Mengalami masalah? <a href="{{ route('checkout.finish', $project) }}" class="underline hover:text-gray-600">Lihat status pembayaran</a>
+            </p>
+        </div>
+
+        <script src="{{ $snapScriptUrl }}" data-client-key="{{ $snapClientKey }}"></script>
+        <script>
+            (function () {
+                var token = @json($snapToken);
+                var finishUrl = @json(route('checkout.finish', $project));
+
+                function runSnap() {
+                    if (typeof snap === 'undefined') {
+                        alert('Midtrans Snap gagal dimuat. Periksa koneksi atau Client Key.');
+                        return;
+                    }
+                    snap.pay(token, {
+                        onSuccess: function () { window.location.href = finishUrl; },
+                        onPending: function () { window.location.href = finishUrl; },
+                        onError: function () { window.location.href = finishUrl; },
+                        onClose: function () { /* user closed popup */ }
+                    });
+                }
+
+                document.getElementById('midtrans-pay-button').addEventListener('click', runSnap);
+            })();
+        </script>
+    @elseif(!empty($paymentSuccess))
+        <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-gray-100">
+            <div class="text-center mb-6">
+                <div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-green-100 mb-4">
+                    <svg class="w-7 h-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900">Pembayaran berhasil</h3>
+                <p class="text-sm text-gray-500 mt-1">Proyek Anda tercatat dan dapat dilanjutkan oleh arsitek.</p>
+            </div>
+
+            <div class="rounded-xl border border-gray-100 bg-gray-50/80 p-6 mb-8 space-y-3 text-sm text-gray-700">
+                <div class="flex justify-between gap-4 border-b border-gray-200 pb-2">
+                    <span class="text-gray-500">Arsitek</span>
+                    <span class="font-medium text-gray-900 text-right">{{ $architect->name }}</span>
+                </div>
+                <div class="flex justify-between gap-4 border-b border-gray-200 pb-2">
+                    <span class="text-gray-500">Tipe proyek</span>
+                    <span class="font-medium text-gray-900 text-right">{{ $project->property_type }}</span>
+                </div>
+                <div class="flex justify-between gap-4 border-b border-gray-200 pb-2">
+                    <span class="text-gray-500">Luas</span>
+                    <span class="font-medium text-gray-900 text-right">{{ number_format($project->area_size, 0, ',', '.') }} m²</span>
+                </div>
+                <div class="flex justify-between gap-4 border-b border-gray-200 pb-2">
+                    <span class="text-gray-500">Harga per m²</span>
+                    <span class="font-medium text-gray-900 text-right">Rp {{ number_format((float) $project->price_per_m2, 0, ',', '.') }}</span>
+                </div>
+                <div class="flex justify-between gap-4 pt-2 text-base font-semibold text-gray-900">
+                    <span>Total</span>
+                    <span>Rp {{ number_format($project->total_price, 0, ',', '.') }}</span>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row justify-center gap-3">
+                <a href="{{ route('client.projects.index') }}" class="inline-flex justify-center rounded-full bg-gray-900 px-6 py-3 text-sm font-medium text-white hover:bg-gray-800 transition">
+                    Lihat proyek saya
+                </a>
+                <a href="{{ route('home') }}" class="inline-flex justify-center rounded-full border border-gray-200 bg-white px-6 py-3 text-sm font-medium text-gray-900 hover:bg-gray-50 transition">
+                    Kembali ke beranda
+                </a>
+            </div>
+        </div>
+    @elseif(!empty($paymentPending))
+        <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-amber-100 bg-amber-50/30">
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Menunggu pembayaran</h3>
+            <p class="text-sm text-gray-600 mb-6">
+                Status proyek masih <strong>pending</strong>. Jika Anda sudah menyelesaikan pembayaran di Midtrans, tunggu beberapa saat lalu segarkan halaman ini. Notifikasi dari Midtrans akan memperbarui status otomatis.
+            </p>
+            <div class="rounded-xl border border-gray-100 bg-white p-4 mb-6 text-sm text-gray-700">
+                <p><span class="text-gray-500">Order:</span> RUANGTEMU-P-{{ $project->id }}</p>
+                <p class="mt-1"><span class="text-gray-500">Total:</span> Rp {{ number_format($project->total_price, 0, ',', '.') }}</p>
+            </div>
+            <div class="flex flex-wrap gap-3">
+                <a href="{{ route('checkout.finish', $project) }}" class="inline-flex justify-center rounded-full bg-gray-900 px-6 py-3 text-sm font-medium text-white hover:bg-gray-800 transition">
+                    Segarkan status
+                </a>
+                <a href="{{ route('client.projects.index') }}" class="inline-flex justify-center rounded-full border border-gray-200 bg-white px-6 py-3 text-sm font-medium text-gray-900 hover:bg-gray-50 transition">
+                    Proyek saya
+                </a>
+            </div>
+        </div>
+    @else
+        <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-gray-100">
+            @if(!$midtransReady)
+                <div class="mb-6 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                    Midtrans belum siap: set <code class="text-xs bg-amber-100 px-1 rounded">MIDTRANS_SERVER_KEY</code> dan <code class="text-xs bg-amber-100 px-1 rounded">MIDTRANS_CLIENT_KEY</code> di file <code class="text-xs">.env</code>, lalu jalankan <code class="text-xs">php artisan config:clear</code>.
+                </div>
+            @endif
+
             <form
                 action="{{ route('checkout.process') }}"
                 method="POST"
@@ -118,57 +229,16 @@
                 <div class="flex justify-end">
                     <button
                         type="submit"
-                        class="inline-flex items-center justify-center rounded-full bg-gray-900 px-6 py-3 text-sm font-medium text-white hover:bg-gray-800 transition"
+                        class="inline-flex items-center justify-center rounded-full bg-gray-900 px-6 py-3 text-sm font-medium text-white hover:bg-gray-800 transition disabled:opacity-50"
+                        @if(!$midtransReady) disabled @endif
                     >
-                        Konfirmasi pemesanan
+                        Lanjut ke pembayaran Midtrans
                     </button>
                 </div>
             </form>
-        @else
-            <div class="text-center mb-6">
-                <div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-green-100 mb-4">
-                    <svg class="w-7 h-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                </div>
-                <h3 class="text-xl font-semibold text-gray-900">Pemesanan berhasil</h3>
-                <p class="text-sm text-gray-500 mt-1">Detail di bawah ini tercatat sebagai proyek Anda.</p>
-            </div>
+        </div>
 
-            <div class="rounded-xl border border-gray-100 bg-gray-50/80 p-6 mb-8 space-y-3 text-sm text-gray-700">
-                <div class="flex justify-between gap-4 border-b border-gray-200 pb-2">
-                    <span class="text-gray-500">Arsitek</span>
-                    <span class="font-medium text-gray-900 text-right">{{ $architect->name }}</span>
-                </div>
-                <div class="flex justify-between gap-4 border-b border-gray-200 pb-2">
-                    <span class="text-gray-500">Tipe proyek</span>
-                    <span class="font-medium text-gray-900 text-right">{{ $project->property_type }}</span>
-                </div>
-                <div class="flex justify-between gap-4 border-b border-gray-200 pb-2">
-                    <span class="text-gray-500">Luas</span>
-                    <span class="font-medium text-gray-900 text-right">{{ number_format($project->area_size, 0, ',', '.') }} m²</span>
-                </div>
-                <div class="flex justify-between gap-4 border-b border-gray-200 pb-2">
-                    <span class="text-gray-500">Harga per m²</span>
-                    <span class="font-medium text-gray-900 text-right">Rp {{ number_format((float) $project->price_per_m2, 0, ',', '.') }}</span>
-                </div>
-                <div class="flex justify-between gap-4 pt-2 text-base font-semibold text-gray-900">
-                    <span>Total</span>
-                    <span>Rp {{ number_format($project->total_price, 0, ',', '.') }}</span>
-                </div>
-            </div>
-
-            <div class="flex flex-col sm:flex-row justify-center gap-3">
-                <a href="{{ route('client.projects.index') }}" class="inline-flex justify-center rounded-full bg-gray-900 px-6 py-3 text-sm font-medium text-white hover:bg-gray-800 transition">
-                    Lihat proyek saya
-                </a>
-                <a href="{{ route('home') }}" class="inline-flex justify-center rounded-full border border-gray-200 bg-white px-6 py-3 text-sm font-medium text-gray-900 hover:bg-gray-50 transition">
-                    Kembali ke beranda
-                </a>
-            </div>
-        @endif
-    </div>
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+    @endif
 </div>
-
-@if(empty($paymentSuccess))
-<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
-@endif
 @endsection

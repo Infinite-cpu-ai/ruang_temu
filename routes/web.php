@@ -16,6 +16,7 @@ use App\Http\Controllers\Client\ProjectController as ClientProjectController;
 use App\Http\Controllers\Client\ReviewController as ClientReviewController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FeatureController;
+use App\Http\Controllers\MidtransNotificationController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -33,6 +34,9 @@ Route::get('/contact', function () {
     return view('contact');
 })->name('contact');
 
+// Midtrans HTTP notification (tanpa CSRF; tanpa auth)
+Route::post('/midtrans/notification', [MidtransNotificationController::class, 'handle'])->name('midtrans.notification');
+
 // Public Features
 Route::get('/cari-arsitek', [FeatureController::class, 'cari'])->name('features.cari');
 Route::get('/arsitek/{id}', [FeatureController::class, 'profil'])->name('features.profil');
@@ -49,6 +53,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/arsitek/{architect}/follow', [FeatureController::class, 'follow'])->name('features.follow');
         Route::post('/arsitek/{architect}/unfollow', [FeatureController::class, 'unfollow'])->name('features.unfollow');
 
+        Route::get('/checkout/finish/{project}', [CheckoutController::class, 'finish'])->name('checkout.finish');
         Route::get('/checkout/{architect}', [CheckoutController::class, 'index'])->name('checkout.index');
         Route::post('/checkout/process', [CheckoutController::class, 'processPayment'])->name('checkout.process');
     });
