@@ -132,7 +132,7 @@
                 
                 @if(!$midtransReady)
                     <div class="mb-6 rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4 text-sm text-amber-900 shadow-sm">
-                        Midtrans belum diatur di server (Aplikasi Test). Konfigurasi tidak valid.
+                        <b>Mode Demo Aktif:</b> Midtrans belum dikonfigurasi. Anda tetap bisa menekan tombol <b>Bayar Pemesanan</b> di bawah untuk menyimulasikan pembayaran tanpa kartu.
                     </div>
                 @endif
                 
@@ -220,7 +220,7 @@
 
                     <!-- Giant Checkout Submit Button -->
                     <div class="mt-10 flex flex-col items-center gap-3">
-                        <button type="submit" @if(!$midtransReady) disabled @endif class="w-full sm:max-w-xs flex items-center justify-center gap-3 rounded-[2rem] bg-black px-8 py-4 text-[15px] font-bold text-white shadow-[0_8px_20px_rgb(0,0,0,0.15)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_12px_25px_rgb(0,0,0,0.2)] disabled:opacity-50">
+                        <button type="submit" class="w-full sm:max-w-xs flex items-center justify-center gap-3 rounded-[2rem] bg-black px-8 py-4 text-[15px] font-bold text-white shadow-[0_8px_20px_rgb(0,0,0,0.15)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_12px_25px_rgb(0,0,0,0.2)]">
                             <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                             Bayar Pemesanan
                         </button>

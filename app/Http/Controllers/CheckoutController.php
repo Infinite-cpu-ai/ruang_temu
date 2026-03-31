@@ -35,12 +35,6 @@ class CheckoutController extends Controller
 
     public function processPayment(ProcessCheckoutRequest $request, MidtransPaymentService $midtrans): View|RedirectResponse
     {
-        if (! $midtrans->hasCredentials()) {
-            return back()
-                ->withErrors(['payment' => 'Pembayaran Midtrans belum dikonfigurasi. Pastikan MIDTRANS_SERVER_KEY dan MIDTRANS_CLIENT_KEY di .env sudah benar.'])
-                ->withInput();
-        }
-
         $area = (float) $request->validated('area_size');
         $units = (int) $request->validated('units');
         $pricePerM2 = (float) $request->validated('price_per_m2');
@@ -58,6 +52,12 @@ class CheckoutController extends Controller
             'total_price' => $totalPrice,
             'status' => 'pending',
         ]);
+
+        // If Midtrans is not configured, we simulate a successful payment automatically.
+        if (! $midtrans->hasCredentials()) {
+            $project->forceFill(['snap_token' => 'dummy', 'status' => 'paid'])->save();
+            return redirect()->route('checkout.finish', $project);
+        }
 
         try {
             $snapToken = $midtrans->createSnapToken($project, Auth::user(), $architect);

@@ -101,7 +101,7 @@
 
         {{-- CTA --}}
         <div class="mt-8 text-center">
-            <a href="{{ route('features.cari') }}"
+            <a id="cta-cari-arsitek" href="{{ route('features.cari') }}"
                class="inline-flex items-center justify-center gap-3 rounded-full bg-black text-white px-10 py-3 text-sm font-medium shadow-sm hover:bg-gray-900 transition"
             >
                 <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-white/10">
@@ -122,11 +122,19 @@
         const priceInput = document.getElementById('calc-price');
         const areaInput  = document.getElementById('calc-area');
         const totalEl    = document.getElementById('calc-total');
+        const ctaBtn     = document.getElementById('cta-cari-arsitek');
+        const baseUrl    = "{{ route('features.cari') }}";
 
         function calculate() {
             const price = parseFloat(priceInput.value) || 0;
             const area  = parseFloat(areaInput.value)  || 0;
             totalEl.textContent = new Intl.NumberFormat('id-ID').format(price * area);
+            
+            if(price > 0) {
+                ctaBtn.href = `${baseUrl}?budget=custom&max_price=${price}`;
+            } else {
+                ctaBtn.href = baseUrl;
+            }
         }
 
         priceInput.addEventListener('input', calculate);
