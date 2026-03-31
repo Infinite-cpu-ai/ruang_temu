@@ -42,8 +42,9 @@ class CheckoutController extends Controller
         }
 
         $area = (float) $request->validated('area_size');
+        $units = (int) $request->validated('units');
         $pricePerM2 = (float) $request->validated('price_per_m2');
-        $totalPrice = round($area * $pricePerM2, 2);
+        $totalPrice = round($area * $pricePerM2 * $units, 2);
 
         $architect = User::query()->with('architectProfile')->findOrFail($request->validated('architect_id'));
 
@@ -52,6 +53,7 @@ class CheckoutController extends Controller
             'architect_id' => $request->validated('architect_id'),
             'property_type' => $request->propertyTypeLabel(),
             'area_size' => (int) round($area),
+            'units' => $units,
             'price_per_m2' => $pricePerM2,
             'total_price' => $totalPrice,
             'status' => 'pending',

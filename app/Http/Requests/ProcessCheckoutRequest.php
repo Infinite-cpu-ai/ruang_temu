@@ -24,6 +24,7 @@ class ProcessCheckoutRequest extends FormRequest
             'architect_id' => ['required', 'integer', 'exists:users,id'],
             'property_type' => ['required', 'string', Rule::in(['hunian', 'komersial'])],
             'area_size' => ['required', 'numeric', 'min:1', 'max:500000'],
+            'units' => ['required', 'integer', 'min:1', 'max:100'],
             'price_per_m2' => ['required', 'numeric', 'min:0'],
         ];
     }
@@ -39,6 +40,9 @@ class ProcessCheckoutRequest extends FormRequest
             'property_type.in' => 'Tipe proyek tidak valid.',
             'area_size.required' => 'Luas bangunan wajib diisi.',
             'area_size.min' => 'Luas minimal 1 m².',
+            'units.required' => 'Jumlah unit wajib diisi.',
+            'units.min' => 'Jumlah unit minimal 1.',
+            'units.max' => 'Jumlah unit maksimal 100.',
             'price_per_m2.required' => 'Harga per m² wajib diisi.',
             'price_per_m2.min' => 'Harga per m² tidak boleh negatif.',
         ];

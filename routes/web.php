@@ -16,6 +16,7 @@ use App\Http\Controllers\Client\ProjectController as ClientProjectController;
 use App\Http\Controllers\Client\ReviewController as ClientReviewController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FeatureController;
+use App\Http\Controllers\FollowedArchitectController;
 use App\Http\Controllers\MidtransNotificationController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -41,6 +42,7 @@ Route::post('/midtrans/notification', [MidtransNotificationController::class, 'h
 Route::get('/cari-arsitek', [FeatureController::class, 'cari'])->name('features.cari');
 Route::get('/arsitek/{id}', [FeatureController::class, 'profil'])->name('features.profil');
 Route::get('/pricing', [FeatureController::class, 'pricing'])->name('features.pricing');
+Route::get('/arsitek-saya', [FollowedArchitectController::class, 'index'])->name('features.followed');
 
 // Protected Routes (Require Authentication)
 Route::middleware(['auth', 'verified'])->group(function () {

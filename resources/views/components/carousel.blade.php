@@ -40,13 +40,13 @@
             Profil Arsitek
         </h1>
         <p id="feature-desc" class="mt-4 text-xs sm:text-sm text-gray-300 max-w-2xl mx-auto">
-            Penjelasan Features: Portofolio, spesialisasi, harga per m2, Rating Arsitek
+            Lihat daftar arsitek yang kamu ikuti, lengkap dengan portofolio, spesialisasi, dan rating
         </p>
 
         <div class="mt-12 flex flex-col items-center gap-3">
             <a
                 id="feature-primary"
-                href="{{ route('features.profil', 1) }}"
+                href="{{ route('features.followed') }}"
                 class="inline-flex items-center justify-center gap-3 rounded-full bg-black text-white px-12 py-3 text-sm font-medium shadow-sm hover:bg-gray-900 transition w-72 max-w-full"
             >
                 <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-white/10">
@@ -90,8 +90,8 @@
         },
         profil: {
             title : 'Profil Arsitek',
-            desc  : 'Penjelasan Features: Portofolio, spesialisasi, harga per m2, Rating Arsitek',
-            href  : @json(route('features.profil', 1)),
+            desc  : 'Lihat daftar arsitek yang kamu ikuti, lengkap dengan portofolio, spesialisasi, dan rating',
+            href  : @json(route('features.followed')),
         },
         pricing: {
             title : 'Pricing',

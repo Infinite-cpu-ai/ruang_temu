@@ -76,6 +76,10 @@
                     <span class="font-medium text-gray-900 text-right">{{ number_format($project->area_size, 0, ',', '.') }} m²</span>
                 </div>
                 <div class="flex justify-between gap-4 border-b border-gray-200 pb-2">
+                    <span class="text-gray-500">Jumlah unit</span>
+                    <span class="font-medium text-gray-900 text-right">{{ $project->units ?? 1 }} unit</span>
+                </div>
+                <div class="flex justify-between gap-4 border-b border-gray-200 pb-2">
                     <span class="text-gray-500">Harga per m²</span>
                     <span class="font-medium text-gray-900 text-right">Rp {{ number_format((float) $project->price_per_m2, 0, ',', '.') }}</span>
                 </div>
@@ -126,6 +130,7 @@
                 method="POST"
                 x-data="{
                     area: @json(old('area_size') !== null && old('area_size') !== '' ? (float) old('area_size') : null),
+                    units: @json(old('units') !== null && old('units') !== '' ? (int) old('units') : 1),
                     pricePerM2: @json(old('price_per_m2') !== null && old('price_per_m2') !== '' ? (float) old('price_per_m2') : (float) $defaultPrice),
                     formatIdr(n) {
                         if (n === null || n === '' || isNaN(Number(n))) return '—';
@@ -134,8 +139,9 @@
                     get total() {
                         const a = Number(this.area);
                         const p = Number(this.pricePerM2);
-                        if (!a || isNaN(a) || isNaN(p)) return null;
-                        return Math.round(a * p);
+                        const u = Number(this.units);
+                        if (!a || isNaN(a) || isNaN(p) || !u || isNaN(u)) return null;
+                        return Math.round(a * p * u);
                     }
                 }"
             >
@@ -190,7 +196,7 @@
                     </div>
                 </fieldset>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-6">
                     <div>
                         <label for="area_size" class="block text-sm font-medium text-gray-700 mb-2">Luas (m²)</label>
                         <input
@@ -204,6 +210,22 @@
                             placeholder="Contoh: 120"
                             required
                         />
+                    </div>
+                    <div>
+                        <label for="units" class="block text-sm font-medium text-gray-700 mb-2">Jumlah Unit</label>
+                        <input
+                            id="units"
+                            type="number"
+                            name="units"
+                            x-model.number="units"
+                            min="1"
+                            max="100"
+                            step="1"
+                            class="w-full rounded-lg border-gray-200 shadow-sm focus:border-gray-300 focus:ring-2 focus:ring-gray-900/10 text-gray-900"
+                            placeholder="Contoh: 1"
+                            required
+                        />
+                        <p class="mt-1 text-xs text-gray-500">Jumlah bangunan yang ingin didesain</p>
                     </div>
                     <div>
                         <label for="price_per_m2" class="block text-sm font-medium text-gray-700 mb-2">Harga per m² (Rp)</label>
