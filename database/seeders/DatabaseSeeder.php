@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
             'Renovasi & Ekstensi',
             'Fasad & Eksterior'
         ];
-        
+
         $specs = collect();
         foreach ($specNames as $name) {
             $specs->push(Specialization::create([
@@ -72,7 +72,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Budi Setiawan',
             'email' => 'budi.klien@example.com',
             'password' => Hash::make('password'),
-            'role' => 'user', 
+            'role' => 'user',
             'is_active' => true,
             'profile_image' => 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200&h=200',
         ]);
@@ -80,7 +80,7 @@ class DatabaseSeeder extends Seeder
         $clients = [$clientTanya, $clientRina, $clientBudi];
 
         // 4. ARCHITECTS & PROFILES
-        
+
         $architectData = [
             [
                 'user' => [
@@ -206,14 +206,14 @@ class DatabaseSeeder extends Seeder
 
         foreach ($architectData as $data) {
             $user = User::create($data['user']);
-            
+
             $profile = ArchitectProfile::create(array_merge(
                 ['user_id' => $user->id],
                 $data['profile']
             ));
 
             // Attach specializations
-            $specIds = collect($data['specs'])->map(function($idx) use ($specs) {
+            $specIds = collect($data['specs'])->map(function ($idx) use ($specs) {
                 return $specs[$idx]->id;
             });
             $profile->specializations()->attach($specIds);
@@ -288,7 +288,7 @@ class DatabaseSeeder extends Seeder
                 'price_per_m2' => $pricePerM2,
                 'total_price' => $pm['area_size'] * $pm['units'] * $pricePerM2,
                 'status' => $pm['status'],
-                'snap_token' => 'dummy-snap-token-'.Str::random(10),
+                'snap_token' => 'dummy-snap-token-' . Str::random(10),
             ]);
 
             if ($pm['rating']) {
@@ -333,7 +333,7 @@ class DatabaseSeeder extends Seeder
             'content' => 'Saya pusing bocor dak beton terus menerus, enaknya ditambal pakai waterproofing merk apa ya kalau cuaca ekstrim? Atau wajib pasang atap kanopi baja ringan di atasnya?',
             'status' => 'open',
         ]);
-        
+
         // 7. FOLLOWS (Favorite Architects)
         $clientTanya->followingArchitects()->attach($architects[0]->id);
         $clientTanya->followingArchitects()->attach($architects[2]->id);
