@@ -1,94 +1,108 @@
 <section>
-    <header>
-        <h2 class="text-lg font-medium text-gray-900">
-            {{ __('Profile Information') }}
-        </h2>
-
-        <p class="mt-1 text-sm text-gray-600">
-            {{ __("Update your account's profile information and email address.") }}
-        </p>
-    </header>
+    <div class="mb-6">
+        <h2 class="text-base font-extrabold text-gray-900">Informasi Profil</h2>
+        <p class="mt-1 text-sm text-gray-400 font-medium">Perbarui nama, foto, dan alamat email akun kamu.</p>
+    </div>
 
     <form id="send-verification" method="post" action="{{ route('verification.send') }}">
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
+    <form method="post" action="{{ route('profile.update') }}" class="space-y-5" enctype="multipart/form-data"
+          x-data="{ photoName: null, photoPreview: null }">
         @csrf
         @method('patch')
 
-        <div x-data="{ photoName: null, photoPreview: null }" class="col-span-6 sm:col-span-4">
-            <x-input-label for="profile_image" :value="__('Profile Image')" />
-            
-            <input type="file" id="profile_image" name="profile_image" class="hidden"
-                        x-ref="photo"
-                        x-on:change="
-                                photoName = $refs.photo.files[0].name;
-                                const reader = new FileReader();
-                                reader.onload = (e) => {
-                                    photoPreview = e.target.result;
-                                };
-                                reader.readAsDataURL($refs.photo.files[0]);
-                        " />
-                        
-            <div class="mt-2" x-show="! photoPreview">
-                <img src="{{ $user->profile_image ? asset('storage/'.$user->profile_image) : asset('images/profiles/profile_placeholder.png') }}" alt="{{ $user->name }}" class="rounded-full h-20 w-20 object-cover">
+        {{-- Avatar Upload --}}
+        <div class="flex items-center gap-5">
+            <div class="relative group">
+                {{-- Current / Preview --}}
+                <div class="w-20 h-20 rounded-full overflow-hidden border-2 border-white shadow-md bg-gray-200" x-show="!photoPreview">
+                    <img src="{{ $user->profile_image ? asset('storage/'.$user->profile_image) : asset('images/profiles/profile_placeholder.png') }}"
+                         alt="{{ $user->name }}" class="w-full h-full object-cover" />
+                </div>
+                <div class="w-20 h-20 rounded-full overflow-hidden border-2 border-white shadow-md bg-cover bg-center bg-no-repeat"
+                     x-show="photoPreview" style="display:none;"
+                     x-bind:style="'background-image: url(\'' + photoPreview + '\');'">
+                </div>
             </div>
-
-            <div class="mt-2" x-show="photoPreview" style="display: none;">
-                <span class="block rounded-full w-20 h-20 bg-cover bg-no-repeat bg-center"
-                      x-bind:style="'background-image: url(\'' + photoPreview + '\');'">
-                </span>
+            <div>
+                <input type="file" id="profile_image" name="profile_image" class="hidden"
+                       x-ref="photo"
+                       x-on:change="
+                           photoName = $refs.photo.files[0].name;
+                           const reader = new FileReader();
+                           reader.onload = (e) => { photoPreview = e.target.result; };
+                           reader.readAsDataURL($refs.photo.files[0]);
+                       " />
+                <button type="button"
+                        x-on:click.prevent="$refs.photo.click()"
+                        class="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2 text-xs font-bold text-gray-700 hover:bg-gray-50 transition shadow-sm">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                    Ganti Foto
+                </button>
+                <p class="mt-1 text-[11px] text-gray-400 font-medium" x-text="photoName ? photoName : 'JPG, PNG, max 2MB'"></p>
+                @error('profile_image')
+                    <p class="mt-1 text-xs text-red-500 font-medium">{{ $message }}</p>
+                @enderror
             </div>
-
-            <x-secondary-button class="mt-2 mr-2" type="button" x-on:click.prevent="$refs.photo.click()">
-                {{ __('Select A New Photo') }}
-            </x-secondary-button>
-
-            <x-input-error class="mt-2" :messages="$errors->get('profile_image')" />
         </div>
 
+        {{-- Name --}}
         <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
-            <x-input-error class="mt-2" :messages="$errors->get('name')" />
+            <label for="name" class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Nama</label>
+            <input id="name" name="name" type="text"
+                   value="{{ old('name', $user->name) }}"
+                   required autofocus autocomplete="name"
+                   class="w-full bg-gray-50 border-0 rounded-2xl py-3 px-4 text-sm text-gray-800 font-medium focus:ring-2 focus:ring-black transition shadow-sm placeholder-gray-300" />
+            @error('name')
+                <p class="mt-1.5 text-xs text-red-500 font-medium">{{ $message }}</p>
+            @enderror
         </div>
 
+        {{-- Email --}}
         <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
-            <x-input-error class="mt-2" :messages="$errors->get('email')" />
+            <label for="email" class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Email</label>
+            <input id="email" name="email" type="email"
+                   value="{{ old('email', $user->email) }}"
+                   required autocomplete="username"
+                   class="w-full bg-gray-50 border-0 rounded-2xl py-3 px-4 text-sm text-gray-800 font-medium focus:ring-2 focus:ring-black transition shadow-sm" />
+            @error('email')
+                <p class="mt-1.5 text-xs text-red-500 font-medium">{{ $message }}</p>
+            @enderror
 
             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
-                <div>
-                    <p class="text-sm mt-2 text-gray-800">
-                        {{ __('Your email address is unverified.') }}
-
-                        <button form="send-verification" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            {{ __('Click here to re-send the verification email.') }}
+                <div class="mt-3 p-3 rounded-xl bg-amber-50 border border-amber-100">
+                    <p class="text-xs text-amber-700 font-medium">
+                        Email belum diverifikasi.
+                        <button form="send-verification" class="underline font-bold hover:text-amber-900 transition">
+                            Kirim ulang email verifikasi.
                         </button>
                     </p>
-
                     @if (session('status') === 'verification-link-sent')
-                        <p class="mt-2 font-medium text-sm text-green-600">
-                            {{ __('A new verification link has been sent to your email address.') }}
-                        </p>
+                        <p class="mt-1 text-xs text-emerald-600 font-semibold">Link verifikasi telah dikirim!</p>
                     @endif
                 </div>
             @endif
         </div>
 
-        <div class="flex items-center gap-4">
-            <x-primary-button>{{ __('Save') }}</x-primary-button>
-
+        {{-- Save --}}
+        <div class="flex items-center gap-4 pt-1">
+            <button type="submit"
+                    class="inline-flex items-center gap-2 rounded-2xl bg-gray-900 px-6 py-3 text-sm font-bold text-white hover:bg-black transition active:scale-[0.97] shadow-sm">
+                Simpan Perubahan
+            </button>
             @if (session('status') === 'profile-updated')
-                <p
-                    x-data="{ show: true }"
-                    x-show="show"
-                    x-transition
-                    x-init="setTimeout(() => show = false, 2000)"
-                    class="text-sm text-gray-600"
-                >{{ __('Saved.') }}</p>
+                <p x-data="{ show: true }" x-show="show" x-transition
+                   x-init="setTimeout(() => show = false, 2500)"
+                   class="text-sm font-semibold text-emerald-600 flex items-center gap-1.5">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    Tersimpan!
+                </p>
             @endif
         </div>
     </form>
