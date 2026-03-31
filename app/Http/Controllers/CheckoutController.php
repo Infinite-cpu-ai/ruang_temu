@@ -13,10 +13,10 @@ use Illuminate\View\View;
 
 class CheckoutController extends Controller
 {
-    public function index(User $architect, MidtransPaymentService $midtrans): View
+    public function index(User $architect, MidtransPaymentService $midtrans): View|RedirectResponse
     {
         if ($architect->role !== 'architect' || ! $architect->is_active) {
-            abort(404);
+            return redirect()->route('features.cari')->with('error', 'Mohon maaf, profil Arsitek belum lengkap atau pengguna tersebut bukan Arsitek.');
         }
 
         $architect->load('architectProfile');

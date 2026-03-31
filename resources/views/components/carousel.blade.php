@@ -39,20 +39,20 @@
         <h1 id="feature-title" class="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-900">
             Profil Arsitek
         </h1>
-        <p id="feature-desc" class="mt-4 text-xs sm:text-sm text-gray-300 max-w-2xl mx-auto">
-            Lihat daftar arsitek yang kamu ikuti, lengkap dengan portofolio, spesialisasi, dan rating
+        <p id="feature-desc" class="mt-4 text-xs sm:text-sm text-gray-400 max-w-2xl mx-auto">
+            Penjelasan Features: Portofolio, spesialisasi, harga per m2, Rating Arsitek
         </p>
 
         <div class="mt-12 flex flex-col items-center gap-3">
             <a
                 id="feature-primary"
                 href="{{ route('features.followed') }}"
-                class="inline-flex items-center justify-center gap-3 rounded-full bg-black text-white px-12 py-3 text-sm font-medium shadow-sm hover:bg-gray-900 transition w-72 max-w-full"
+                class="inline-flex items-center justify-center gap-4 rounded-full bg-black text-white p-1 pr-6 text-sm font-medium hover:bg-gray-800 transition w-64 max-w-full shadow-lg"
             >
-                <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-white/10">
-                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22 2L11 13"/>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22 2l-7 20-4-9-9-4 20-7z"/>
+                <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white text-black shrink-0">
+                    <svg class="w-4 h-4 ml-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <line x1="22" y1="2" x2="11" y2="13" stroke-width="2" stroke-linecap="round"/>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </span>
                 Get Started
@@ -61,12 +61,11 @@
             <a
                 id="feature-secondary"
                 href="{{ route('contact') }}"
-                class="inline-flex items-center justify-center gap-3 rounded-full bg-black text-white/90 px-10 py-2.5 text-[11px] font-medium shadow-sm hover:bg-gray-900 transition w-56 max-w-full"
+                class="inline-flex items-center gap-3 rounded-full bg-black text-white p-1 pl-4 pr-6 text-[10px] font-medium hover:bg-gray-800 transition w-auto max-w-full shadow-md"
             >
-                <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-white/10">
+                <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-white text-black shrink-0">
                     <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5a3 3 0 006 0"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
                     </svg>
                 </span>
                 Alur Pemesanan
@@ -90,7 +89,7 @@
         },
         profil: {
             title : 'Profil Arsitek',
-            desc  : 'Lihat daftar arsitek yang kamu ikuti, lengkap dengan portofolio, spesialisasi, dan rating',
+            desc  : 'Penjelasan Features: Portofolio, spesialisasi, harga per m2, Rating Arsitek',
             href  : @json(route('features.followed')),
         },
         pricing: {

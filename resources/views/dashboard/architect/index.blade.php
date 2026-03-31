@@ -18,11 +18,18 @@
             </div>
 
             <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Ubah Profile -->
+                <!-- Ubah Profile Arsitek -->
                 <div class="bg-white p-6 rounded-lg shadow border-l-4 border-blue-500">
-                    <h3 class="text-lg font-bold mb-4">Pengaturan Profil & Keahlian</h3>
-                    <p class="text-gray-600 mb-4">Kelola foto, harga, spesialisasi, gaya, dan timeline kerja.</p>
-                    <a href="{{ route('architect.profile.edit') }}" class="bg-blue-500 text-white px-4 py-2 rounded inline-block">Ubah Profil</a>
+                    <h3 class="text-lg font-bold mb-4">Pengaturan Profil Arsitek</h3>
+                    <p class="text-gray-600 mb-4">Kelola harga per m², spesialisasi, gaya desain, dan deskripsi publik Anda.</p>
+                    <a href="{{ route('architect.profile.edit') }}" class="bg-blue-500 text-white px-4 py-2 rounded inline-block">Ubah Profil Publik</a>
+                </div>
+
+                <!-- Pengaturan Akun Dasar -->
+                <div class="bg-white p-6 rounded-lg shadow border-l-4 border-gray-500">
+                    <h3 class="text-lg font-bold mb-4">Pengaturan Akun Dasar</h3>
+                    <p class="text-gray-600 mb-4">Kelola Username, Kata sandi, dan Foto Profil Global Anda.</p>
+                    <a href="{{ route('profile.edit') }}" class="bg-gray-500 text-white px-4 py-2 rounded inline-block">Ubah Akun</a>
                 </div>
 
                 <!-- CRUD Portofolio -->

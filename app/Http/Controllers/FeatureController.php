@@ -15,13 +15,16 @@ class FeatureController extends Controller
     public function cari(Request $request)
     {
         $budget = $request->string('budget')->toString();
+        $minPrice = $request->input('min_price');
+        $maxPrice = $request->input('max_price');
         $projectType = $request->string('project_type')->toString();
         $location = $request->string('location')->toString();
         $style = $request->string('style')->toString();
 
         $architectsQuery = User::query()
             ->where('role', 'architect')
-            ->with('architectProfile')
+            ->where('is_active', true)
+            ->with(['architectProfile.specializations'])
             ->withAvg('reviewsAsArchitect as reviews_avg_rating', 'rating');
 
         if ($location !== '') {
@@ -37,70 +40,57 @@ class FeatureController extends Controller
         }
 
         if ($budget !== '') {
-            $architectsQuery->whereHas('architectProfile', function ($q) use ($budget) {
+            $architectsQuery->whereHas('architectProfile', function ($q) use ($budget, $minPrice, $maxPrice) {
                 if ($budget === 'under_100') {
                     $q->where('price_per_m2', '<', 100000);
                 } elseif ($budget === '100_300') {
                     $q->whereBetween('price_per_m2', [100000, 300000]);
                 } elseif ($budget === 'above_300') {
                     $q->where('price_per_m2', '>', 300000);
+                } elseif ($budget === 'custom') {
+                    if ($minPrice !== null && $minPrice !== '') {
+                        $q->where('price_per_m2', '>=', $minPrice);
+                    }
+                    if ($maxPrice !== null && $maxPrice !== '') {
+                        $q->where('price_per_m2', '<=', $maxPrice);
+                    }
                 }
+            });
+        }
+
+        if ($projectType !== '') {
+            // Check if it's within the specific project type array OR within the modern relations
+            $architectsQuery->whereHas('architectProfile', function ($q) use ($projectType) {
+                $q->whereJsonContains('project_types', $projectType)
+                  ->orWhereHas('specializations', function ($sq) use ($projectType) {
+                      $sq->where('name', $projectType);
+                  });
             });
         }
 
         $architects = $architectsQuery->get();
 
-        if ($projectType !== '') {
-            $architects = $architects->filter(function ($architect) use ($projectType) {
-                $types = (array) data_get($architect, 'architectProfile.project_types', []);
-                $specialization = (string) data_get($architect, 'architectProfile.specialization', '');
+        // No more fallback to dummy data according to the request "tidak di hardcode"
+        // But if architects is empty, we just pass the empty collection to frontend.
 
-                if ($types !== [] && in_array($projectType, $types, true)) {
-                    return true;
-                }
+        // Get unique options dynamically from active architects' profiles
+        $locations = \App\Models\ArchitectProfile::whereHas('user', fn($q) => $q->where('role', 'architect')->where('is_active', true))
+            ->whereNotNull('location')->where('location', '!=', '')
+            ->distinct()->pluck('location');
+            
+        $styles = \App\Models\ArchitectProfile::whereHas('user', fn($q) => $q->where('role', 'architect')->where('is_active', true))
+            ->whereNotNull('style')->where('style', '!=', '')
+            ->distinct()->pluck('style');
+            
+        // For specializations, fetch from relationships or raw DB
+        $dbSpecializations = \App\Models\Specialization::pluck('name');
+        $profileProjectTypes = []; // Can be extracted if needed, but DB spec is better
+        
+        $projectTypes = $dbSpecializations->count() > 0 ? $dbSpecializations : collect([
+            'Residential', 'Commercial', 'Minimalist', 'Interior', 'Landscape', 'Master Planning'
+        ]); // fallback options if totally empty table
 
-                return str_contains(mb_strtolower($specialization), mb_strtolower($projectType));
-            })->values();
-        }
-
-        if ($architects->isEmpty()) {
-            $architects = $this->dummyArchitects();
-
-            $architects = $architects->filter(function ($architect) use ($budget, $projectType, $location, $style) {
-                $price = (float) data_get($architect, 'architectProfile.price_per_m2', 0);
-                $archLocation = (string) data_get($architect, 'architectProfile.location', '');
-                $archStyle = (string) data_get($architect, 'architectProfile.style', '');
-                $types = (array) data_get($architect, 'architectProfile.project_types', []);
-
-                if ($location !== '' && $archLocation !== $location) {
-                    return false;
-                }
-
-                if ($style !== '' && $archStyle !== $style) {
-                    return false;
-                }
-
-                if ($budget === 'under_100' && $price >= 100000) {
-                    return false;
-                }
-
-                if ($budget === '100_300' && ($price < 100000 || $price > 300000)) {
-                    return false;
-                }
-
-                if ($budget === 'above_300' && $price <= 300000) {
-                    return false;
-                }
-
-                if ($projectType !== '' && ! in_array($projectType, $types, true)) {
-                    return false;
-                }
-
-                return true;
-            })->values();
-        }
-
-        return view('features.cari', compact('architects'));
+        return view('features.cari', compact('architects', 'locations', 'styles', 'projectTypes'));
     }
 
     public function profil(Request $request, $id)

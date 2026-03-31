@@ -19,6 +19,7 @@ use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\FollowedArchitectController;
 use App\Http\Controllers\MidtransNotificationController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\QuickAskController;
 use Illuminate\Support\Facades\Route;
 
 // Public Static Pages
@@ -43,6 +44,9 @@ Route::get('/cari-arsitek', [FeatureController::class, 'cari'])->name('features.
 Route::get('/arsitek/{id}', [FeatureController::class, 'profil'])->name('features.profil');
 Route::get('/pricing', [FeatureController::class, 'pricing'])->name('features.pricing');
 Route::get('/arsitek-saya', [FollowedArchitectController::class, 'index'])->name('features.followed');
+
+Route::get('/tanya-arsitek', [QuickAskController::class, 'index'])->name('quick-ask.index');
+Route::post('/tanya-arsitek', [QuickAskController::class, 'store'])->name('quick-ask.store');
 
 // Protected Routes (Require Authentication)
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -95,6 +99,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Projects (Status Desain)
         Route::get('/projects', [ArchitectProjectController::class, 'index'])->name('projects.index');
         Route::patch('/projects/{project}/status', [ArchitectProjectController::class, 'updateStatus'])->name('projects.update-status');
+
+        // Live Board (Tanya Arsitek)
+        Route::get('/live-board', [App\Http\Controllers\Architect\LiveBoardController::class, 'index'])->name('live-board.index');
+        Route::post('/live-board/{question}/claim', [App\Http\Controllers\Architect\LiveBoardController::class, 'claim'])->name('live-board.claim');
+        Route::post('/live-board/{question}/answer', [App\Http\Controllers\Architect\LiveBoardController::class, 'answer'])->name('live-board.answer');
 
         // Reviews
         Route::get('/reviews', [ArchitectReviewController::class, 'index'])->name('reviews.index');

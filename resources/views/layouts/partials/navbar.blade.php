@@ -8,6 +8,7 @@
             <nav class="hidden md:flex items-center gap-10 text-sm text-gray-500">
                 <a href="{{ route('home') }}" class="hover:text-gray-900 transition">Home</a>
                 <a href="{{ route('needs') }}" class="hover:text-gray-900 transition">Features</a>
+                <a href="{{ route('quick-ask.index') }}" class="hover:text-blue-600 text-blue-500 font-semibold transition">Tanya Arsitek (Live)</a>
                 <a href="{{ route('about') }}" class="hover:text-gray-900 transition">About Us</a>
                 <a href="{{ route('contact') }}" class="hover:text-gray-900 transition">Contact</a>
             </nav>
