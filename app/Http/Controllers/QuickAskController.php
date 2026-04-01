@@ -11,8 +11,13 @@ class QuickAskController extends Controller
 {
     public function index(Request $request)
     {
+        // Architects see the live board to answer questions
+        if (auth()->check() && auth()->user()->role === 'architect') {
+            return redirect()->route('architect.live-board.index');
+        }
+
         // Generate or get session ID for guest tracking
-        if (!$request->session()->has('guest_session_id')) {
+        if (! $request->session()->has('guest_session_id')) {
             $request->session()->put('guest_session_id', Str::uuid()->toString());
         }
 
@@ -42,7 +47,7 @@ class QuickAskController extends Controller
         return response()->json([
             'status' => 'success',
             'question' => $question,
-            'channel' => 'public.question.' . $sessionId
+            'channel' => 'public.question.'.$sessionId,
         ]);
     }
 }
