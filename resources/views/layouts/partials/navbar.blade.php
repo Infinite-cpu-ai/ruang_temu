@@ -10,7 +10,7 @@
                 <a href="{{ route('home') }}" class="hover:text-gray-900 transition">Home</a>
                 <a href="{{ route('needs') }}" class="hover:text-gray-900 transition">Features</a>
                 <a href="{{ route('quick-ask.index') }}"
-                    class="hover:text-gray-900 text-blue-500 font-semibold transition">Tanya Arsitek (Live)</a>
+                    class="hover:text-black-900 text-gray-900 font-semibold transition">Tanya Arsitek (Live)</a>
                 <a href="{{ route('about') }}" class="hover:text-gray-900 transition">About Us</a>
                 <a href="{{ route('contact') }}" class="hover:text-gray-900 transition">Contact</a>
             </nav>
