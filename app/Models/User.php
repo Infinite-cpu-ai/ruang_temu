@@ -21,7 +21,7 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     protected $fillable = [
-        'name', 'email', 'password', 'role', 'is_active',
+        'name', 'email', 'password', 'role', 'is_active', 'is_premium', 'premium_expires_at',
     ];
 
     protected $hidden = [
@@ -33,7 +33,28 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_premium' => 'boolean',
+            'premium_expires_at' => 'datetime',
         ];
+    }
+
+    public function isPremium(): bool
+    {
+        if (! $this->is_premium) {
+            return false;
+        }
+
+        // If expiry is set and has passed, no longer premium
+        if ($this->premium_expires_at && $this->premium_expires_at->isPast()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function answers(): HasMany
+    {
+        return $this->hasMany(Answer::class, 'architect_id');
     }
 
     public function architectProfile(): HasOne

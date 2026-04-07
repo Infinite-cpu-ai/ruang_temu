@@ -27,6 +27,16 @@
                 @endguest
 
                 @auth
+                    @if(auth()->user()->isPremium())
+                        <div class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gray-900 border border-transparent shadow-sm">
+                            <span class="text-[10px] font-bold text-white tracking-widest uppercase">Premium</span>
+                        </div>
+                    @else
+                        <a href="{{ route('upgrade.index') }}" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-gray-200 hover:bg-gray-50 transition shadow-sm">
+                            <span class="text-[10px] font-bold text-gray-600 tracking-widest uppercase">Upgrade</span>
+                        </a>
+                    @endif
+
                     <details class="relative group">
                         <summary
                             class="list-none w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-900 hover:bg-gray-50 transition cursor-pointer"

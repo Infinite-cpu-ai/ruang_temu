@@ -22,6 +22,30 @@
             <p class="mt-2 text-base text-gray-500 font-medium">Kelola proyek, portofolio, dan bangun reputasimu sebagai arsitek terbaik.</p>
         </div>
 
+        @if(session('success'))
+            <div class="mb-6 flex items-center gap-3 rounded-2xl bg-emerald-50 border border-emerald-100 px-5 py-4 text-emerald-700 font-semibold text-sm shadow-sm">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                {{ session('success') }}
+            </div>
+        @endif
+
+        {{-- Upgrade Banner (non-premium) --}}
+        @if(!auth()->user()->isPremium())
+        <div class="mb-8 rounded-[2rem] border border-gray-900/10 bg-gradient-to-r from-gray-900 to-gray-800 p-6 shadow-lg relative overflow-hidden">
+            <div class="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-white/5 blur-2xl"></div>
+            <div class="relative flex items-center justify-between gap-4 flex-wrap">
+                <div>
+                    <h3 class="text-base font-extrabold text-white mb-1">Tingkatkan Profilmu ke Premium ✨</h3>
+                    <p class="text-sm text-gray-400 font-medium">Prioritas di pencarian, terima booking konsultasi, dan chat langsung dengan klien.</p>
+                </div>
+                <a href="{{ route('upgrade.index') }}"
+                   class="shrink-0 inline-flex items-center gap-2 rounded-2xl bg-white px-5 py-2.5 text-sm font-bold text-gray-900 hover:bg-gray-100 transition active:scale-[0.97]">
+                    Lebih Lanjut →
+                </a>
+            </div>
+        </div>
+        @endif
+
         <!-- Stats Grid -->
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-10">
             <div class="lg:col-span-2 relative rounded-[2rem] border border-white/60 bg-white/70 backdrop-blur-xl p-6 shadow-[0_4px_20px_rgb(0,0,0,0.04)] overflow-hidden">
@@ -100,12 +124,22 @@
                         </span>
                         Portofolio
                     </a>
+                    @if(auth()->user()->isPremium())
                     <a href="{{ route('chat.index') }}" class="flex items-center gap-3 rounded-2xl bg-white border border-gray-200 text-gray-900 px-4 py-3 text-sm font-bold hover:bg-gray-50 transition active:scale-[0.97]">
                         <span class="flex items-center justify-center w-7 h-7 rounded-full bg-gray-100">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.9 9.9 0 01-4-.8L3 20l1.2-3A7.6 7.6 0 013 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
                         </span>
                         Kotak Masuk
                     </a>
+                    @else
+                    <a href="{{ route('upgrade.index') }}" class="flex items-center gap-3 rounded-2xl bg-gray-50 border border-gray-200 text-gray-400 px-4 py-3 text-sm font-bold hover:bg-gray-100 transition">
+                        <span class="flex items-center justify-center w-7 h-7 rounded-full bg-gray-200">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                        </span>
+                        Kotak Masuk
+                        <span class="ml-auto text-[10px] font-bold bg-gray-200 text-gray-500 rounded-full px-2 py-0.5">PREMIUM</span>
+                    </a>
+                    @endif
                     <a href="{{ route('architect.reviews.index') }}" class="flex items-center gap-3 rounded-2xl bg-white border border-gray-200 text-gray-900 px-4 py-3 text-sm font-bold hover:bg-gray-50 transition active:scale-[0.97]">
                         <span class="flex items-center justify-center w-7 h-7 rounded-full bg-gray-100">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.173c.969 0 1.371 1.24.588 1.81l-3.377 2.454a1 1 0 00-.364 1.118l1.286 3.967c.3.921-.755 1.688-1.54 1.118l-3.377-2.454a1 1 0 00-1.176 0l-3.377 2.454c-.784.57-1.838-.197-1.54-1.118l1.286-3.967a1 1 0 00-.364-1.118L2 9.394c-.783-.57-.38-1.81.588-1.81h4.173a1 1 0 00.95-.69l1.286-3.967z"/></svg>

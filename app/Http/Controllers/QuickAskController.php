@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Events\QuestionCreated;
+use App\Models\Answer;
 use App\Models\Question;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -49,5 +51,20 @@ class QuickAskController extends Controller
             'question' => $question,
             'channel' => 'public.question.'.$sessionId,
         ]);
+    }
+
+    public function rateAnswer(Request $request, Answer $answer): JsonResponse
+    {
+        $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'feedback' => 'nullable|string|max:500',
+        ]);
+
+        $answer->update([
+            'rating' => $request->rating,
+            'rating_feedback' => $request->feedback,
+        ]);
+
+        return response()->json(['status' => 'success']);
     }
 }

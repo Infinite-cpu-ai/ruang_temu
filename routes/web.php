@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\ReviewController as AdminReviewController;
 use App\Http\Controllers\Admin\SpecializationController as AdminSpecializationController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Architect\DashboardController as ArchitectDashboardController;
+use App\Http\Controllers\Architect\LiveBoardController;
 use App\Http\Controllers\Architect\PortfolioController as ArchitectPortfolioController;
 use App\Http\Controllers\Architect\ProfileController as ArchitectProfileController;
 use App\Http\Controllers\Architect\ProjectController as ArchitectProjectController;
@@ -20,6 +21,7 @@ use App\Http\Controllers\FollowedArchitectController;
 use App\Http\Controllers\MidtransNotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuickAskController;
+use App\Http\Controllers\UpgradeController;
 use Illuminate\Support\Facades\Route;
 
 // Public Static Pages
@@ -47,18 +49,26 @@ Route::get('/arsitek-saya', [FollowedArchitectController::class, 'index'])->name
 
 Route::get('/tanya-arsitek', [QuickAskController::class, 'index'])->name('quick-ask.index');
 Route::post('/tanya-arsitek', [QuickAskController::class, 'store'])->name('quick-ask.store');
+Route::post('/tanya-arsitek/{answer}/rate', [QuickAskController::class, 'rateAnswer'])->name('quick-ask.rate');
 
 // Protected Routes (Require Authentication)
 Route::middleware(['auth', 'verified'])->group(function () {
 
-    // Client review actions from architect public profile page & checkout
+    // Upgrade
+    Route::get('/upgrade', [UpgradeController::class, 'index'])->name('upgrade.index');
+    Route::post('/upgrade/process', [UpgradeController::class, 'process'])->name('upgrade.process');
+
+    // Client review actions from architect public profile page
     Route::middleware('can:client')->group(function () {
         Route::post('/arsitek/{architect}/reviews', [FeatureController::class, 'storeReview'])->name('features.reviews.store');
         Route::put('/arsitek/{architect}/reviews/{review}', [FeatureController::class, 'updateReview'])->name('features.reviews.update');
         Route::get('/arsitek/{architect}/follow', [FeatureController::class, 'followFromLink'])->name('features.follow.link');
         Route::post('/arsitek/{architect}/follow', [FeatureController::class, 'follow'])->name('features.follow');
         Route::post('/arsitek/{architect}/unfollow', [FeatureController::class, 'unfollow'])->name('features.unfollow');
+    });
 
+    // Premium-only: Checkout & Chat
+    Route::middleware(['can:client', 'premium'])->group(function () {
         Route::get('/checkout/finish/{project}', [CheckoutController::class, 'finish'])->name('checkout.finish');
         Route::get('/checkout/{architect}', [CheckoutController::class, 'index'])->name('checkout.index');
         Route::post('/checkout/process', [CheckoutController::class, 'processPayment'])->name('checkout.process');
@@ -101,9 +111,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::patch('/projects/{project}/status', [ArchitectProjectController::class, 'updateStatus'])->name('projects.update-status');
 
         // Live Board (Tanya Arsitek)
-        Route::get('/live-board', [App\Http\Controllers\Architect\LiveBoardController::class, 'index'])->name('live-board.index');
-        Route::post('/live-board/{question}/claim', [App\Http\Controllers\Architect\LiveBoardController::class, 'claim'])->name('live-board.claim');
-        Route::post('/live-board/{question}/answer', [App\Http\Controllers\Architect\LiveBoardController::class, 'answer'])->name('live-board.answer');
+        Route::get('/live-board', [LiveBoardController::class, 'index'])->name('live-board.index');
+        Route::post('/live-board/{question}/claim', [LiveBoardController::class, 'claim'])->name('live-board.claim');
+        Route::post('/live-board/{question}/answer', [LiveBoardController::class, 'answer'])->name('live-board.answer');
 
         // Reviews
         Route::get('/reviews', [ArchitectReviewController::class, 'index'])->name('reviews.index');
@@ -124,11 +134,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/reviews/{review}', [ClientReviewController::class, 'update'])->name('reviews.update');
     });
 
-    // Chat Routes (specific paths before optional /chat/{id})
-    Route::post('/chat/send', [ChatController::class, 'sendMessage'])->name('chat.send');
-    Route::post('/chat/receipt/delivered', [ChatController::class, 'markDelivered'])->name('chat.receipt.delivered');
-    Route::get('/chat/messages/{receiverId}', [ChatController::class, 'fetchMessages'])->name('chat.fetch');
-    Route::get('/chat/{architect_id?}', [ChatController::class, 'index'])->name('chat.index');
+    // Chat Routes — Premium only
+    Route::middleware('premium')->group(function () {
+        Route::post('/chat/send', [ChatController::class, 'sendMessage'])->name('chat.send');
+        Route::post('/chat/receipt/delivered', [ChatController::class, 'markDelivered'])->name('chat.receipt.delivered');
+        Route::get('/chat/messages/{receiverId}', [ChatController::class, 'fetchMessages'])->name('chat.fetch');
+        Route::get('/chat/{architect_id?}', [ChatController::class, 'index'])->name('chat.index');
+    });
 
     // Default Breeze Profile Routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

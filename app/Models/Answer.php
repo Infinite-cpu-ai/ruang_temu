@@ -10,6 +10,8 @@ class Answer extends Model
         'question_id',
         'architect_id',
         'content',
+        'rating',
+        'rating_feedback',
     ];
 
     public function question()
