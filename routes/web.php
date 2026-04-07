@@ -42,10 +42,7 @@ Route::get('/contact', function () {
 Route::post('/midtrans/notification', [MidtransNotificationController::class, 'handle'])->name('midtrans.notification');
 
 // Public Features
-Route::get('/cari-arsitek', [FeatureController::class, 'cari'])->name('features.cari');
-Route::get('/arsitek/{id}', [FeatureController::class, 'profil'])->name('features.profil');
 Route::get('/pricing', [FeatureController::class, 'pricing'])->name('features.pricing');
-Route::get('/arsitek-saya', [FollowedArchitectController::class, 'index'])->name('features.followed');
 
 Route::get('/tanya-arsitek', [QuickAskController::class, 'index'])->name('quick-ask.index');
 Route::post('/tanya-arsitek', [QuickAskController::class, 'store'])->name('quick-ask.store');
@@ -57,6 +54,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Upgrade
     Route::get('/upgrade', [UpgradeController::class, 'index'])->name('upgrade.index');
     Route::post('/upgrade/process', [UpgradeController::class, 'process'])->name('upgrade.process');
+    Route::post('/upgrade/cancel', [UpgradeController::class, 'cancel'])->name('upgrade.cancel');
 
     // Client review actions from architect public profile page
     Route::middleware('can:client')->group(function () {
@@ -67,8 +65,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/arsitek/{architect}/unfollow', [FeatureController::class, 'unfollow'])->name('features.unfollow');
     });
 
-    // Premium-only: Checkout & Chat
+    // Premium-only: Advanced Features, Checkout & Chat
     Route::middleware(['can:client', 'premium'])->group(function () {
+        // Browse & Profil Arsitek
+        Route::get('/cari-arsitek', [FeatureController::class, 'cari'])->name('features.cari');
+        Route::get('/arsitek/{id}', [FeatureController::class, 'profil'])->name('features.profil');
+        Route::get('/arsitek-saya', [FollowedArchitectController::class, 'index'])->name('features.followed');
+
+        // Checkout
         Route::get('/checkout/finish/{project}', [CheckoutController::class, 'finish'])->name('checkout.finish');
         Route::get('/checkout/{architect}', [CheckoutController::class, 'index'])->name('checkout.index');
         Route::post('/checkout/process', [CheckoutController::class, 'processPayment'])->name('checkout.process');

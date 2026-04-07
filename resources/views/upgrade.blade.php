@@ -113,6 +113,21 @@
                         <div class="rounded-2xl bg-emerald-50 border border-emerald-200 px-6 py-3 text-center text-sm font-bold text-emerald-700">
                             ✅ Kamu sudah Premium!
                         </div>
+                        
+                        @if(auth()->user()->is_subscription_active)
+                            <p class="mt-3 text-center text-xs text-gray-500 font-medium">Berlaku hingga {{ auth()->user()->premium_expires_at?->format('d M Y') }}.</p>
+                            <form action="{{ route('upgrade.cancel') }}" method="POST" class="mt-2 text-center" onsubmit="return confirm('Apakah kamu yakin ingin membatalkan perpanjangan otomatis? Fitur Premium akan tetap aktif hingga periode ini berakhir.')">
+                                @csrf
+                                <button type="submit" class="text-xs font-bold text-red-500 hover:text-red-700 hover:underline transition">
+                                    Batalkan Langganan
+                                </button>
+                            </form>
+                        @else
+                            <div class="mt-3 rounded-xl bg-orange-50 border border-orange-100 p-3 text-center">
+                                <p class="text-xs text-orange-600 font-bold">⚠️ Langganan Telah Dibatalkan</p>
+                                <p class="text-[11px] text-gray-500 font-medium mt-1">Akan kembali ke Free Plan pada {{ auth()->user()->premium_expires_at?->format('d M Y') }}.</p>
+                            </div>
+                        @endif
                     @else
                         <form action="{{ route('upgrade.process') }}" method="POST">
                             @csrf
