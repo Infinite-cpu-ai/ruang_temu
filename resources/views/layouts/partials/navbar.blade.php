@@ -2,8 +2,8 @@
     class="w-full border-b border-gray-100 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80 sticky top-0 z-40">
     <div class="max-w-7xl mx-auto px-6 lg:px-10">
         <div class="h-20 flex items-center justify-between gap-4">
-            <a href="{{ route('home') }}" class="text-sm font-semibold tracking-wide text-gray-900">
-                RUANG TEMU
+            <a href="{{ route('home') }}" class="flex items-center">
+                <img src="{{ asset('images/assets/Logo Ruang Temu.png') }}" alt="Ruang Temu" class="h-10 w-auto object-contain">
             </a>
 
             <nav class="hidden md:flex items-center gap-10 text-sm text-gray-500">

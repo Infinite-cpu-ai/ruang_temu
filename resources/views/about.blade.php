@@ -5,12 +5,7 @@
     
     {{-- Logo & Brand --}}
     <div class="text-center mb-10">
-        <h1 class="text-6xl font-black tracking-tight text-gray-900 leading-none">
-            LOGO
-        </h1>
-        <h2 class="text-5xl font-black tracking-tight text-gray-900 leading-none mt-2">
-            RUANG TEMU
-        </h2>
+        <img src="{{ asset('images/assets/Logo Ruang Temu.png') }}" alt="Ruang Temu" class="h-32 sm:h-40 mx-auto object-contain">
     </div>
 
     {{-- Contact Info - Horizontal --}}

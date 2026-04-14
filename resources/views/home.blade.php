@@ -3,12 +3,7 @@
 @section('content')
 <section class="pt-24 pb-24 min-h-[calc(100vh-5rem)] flex items-center justify-center">
     <div class="max-w-5xl mx-auto px-6 w-full text-center">
-        <h2 class="text-5xl sm:text-6xl font-extrabold tracking-tight text-gray-900 mb-4">
-            LOGO
-        </h2>
-        <h1 class="text-6xl sm:text-7xl font-black tracking-tight text-gray-900 leading-none">
-            RUANG TEMU
-        </h1>
+        <img src="{{ asset('images/assets/Logo Ruang Temu.png') }}" alt="Ruang Temu" class="h-32 sm:h-40 mx-auto object-contain">
         <p class="mt-10 text-sm text-gray-400 max-w-xl mx-auto leading-relaxed">
             Tempat kamu mencari, bertanya, konsultasi dan membangun - langsung dengan arsitek pilihan mu
         </p>
