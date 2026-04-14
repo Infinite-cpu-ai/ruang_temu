@@ -11,6 +11,13 @@ class UpgradeController extends Controller
 {
     public function index(): View
     {
+        /** @var User $user */
+        $user = auth()->user();
+
+        if ($user?->role === 'architect') {
+            return view('upgrade-architect');
+        }
+
         return view('upgrade');
     }
 
