@@ -79,11 +79,11 @@
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                                                @if($project->status == 'pending') bg-yellow-100 text-yellow-800
-                                                                @elseif($project->status == 'paid') bg-emerald-100 text-emerald-800
-                                                                @elseif($project->status == 'on_progress') bg-blue-100 text-blue-800
-                                                                @elseif($project->status == 'completed') bg-green-100 text-green-800
-                                                                @else bg-red-100 text-red-800 @endif">
+                                                                            @if($project->status == 'pending') bg-yellow-100 text-yellow-800
+                                                                            @elseif($project->status == 'paid') bg-emerald-100 text-emerald-800
+                                                                            @elseif($project->status == 'on_progress') bg-blue-100 text-blue-800
+                                                                            @elseif($project->status == 'completed') bg-green-100 text-green-800
+                                                                            @else bg-red-100 text-red-800 @endif">
                                                     {{ ucfirst(str_replace('_', ' ', $project->status)) }}
                                                 </span>
                                             </td>
