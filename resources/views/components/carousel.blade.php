@@ -47,58 +47,33 @@
         <p id="feature-desc" class="mt-4 text-xs sm:text-sm text-gray-400 max-w-2xl mx-auto">
             Penjelasan Features: Portofolio, spesialisasi, harga per m2, Rating Arsitek
         </p>
+        <a id="feature-primary" href="{{ route('features.followed') }}" class="hidden"></a>
 
-        <!-- <div class="mt-12 flex flex-col items-center gap-3">
-            <a
-                id="feature-primary"
-                href="{{ route('features.followed') }}"
-                class="inline-flex items-center justify-center gap-4 rounded-full bg-black text-white p-1 pr-6 text-sm font-medium hover:bg-gray-800 transition w-64 max-w-full shadow-lg"
-            >
-                <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white text-black shrink-0">
-                    <svg class="w-4 h-4 ml-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <line x1="22" y1="2" x2="11" y2="13" stroke-width="2" stroke-linecap="round"/>
-                        <polygon points="22 2 15 22 11 13 2 9 22 2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <div class="mt-10 flex flex-col items-center gap-3">
+            <a href="{{ route('features.followed') }}"
+                class="inline-flex items-center gap-3 bg-black text-white text-sm font-medium px-6 py-3 rounded-full hover:bg-gray-800 transition-colors">
+                <span class="w-7 h-7 rounded-full border-2 border-white flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
                     </svg>
                 </span>
                 Get Started
-            </a> -->
+            </a>
 
-        <a href="{{ route('features.followed') }}"
-            class="inline-flex items-center gap-3 bg-black text-white text-sm font-medium px-6 py-3 rounded-full hover:bg-gray-800 transition-colors">
-            <span class="w-7 h-7 rounded-full border-2 border-white flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="22" y1="2" x2="11" y2="13"></line>
-                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                </svg>
-            </span>
-            Get Started
-        </a>
-
-        <a href="{{ route('contact') }}"
-            class="inline-flex items-center gap-2 bg-black text-white text-sm font-medium px-5 py-2 rounded-full hover:bg-gray-800 transition-colors">
-            <span class="w-6 h-6 rounded-full border-2 border-white flex items-center justify-center">
-                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                </svg>
-            </span>
-            Alur Pemesanan
-        </a>
-        <!-- <a
-                id="feature-secondary"
-                href="{{ route('contact') }}"
-                class="inline-flex items-center gap-3 rounded-full bg-black text-white p-1 pl-4 pr-6 text-[10px] font-medium hover:bg-gray-800 transition w-auto max-w-full shadow-md"
-            >
-                <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-white text-black shrink-0">
+            <a href="{{ route('contact') }}"
+                class="inline-flex items-center gap-2 bg-black text-white text-sm font-medium px-5 py-2 rounded-full hover:bg-gray-800 transition-colors">
+                <span class="w-6 h-6 rounded-full border-2 border-white flex items-center justify-center">
                     <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                     </svg>
                 </span>
                 Alur Pemesanan
-            </a> -->
+            </a>
+        </div>
     </div>
-</div>
 </div>
 
 <script>
