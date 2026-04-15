@@ -21,6 +21,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Portfolio images (local)
+        $homeImg = '/images/portofolios/house_mockup.jpg';
+        $officeImg = '/images/portofolios/office_mockup.jpeg';
+
         // 1. SPECIALIZATIONS
         $specNames = [
             'Arsitektur Hunian',
@@ -44,6 +48,7 @@ class DatabaseSeeder extends Seeder
         User::create([
             'name' => 'Admin Ruang Temu',
             'email' => 'admin@ruangtemu.com',
+            'email_verified_at' => now(),
             'password' => Hash::make('password'),
             'role' => 'admin',
             'is_active' => true,
@@ -53,37 +58,37 @@ class DatabaseSeeder extends Seeder
         $clientTanya = User::create([
             'name' => 'Michael Wibowo',
             'email' => 'klien@ruangtemu.com',
+            'email_verified_at' => now(),
             'password' => Hash::make('password'),
             'role' => 'user',
             'is_active' => true,
             'is_premium' => true,
             'is_subscription_active' => true,
             'premium_expires_at' => now()->addMonths(3),
-            'profile_image' => 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&q=80&w=200&h=200',
         ]);
 
         $clientRina = User::create([
             'name' => 'Rina Paramita',
             'email' => 'rina.klien@example.com',
+            'email_verified_at' => now(),
             'password' => Hash::make('password'),
             'role' => 'user',
             'is_active' => true,
             'is_premium' => true,
             'is_subscription_active' => true,
             'premium_expires_at' => now()->addMonths(2),
-            'profile_image' => 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=200&h=200',
         ]);
 
         $clientBudi = User::create([
             'name' => 'Budi Setiawan',
             'email' => 'budi.klien@example.com',
+            'email_verified_at' => now(),
             'password' => Hash::make('password'),
             'role' => 'user',
             'is_active' => true,
             'is_premium' => true,
             'is_subscription_active' => true,
             'premium_expires_at' => now()->addMonth(),
-            'profile_image' => 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200&h=200',
         ]);
 
         $clients = [$clientTanya, $clientRina, $clientBudi];
@@ -95,13 +100,13 @@ class DatabaseSeeder extends Seeder
                 'user' => [
                     'name' => 'Andra Matin',
                     'email' => 'andra.matin@ruangtemu.com',
+                    'email_verified_at' => now(),
                     'password' => Hash::make('password'),
                     'role' => 'architect',
                     'is_active' => true,
                     'is_premium' => true,
                     'is_subscription_active' => true,
                     'premium_expires_at' => now()->addYear(),
-                    'profile_image' => 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=400&h=400',
                 ],
                 'profile' => [
                     'specialization' => 'Modern Tropis & Kontemporer',
@@ -113,30 +118,27 @@ class DatabaseSeeder extends Seeder
                     'timeline' => '3-6 Bulan',
                 ],
                 'specs' => [0, 1, 5],
+                'type' => 'hunian',
                 'portfolios' => [
-                    [
-                        'title' => 'Rumah Alam Sutera Residence',
-                        'description' => 'Hunian minimalis tropis 2 lantai dengan konsep open-plan living, kolam renang privat, dan taman vertikal. Material dominan kayu jati dan beton ekspos.',
-                        'image' => 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&q=80&w=1200',
-                    ],
-                    [
-                        'title' => 'Villa Ubud Bamboo House',
-                        'description' => 'Vila butik 4 kamar tidur dengan struktur bambu pabrikasi. Infinity pool menghadap sawah terasering.',
-                        'image' => 'https://images.unsplash.com/photo-1610641818989-c2051b5e2cfd?auto=format&fit=crop&q=80&w=1200',
-                    ],
+                    ['title' => 'Rumah Alam Sutera Residence', 'description' => 'Hunian minimalis tropis 2 lantai dengan konsep open-plan living, kolam renang privat, dan taman vertikal.'],
+                    ['title' => 'Villa Ubud Bamboo House', 'description' => 'Vila butik 4 kamar tidur dengan struktur bambu pabrikasi. Infinity pool menghadap sawah.'],
+                    ['title' => 'Townhouse Cipete', 'description' => 'Cluster townhouse modern 3 unit dengan shared courtyard dan rooftop garden.'],
+                    ['title' => 'Retreat House Puncak', 'description' => 'Rumah peristirahatan pegunungan dengan dinding kaca penuh dan fireplace batu alam.'],
+                    ['title' => 'Compact House Kemang', 'description' => 'Rumah compact di lahan 90m2 dengan split level dan skylight untuk pencahayaan alami.'],
+                    ['title' => 'Pavilion House Sentul', 'description' => 'Konsep pavilion terpisah untuk area tidur dan living, dihubungkan oleh taman air.'],
                 ],
             ],
             [
                 'user' => [
                     'name' => 'Kengo Kuma',
                     'email' => 'kengo.kuma@ruangtemu.com',
+                    'email_verified_at' => now(),
                     'password' => Hash::make('password'),
                     'role' => 'architect',
                     'is_active' => true,
                     'is_premium' => true,
                     'is_subscription_active' => true,
                     'premium_expires_at' => now()->addYear(),
-                    'profile_image' => 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=400&h=400',
                 ],
                 'profile' => [
                     'specialization' => 'Natural Material & Zen Design',
@@ -148,30 +150,27 @@ class DatabaseSeeder extends Seeder
                     'timeline' => '4-8 Bulan',
                 ],
                 'specs' => [0, 1, 6],
+                'type' => 'hunian',
                 'portfolios' => [
-                    [
-                        'title' => 'Timber Lattice House',
-                        'description' => 'Rumah dengan fasad kisi-kisi kayu cedar yang menciptakan permainan cahaya dinamis sepanjang hari. Konsep wabi-sabi di setiap detail.',
-                        'image' => 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1200',
-                    ],
-                    [
-                        'title' => 'Garden Pavilion Sentul',
-                        'description' => 'Paviliun taman dengan atap melengkung dari material bambu laminasi. Ruang meditasi yang menyatu dengan alam.',
-                        'image' => 'https://images.unsplash.com/photo-1584483733009-328b9ab7d264?auto=format&fit=crop&q=80&w=1200',
-                    ],
+                    ['title' => 'Timber Lattice House', 'description' => 'Fasad kisi-kisi kayu cedar yang menciptakan permainan cahaya dinamis sepanjang hari.'],
+                    ['title' => 'Garden Pavilion Sentul', 'description' => 'Paviliun taman dengan atap melengkung dari bambu laminasi. Ruang meditasi.'],
+                    ['title' => 'Zen Courtyard House', 'description' => 'Rumah dengan inner courtyard bergaya zen garden, batu kerikil, dan maple Jepang.'],
+                    ['title' => 'Floating Tea House', 'description' => 'Ruang teh yang mengambang di atas kolam refleksi. Struktur kayu tanpa paku.'],
+                    ['title' => 'Bamboo Canopy Residence', 'description' => 'Kesatuan antara arsitektur dan alam dengan kanopi bambu yang menaungi seluruh bangunan.'],
+                    ['title' => 'Light Wood Villa', 'description' => 'Vila dengan selubung kayu ringan yang bisa dibuka tutup mengikuti cuaca dan musim.'],
                 ],
             ],
             [
                 'user' => [
                     'name' => 'Realrich Sjarief',
                     'email' => 'realrich@ruangtemu.com',
+                    'email_verified_at' => now(),
                     'password' => Hash::make('password'),
                     'role' => 'architect',
                     'is_active' => true,
                     'is_premium' => true,
                     'is_subscription_active' => true,
                     'premium_expires_at' => now()->addYear(),
-                    'profile_image' => 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=400&h=400',
                 ],
                 'profile' => [
                     'specialization' => 'Raw Architecture & Sustainable',
@@ -183,25 +182,27 @@ class DatabaseSeeder extends Seeder
                     'timeline' => '3-5 Bulan',
                 ],
                 'specs' => [0, 3, 5],
+                'type' => 'hunian',
                 'portfolios' => [
-                    [
-                        'title' => 'Omah Boto Semarang',
-                        'description' => 'Rumah bata merah ekspos dengan void besar di tengah. Sirkulasi udara alami tanpa AC. Penghargaan IAI Award 2024.',
-                        'image' => 'https://images.unsplash.com/photo-1523217582562-09d0def993a6?auto=format&fit=crop&q=80&w=1200',
-                    ],
+                    ['title' => 'Omah Boto Semarang', 'description' => 'Rumah bata merah ekspos dengan void besar. Sirkulasi udara alami tanpa AC.'],
+                    ['title' => 'Concrete Frame House', 'description' => 'Struktur beton ekspos dengan tanaman merambat sebagai selubung hijau alami.'],
+                    ['title' => 'Brick Garden House', 'description' => 'Hunian dengan 70% area taman. Dinding bata daur ulang dari pabrik gula tua.'],
+                    ['title' => 'Rumah Kayu Recycled', 'description' => 'Seluruh material kayu berasal dari kapal nelayan dan rumah Joglo yang dibongkar.'],
+                    ['title' => 'Earth Shelter Home', 'description' => 'Rumah semi-underground dengan atap tanah yang menyatu dengan kontur bukit.'],
+                    ['title' => 'Ventilation House', 'description' => 'Eksperimen arsitektur dengan 12 jenis bukaan untuk ventilasi silang maksimal.'],
                 ],
             ],
             [
                 'user' => [
                     'name' => 'Bjarke Ingels',
                     'email' => 'bjarke.ingels@ruangtemu.com',
+                    'email_verified_at' => now(),
                     'password' => Hash::make('password'),
                     'role' => 'architect',
                     'is_active' => true,
                     'is_premium' => true,
                     'is_subscription_active' => true,
                     'premium_expires_at' => now()->addYear(),
-                    'profile_image' => 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=400&h=400',
                 ],
                 'profile' => [
                     'specialization' => 'Futuristic & Hedonistic Sustainability',
@@ -213,30 +214,27 @@ class DatabaseSeeder extends Seeder
                     'timeline' => '4-7 Bulan',
                 ],
                 'specs' => [0, 1, 6],
+                'type' => 'hunian',
                 'portfolios' => [
-                    [
-                        'title' => 'Cliff House Uluwatu',
-                        'description' => 'Rumah tebing 3 lantai dengan cantilever dramatis menghadap samudera. Rooftop garden dan panel surya terintegrasi.',
-                        'image' => 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&q=80&w=1200',
-                    ],
-                    [
-                        'title' => 'Spiral Garden House',
-                        'description' => 'Hunian dengan ramp spiral yang menghubungkan semua lantai, menciptakan taman kontinyu dari basement ke rooftop.',
-                        'image' => 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&q=80&w=1200',
-                    ],
+                    ['title' => 'Cliff House Uluwatu', 'description' => 'Rumah tebing 3 lantai dengan cantilever dramatis menghadap samudera.'],
+                    ['title' => 'Spiral Garden House', 'description' => 'Hunian dengan ramp spiral menghubungkan semua lantai, taman kontinyu.'],
+                    ['title' => 'Infinity Pool Villa', 'description' => 'Vila dengan kolam renang tanpa batas yang menyatu dengan cakrawala Bali.'],
+                    ['title' => 'Solar Powered Residence', 'description' => 'Rumah net-zero energy dengan panel surya terintegrasi ke atap origami.'],
+                    ['title' => 'Modular Beach House', 'description' => 'Hunian modular yang bisa diperluas. Setiap modul memiliki teras pantai privat.'],
+                    ['title' => 'Rooftop Farm House', 'description' => 'Rumah dengan kebun produktif di rooftop seluas 200m2 untuk urban farming.'],
                 ],
             ],
             [
                 'user' => [
                     'name' => 'Achmad Tardiyana',
                     'email' => 'achmad.tardiyana@ruangtemu.com',
+                    'email_verified_at' => now(),
                     'password' => Hash::make('password'),
                     'role' => 'architect',
                     'is_active' => true,
                     'is_premium' => true,
                     'is_subscription_active' => true,
                     'premium_expires_at' => now()->addYear(),
-                    'profile_image' => 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=400&h=400',
                 ],
                 'profile' => [
                     'specialization' => 'Smart Home & IoT Architecture',
@@ -248,17 +246,14 @@ class DatabaseSeeder extends Seeder
                     'timeline' => '2-4 Bulan',
                 ],
                 'specs' => [0, 1, 5],
+                'type' => 'hunian',
                 'portfolios' => [
-                    [
-                        'title' => 'Smart Compact House Dago',
-                        'description' => 'Rumah tumbuh di lahan 72m2 dengan sistem smart home terintegrasi. Split level dan mezzanine untuk efisiensi ruang.',
-                        'image' => 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&q=80&w=1200',
-                    ],
-                    [
-                        'title' => 'Eco Residence Cimahi',
-                        'description' => 'Perumahan cluster 12 unit dengan rainwater harvesting dan smart energy management system.',
-                        'image' => 'https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?auto=format&fit=crop&q=80&w=1200',
-                    ],
+                    ['title' => 'Smart Compact House Dago', 'description' => 'Rumah tumbuh di lahan 72m2 dengan sistem smart home terintegrasi penuh.'],
+                    ['title' => 'Eco Residence Cimahi', 'description' => 'Perumahan cluster 12 unit dengan rainwater harvesting dan smart energy.'],
+                    ['title' => 'IoT Villa Lembang', 'description' => 'Vila dengan otomasi penuh: lighting, HVAC, security, dan irrigation system.'],
+                    ['title' => 'Passive House Bandung', 'description' => 'Rumah hemat energi 80% dengan insulasi optimal dan heat recovery ventilation.'],
+                    ['title' => 'Nano House Project', 'description' => 'Eksperimen hunian 36m2 dengan furnitur transformable dan storage tersembunyi.'],
+                    ['title' => 'Smart Garden Home', 'description' => 'Rumah dengan sistem IoT untuk monitoring dan perawatan taman otomatis.'],
                 ],
             ],
             // ── Komersial Specialists (5) ──
@@ -266,13 +261,13 @@ class DatabaseSeeder extends Seeder
                 'user' => [
                     'name' => 'Danny Wicaksono',
                     'email' => 'danny.wicaksono@ruangtemu.com',
+                    'email_verified_at' => now(),
                     'password' => Hash::make('password'),
                     'role' => 'architect',
                     'is_active' => true,
                     'is_premium' => true,
                     'is_subscription_active' => true,
                     'premium_expires_at' => now()->addYear(),
-                    'profile_image' => 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&q=80&w=400&h=400',
                 ],
                 'profile' => [
                     'specialization' => 'Corporate & Office Design',
@@ -284,30 +279,27 @@ class DatabaseSeeder extends Seeder
                     'timeline' => '3-6 Bulan',
                 ],
                 'specs' => [2, 1, 6],
+                'type' => 'komersial',
                 'portfolios' => [
-                    [
-                        'title' => 'Senopati Office Tower Lobby',
-                        'description' => 'Redesain lobby kantor 25 lantai dengan konsep biophilic design. Vertical garden dan water feature sebagai focal point.',
-                        'image' => 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=1200',
-                    ],
-                    [
-                        'title' => 'WeWork Inspired Co-Space',
-                        'description' => 'Co-working space 800m2 dengan zona kolaborasi, phone booth, dan pantry komunal bergaya industrial chic.',
-                        'image' => 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&q=80&w=1200',
-                    ],
+                    ['title' => 'Senopati Office Tower Lobby', 'description' => 'Redesain lobby kantor 25 lantai dengan biophilic design dan vertical garden.'],
+                    ['title' => 'WeWork Inspired Co-Space', 'description' => 'Co-working space 800m2 dengan zona kolaborasi dan phone booth.'],
+                    ['title' => 'Tech Startup HQ', 'description' => 'Kantor pusat startup teknologi dengan open floor plan dan game room.'],
+                    ['title' => 'Executive Boardroom Suite', 'description' => 'Ruang rapat eksekutif dengan smart display wall dan akustik premium.'],
+                    ['title' => 'Creative Agency Office', 'description' => 'Kantor agensi kreatif dengan studio foto, ruang brainstorm, dan pantry bar.'],
+                    ['title' => 'Flexible Workspace Hub', 'description' => 'Workspace hybrid dengan hot desk, private pod, dan meeting room modular.'],
                 ],
             ],
             [
                 'user' => [
                     'name' => 'Masamichi Katayama',
                     'email' => 'masamichi@ruangtemu.com',
+                    'email_verified_at' => now(),
                     'password' => Hash::make('password'),
                     'role' => 'architect',
                     'is_active' => true,
                     'is_premium' => true,
                     'is_subscription_active' => true,
                     'premium_expires_at' => now()->addYear(),
-                    'profile_image' => 'https://images.unsplash.com/photo-1537511446984-935f663eb1f4?auto=format&fit=crop&q=80&w=400&h=400',
                 ],
                 'profile' => [
                     'specialization' => 'Retail & Hospitality Experience',
@@ -319,30 +311,27 @@ class DatabaseSeeder extends Seeder
                     'timeline' => '2-5 Bulan',
                 ],
                 'specs' => [2, 4, 1],
+                'type' => 'komersial',
                 'portfolios' => [
-                    [
-                        'title' => 'Flagship Store PIK Avenue',
-                        'description' => 'Butik fashion 400m2 dengan instalasi seni kinetik di entrance dan fitting room yang Instagrammable.',
-                        'image' => 'https://images.unsplash.com/photo-1604014237800-1c9102c219da?auto=format&fit=crop&q=80&w=1200',
-                    ],
-                    [
-                        'title' => 'Omakase Counter Kemang',
-                        'description' => 'Restoran omakase 16 seat dengan material hinoki cypress dan lighting dramatis yang terinspirasi teater Noh.',
-                        'image' => 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&q=80&w=1200',
-                    ],
+                    ['title' => 'Flagship Store PIK Avenue', 'description' => 'Butik fashion 400m2 dengan instalasi seni kinetik di entrance.'],
+                    ['title' => 'Omakase Counter Kemang', 'description' => 'Restoran omakase 16 seat dengan material hinoki cypress dan lighting dramatis.'],
+                    ['title' => 'Concept Store Sudirman', 'description' => 'Toko konsep multi-brand dengan layout yang berubah setiap musim.'],
+                    ['title' => 'Artisan Bakery Interior', 'description' => 'Interior bakery artisan dengan oven display dan counter kayu oak massif.'],
+                    ['title' => 'Luxury Spa Retreat', 'description' => 'Spa mewah dengan private onsen, steam room, dan relaxation lounge.'],
+                    ['title' => 'Rooftop Bar & Lounge', 'description' => 'Bar rooftop dengan panorama skyline Jakarta dan cocktail bar circular.'],
                 ],
             ],
             [
                 'user' => [
                     'name' => 'Budi Pradono',
                     'email' => 'budi.pradono@ruangtemu.com',
+                    'email_verified_at' => now(),
                     'password' => Hash::make('password'),
                     'role' => 'architect',
                     'is_active' => true,
                     'is_premium' => true,
                     'is_subscription_active' => true,
                     'premium_expires_at' => now()->addYear(),
-                    'profile_image' => 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&q=80&w=400&h=400',
                 ],
                 'profile' => [
                     'specialization' => 'Parametric & Digital Architecture',
@@ -354,30 +343,27 @@ class DatabaseSeeder extends Seeder
                     'timeline' => '4-8 Bulan',
                 ],
                 'specs' => [2, 6, 1],
+                'type' => 'komersial',
                 'portfolios' => [
-                    [
-                        'title' => 'Community Hub Surabaya',
-                        'description' => 'Pusat komunitas dengan fasad parametrik dari panel aluminium CNC cut. Atap membran ETFE transparan.',
-                        'image' => 'https://images.unsplash.com/photo-1541887089-13db5231c6a2?auto=format&fit=crop&q=80&w=1200',
-                    ],
-                    [
-                        'title' => 'Digital Art Gallery',
-                        'description' => 'Galeri seni digital 1200m2 dengan LED wall immersive dan spatial audio. Pertama di Indonesia Timur.',
-                        'image' => 'https://images.unsplash.com/photo-1518998053901-5348d3961a04?auto=format&fit=crop&q=80&w=1200',
-                    ],
+                    ['title' => 'Community Hub Surabaya', 'description' => 'Pusat komunitas dengan fasad parametrik dari panel aluminium CNC cut.'],
+                    ['title' => 'Digital Art Gallery', 'description' => 'Galeri seni digital 1200m2 dengan LED wall immersive dan spatial audio.'],
+                    ['title' => 'Parametric Pavilion', 'description' => 'Paviliun pameran dengan struktur 3D printed dari beton daur ulang.'],
+                    ['title' => 'Interactive Museum', 'description' => 'Museum interaktif dengan sensor gerak dan projection mapping di setiap ruang.'],
+                    ['title' => 'Media Facade Building', 'description' => 'Gedung komersial dengan fasad LED responsive yang berinteraksi dengan pejalan kaki.'],
+                    ['title' => 'Kinetic Art Center', 'description' => 'Pusat seni kinetik dengan elemen arsitektur yang bergerak mengikuti angin.'],
                 ],
             ],
             [
                 'user' => [
                     'name' => 'Andi Pratomo',
                     'email' => 'andi.pratomo@ruangtemu.com',
+                    'email_verified_at' => now(),
                     'password' => Hash::make('password'),
                     'role' => 'architect',
                     'is_active' => true,
                     'is_premium' => true,
                     'is_subscription_active' => true,
                     'premium_expires_at' => now()->addYear(),
-                    'profile_image' => 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=400&h=400',
                 ],
                 'profile' => [
                     'specialization' => 'Sustainable Commercial Design',
@@ -389,30 +375,27 @@ class DatabaseSeeder extends Seeder
                     'timeline' => '3-6 Bulan',
                 ],
                 'specs' => [2, 3, 5],
+                'type' => 'komersial',
                 'portfolios' => [
-                    [
-                        'title' => 'Green Office Jogja',
-                        'description' => 'Kantor hijau 3 lantai dengan sertifikasi Green Building. Fasad tanaman gantung dan panel surya terintegrasi.',
-                        'image' => 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1200',
-                    ],
-                    [
-                        'title' => 'Malioboro Retail Complex',
-                        'description' => 'Renovasi komplek ritel heritage di kawasan Malioboro dengan pendekatan adaptive reuse dan vernakular Jawa.',
-                        'image' => 'https://images.unsplash.com/photo-1555636222-cae831e670b3?auto=format&fit=crop&q=80&w=1200',
-                    ],
+                    ['title' => 'Green Office Jogja', 'description' => 'Kantor hijau 3 lantai dengan sertifikasi Green Building dan panel surya.'],
+                    ['title' => 'Malioboro Retail Complex', 'description' => 'Renovasi komplek ritel heritage di Malioboro dengan adaptive reuse.'],
+                    ['title' => 'Bamboo Market Hall', 'description' => 'Pasar modern dengan struktur bambu bentang lebar tanpa kolom di tengah.'],
+                    ['title' => 'Eco Hotel Prambanan', 'description' => 'Hotel ramah lingkungan 40 kamar dengan zero waste management system.'],
+                    ['title' => 'Solar Canopy Mall', 'description' => 'Pusat perbelanjaan outdoor dengan kanopi panel surya yang menghasilkan listrik.'],
+                    ['title' => 'Vertical Farm Market', 'description' => 'Pasar dengan vertical farming terintegrasi, sayuran dipanen langsung di tempat.'],
                 ],
             ],
             [
                 'user' => [
                     'name' => 'Snøhetta',
                     'email' => 'snohetta@ruangtemu.com',
+                    'email_verified_at' => now(),
                     'password' => Hash::make('password'),
                     'role' => 'architect',
                     'is_active' => true,
                     'is_premium' => true,
                     'is_subscription_active' => true,
                     'premium_expires_at' => now()->addYear(),
-                    'profile_image' => 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400&h=400',
                 ],
                 'profile' => [
                     'specialization' => 'Landscape-Integrated Commercial',
@@ -424,22 +407,14 @@ class DatabaseSeeder extends Seeder
                     'timeline' => '6-12 Bulan',
                 ],
                 'specs' => [2, 3, 4],
+                'type' => 'komersial',
                 'portfolios' => [
-                    [
-                        'title' => 'Underwater Restaurant Bali',
-                        'description' => 'Restoran bawah laut pertama di Indonesia. Dinding kaca akrilik 360° dengan kapasitas 48 tamu, kedalaman 5m.',
-                        'image' => 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&q=80&w=1200',
-                    ],
-                    [
-                        'title' => 'Mountain Library Kintamani',
-                        'description' => 'Perpustakaan publik di kaki Gunung Batur dengan roof garden terbuka dan panorama danau kaldera.',
-                        'image' => 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&q=80&w=1200',
-                    ],
-                    [
-                        'title' => 'Beachfront Resort Nusa Dua',
-                        'description' => 'Resort butik 30 kamar yang tenggelam ke dalam kontur pantai. Rooftop menyatu dengan bukit pasir alami.',
-                        'image' => 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&q=80&w=1200',
-                    ],
+                    ['title' => 'Underwater Restaurant Bali', 'description' => 'Restoran bawah laut pertama di Indonesia. Dinding kaca akrilik 360°.'],
+                    ['title' => 'Mountain Library Kintamani', 'description' => 'Perpustakaan publik di kaki Gunung Batur dengan roof garden terbuka.'],
+                    ['title' => 'Beachfront Resort Nusa Dua', 'description' => 'Resort butik 30 kamar yang tenggelam ke dalam kontur pantai.'],
+                    ['title' => 'Volcanic Spa Center', 'description' => 'Spa center yang memanfaatkan panas bumi vulkanik untuk kolam terapi.'],
+                    ['title' => 'Cliff Edge Restaurant', 'description' => 'Restoran di tepi tebing dengan lantai kaca transparan dan sunset view.'],
+                    ['title' => 'Coral Reef Observatory', 'description' => 'Observatorium terumbu karang dengan tunnel bawah air dan amphitheater.'],
                 ],
             ],
         ];
@@ -460,13 +435,14 @@ class DatabaseSeeder extends Seeder
             });
             $profile->specializations()->attach($specIds);
 
-            // Create portfolios
+            // Create portfolios with local images
+            $img = $data['type'] === 'hunian' ? $homeImg : $officeImg;
             foreach ($data['portfolios'] as $portData) {
                 Portfolio::create([
                     'architect_profile_id' => $profile->id,
                     'title' => $portData['title'],
                     'description' => $portData['description'],
-                    'image' => $portData['image'],
+                    'image' => $img,
                 ]);
             }
 
@@ -493,7 +469,7 @@ class DatabaseSeeder extends Seeder
                 'units' => 1,
                 'status' => 'completed',
                 'rating' => 4,
-                'comment' => 'Sangat solutif untuk rumah compact kami. Smart home integrationnya keren. Sedikit terlambat tapi kami puas!',
+                'comment' => 'Sangat solutif untuk rumah compact kami. Smart home integrationnya keren!',
             ],
             [
                 'client' => $clientBudi,
@@ -503,7 +479,7 @@ class DatabaseSeeder extends Seeder
                 'units' => 1,
                 'status' => 'completed',
                 'rating' => 5,
-                'comment' => 'Super kreatif! Restoran kami jadi paling hits. Customer experience yang didesain luar biasa.',
+                'comment' => 'Super kreatif! Restoran kami jadi paling hits. Customer experience luar biasa.',
             ],
             [
                 'client' => $clientTanya,
@@ -555,9 +531,9 @@ class DatabaseSeeder extends Seeder
         // 6. TANYA ARSITEK (QUESTIONS & ANSWERS)
         $q1 = Question::create([
             'client_id' => $clientTanya->id,
-            'content' => 'Halo min, saya ada lahan 6x12 memanjang ke belakang, ingin bangun rumah 2 lantai minimalis, apakah bujet desain 25 juta cukup?',
+            'content' => 'Halo, saya ada lahan 6x12 memanjang ke belakang, ingin bangun rumah 2 lantai minimalis, bujet desain 25 juta cukup?',
             'status' => 'answered',
-            'architect_id' => $architects[4]->id, // Achmad Tardiyana
+            'architect_id' => $architects[4]->id,
             'claimed_at' => now()->subDays(2),
             'answered_at' => now()->subDay(),
         ]);
@@ -565,27 +541,27 @@ class DatabaseSeeder extends Seeder
         Answer::create([
             'question_id' => $q1->id,
             'architect_id' => $architects[4]->id,
-            'content' => 'Halo Pak Michael! Untuk lahan 6x12 dengan 2 lantai, bujet 25 juta sangat reasonable untuk jasa desain lengkap termasuk gambar kerja. Kalau mau tambah 3D eksterior/interior, biasanya extra 5-8 juta. Mari konsultasi lebih lanjut!',
+            'content' => 'Halo Pak Michael! Untuk lahan 6x12 dengan 2 lantai, bujet 25 juta sangat reasonable untuk jasa desain lengkap. Kalau mau tambah 3D, biasanya extra 5-8 juta. Mari konsultasi lebih lanjut!',
         ]);
 
-        $q2 = Question::create([
+        Question::create([
             'client_id' => $clientRina->id,
-            'content' => 'Arsitek di Jakarta Selatan ada yang bisa renovasi ruko setengah jadi menjadi klinik kecantikan? Budget 500 jutaan untuk renovasinya.',
+            'content' => 'Arsitek di Jakarta Selatan ada yang bisa renovasi ruko jadi klinik kecantikan? Budget 500 jutaan.',
             'status' => 'claimed',
-            'architect_id' => $architects[5]->id, // Danny Wicaksono
+            'architect_id' => $architects[5]->id,
             'claimed_at' => now()->subHours(2),
         ]);
 
         Question::create([
             'client_id' => $clientBudi->id,
-            'content' => 'Mau buka cafe industrial di Surabaya, lahan 200m2. Ada rekomendasi arsitek yang specialized di F&B?',
+            'content' => 'Mau buka cafe industrial di Surabaya, lahan 200m2. Ada rekomendasi arsitek F&B?',
             'status' => 'open',
         ]);
 
-        // 7. FOLLOWS (Favorite Architects)
-        $clientTanya->followingArchitects()->attach($architects[0]->id); // Andra Matin
-        $clientTanya->followingArchitects()->attach($architects[1]->id); // Kengo Kuma
-        $clientRina->followingArchitects()->attach($architects[6]->id); // Masamichi
-        $clientBudi->followingArchitects()->attach($architects[7]->id); // Budi Pradono
+        // 7. FOLLOWS
+        $clientTanya->followingArchitects()->attach($architects[0]->id);
+        $clientTanya->followingArchitects()->attach($architects[1]->id);
+        $clientRina->followingArchitects()->attach($architects[6]->id);
+        $clientBudi->followingArchitects()->attach($architects[7]->id);
     }
 }
