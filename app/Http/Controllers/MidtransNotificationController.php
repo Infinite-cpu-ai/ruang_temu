@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Project;
+use App\Models\User;
 use App\Services\MidtransPaymentService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -26,15 +27,6 @@ class MidtransNotificationController extends Controller
         }
 
         $orderId = (string) $raw['order_id'];
-        $projectId = $midtransPayment->projectIdFromOrderId($orderId);
-        if ($projectId === null) {
-            return response('UNKNOWN_ORDER', 404);
-        }
-
-        $project = Project::query()->find($projectId);
-        if (! $project) {
-            return response('PROJECT_NOT_FOUND', 404);
-        }
 
         try {
             $statusPayload = Transaction::status($orderId);
@@ -58,6 +50,40 @@ class MidtransNotificationController extends Controller
             } else {
                 $shouldMarkPaid = true;
             }
+        }
+
+        // Handle premium subscription orders
+        if ($midtransPayment->isPremiumOrder($orderId)) {
+            $userId = $midtransPayment->userIdFromPremiumOrderId($orderId);
+            if ($userId === null) {
+                return response('UNKNOWN_PREMIUM_ORDER', 404);
+            }
+
+            $user = User::query()->find($userId);
+            if (! $user) {
+                return response('USER_NOT_FOUND', 404);
+            }
+
+            if ($shouldMarkPaid && ! $user->isPremium()) {
+                $user->update([
+                    'is_premium' => true,
+                    'is_subscription_active' => true,
+                    'premium_expires_at' => now()->addMonth(),
+                ]);
+            }
+
+            return response('OK', 200);
+        }
+
+        // Handle project payment orders
+        $projectId = $midtransPayment->projectIdFromOrderId($orderId);
+        if ($projectId === null) {
+            return response('UNKNOWN_ORDER', 404);
+        }
+
+        $project = Project::query()->find($projectId);
+        if (! $project) {
+            return response('PROJECT_NOT_FOUND', 404);
         }
 
         if ($shouldMarkPaid && $project->status !== 'paid') {

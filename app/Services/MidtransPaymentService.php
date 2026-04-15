@@ -78,4 +78,56 @@ class MidtransPaymentService
 
         return null;
     }
+
+    /**
+     * Create a Snap token for a premium subscription payment.
+     *
+     * @throws \Exception
+     */
+    public function createPremiumSnapToken(User $user, int $grossAmount): string
+    {
+        $this->configure();
+
+        $orderId = $this->orderIdForPremium($user);
+
+        $params = [
+            'transaction_details' => [
+                'order_id' => $orderId,
+                'gross_amount' => $grossAmount,
+            ],
+            'customer_details' => [
+                'first_name' => Str::limit((string) $user->name, 40),
+                'email' => $user->email,
+            ],
+            'item_details' => [
+                [
+                    'id' => 'premium-'.$user->id,
+                    'price' => $grossAmount,
+                    'quantity' => 1,
+                    'name' => 'Ruang Temu Premium — 1 Bulan',
+                ],
+            ],
+        ];
+
+        return Snap::getSnapToken($params);
+    }
+
+    public function orderIdForPremium(User $user): string
+    {
+        return 'RUANGTEMU-PREM-'.$user->id.'-'.now()->timestamp;
+    }
+
+    public function userIdFromPremiumOrderId(string $orderId): ?int
+    {
+        if (preg_match('/^RUANGTEMU-PREM-(\d+)-\d+$/', $orderId, $matches)) {
+            return (int) $matches[1];
+        }
+
+        return null;
+    }
+
+    public function isPremiumOrder(string $orderId): bool
+    {
+        return str_starts_with($orderId, 'RUANGTEMU-PREM-');
+    }
 }

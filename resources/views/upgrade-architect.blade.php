@@ -133,13 +133,26 @@
                             </div>
                         @endif
                     @else
-                        <form action="{{ route('upgrade.process') }}" method="POST">
-                            @csrf
-                            <button type="submit"
-                                    class="w-full rounded-2xl bg-gray-900 px-6 py-3.5 text-sm font-bold text-white hover:bg-black transition active:scale-[0.97] shadow-lg shadow-gray-900/20">
-                                Upgrade ke Premium — Rp 50.000/bln
-                            </button>
-                        </form>
+                        @if(!empty($midtransReady))
+                            <form action="{{ route('upgrade.process') }}" method="POST" id="upgrade-form">
+                                @csrf
+                                <button type="submit" id="upgrade-btn"
+                                        class="w-full rounded-2xl bg-gray-900 px-6 py-3.5 text-sm font-bold text-white hover:bg-black transition active:scale-[0.97] shadow-lg shadow-gray-900/20">
+                                    Upgrade ke Premium Arsitek — Rp 50.000/bln
+                                </button>
+                            </form>
+                        @else
+                            <form action="{{ route('upgrade.process') }}" method="POST">
+                                @csrf
+                                <button type="submit"
+                                        class="w-full rounded-2xl bg-gray-900 px-6 py-3.5 text-sm font-bold text-white hover:bg-black transition active:scale-[0.97] shadow-lg shadow-gray-900/20">
+                                    Upgrade ke Premium Arsitek — Rp 50.000/bln
+                                </button>
+                            </form>
+                        @endif
+                        @error('payment')
+                            <p class="mt-3 text-center text-xs text-red-500 font-medium">{{ $message }}</p>
+                        @enderror
                         <p class="mt-3 text-center text-[11px] text-gray-400 font-medium">Bisa dibatalkan kapan saja.</p>
                     @endif
                 @else
@@ -287,4 +300,27 @@
 
     </div>
 </div>
+
+{{-- Midtrans Snap Popup --}}
+@if(!empty($snapToken))
+<script src="{{ $snapScriptUrl }}" data-client-key="{{ $snapClientKey }}"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', function () {
+        snap.pay('{{ $snapToken }}', {
+            onSuccess: function (result) {
+                window.location.href = '{{ route("upgrade.finish") }}';
+            },
+            onPending: function (result) {
+                window.location.href = '{{ route("upgrade.finish") }}';
+            },
+            onError: function (result) {
+                alert('Pembayaran gagal. Silakan coba lagi.');
+            },
+            onClose: function () {
+                // User closed the popup without completing payment
+            }
+        });
+    });
+</script>
+@endif
 @endsection

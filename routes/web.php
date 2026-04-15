@@ -54,6 +54,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Upgrade
     Route::get('/upgrade', [UpgradeController::class, 'index'])->name('upgrade.index');
     Route::post('/upgrade/process', [UpgradeController::class, 'process'])->name('upgrade.process');
+    Route::get('/upgrade/finish', [UpgradeController::class, 'finish'])->name('upgrade.finish');
     Route::post('/upgrade/cancel', [UpgradeController::class, 'cancel'])->name('upgrade.cancel');
 
     // Client review actions from architect public profile page
