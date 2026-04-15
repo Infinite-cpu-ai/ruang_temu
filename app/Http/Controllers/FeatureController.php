@@ -24,6 +24,7 @@ class FeatureController extends Controller
         $architectsQuery = User::query()
             ->where('role', 'architect')
             ->where('is_active', true)
+            ->where('is_premium', true)
             ->with(['architectProfile.specializations'])
             ->withAvg('reviewsAsArchitect as reviews_avg_rating', 'rating');
 
@@ -74,11 +75,11 @@ class FeatureController extends Controller
         // But if architects is empty, we just pass the empty collection to frontend.
 
         // Get unique options dynamically from active architects' profiles
-        $locations = \App\Models\ArchitectProfile::whereHas('user', fn($q) => $q->where('role', 'architect')->where('is_active', true))
+        $locations = \App\Models\ArchitectProfile::whereHas('user', fn($q) => $q->where('role', 'architect')->where('is_active', true)->where('is_premium', true))
             ->whereNotNull('location')->where('location', '!=', '')
             ->distinct()->pluck('location');
             
-        $styles = \App\Models\ArchitectProfile::whereHas('user', fn($q) => $q->where('role', 'architect')->where('is_active', true))
+        $styles = \App\Models\ArchitectProfile::whereHas('user', fn($q) => $q->where('role', 'architect')->where('is_active', true)->where('is_premium', true))
             ->whereNotNull('style')->where('style', '!=', '')
             ->distinct()->pluck('style');
             

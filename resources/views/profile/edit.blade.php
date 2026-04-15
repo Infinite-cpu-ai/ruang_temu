@@ -70,6 +70,26 @@
                 @include('profile.partials.update-password-form')
             </div>
 
+            {{-- Nonaktifkan Akun (Architect only) --}}
+            @if ($user->role === 'architect')
+            <div class="rounded-[2rem] border border-red-100 bg-red-50/50 backdrop-blur-xl p-7 shadow-[0_4px_20px_rgb(0,0,0,0.04)]">
+                <h2 class="text-base font-extrabold text-red-700 mb-1">Nonaktifkan Akun Arsitek</h2>
+                <p class="text-sm text-red-500/80 font-medium mb-5">Aksi ini menyembunyikan profil dari pencarian dan menonaktifkan login. Tidak bisa dikembalikan tanpa bantuan Admin.</p>
+                <form action="{{ route('architect.profile.deactivate') }}" method="POST"
+                      onsubmit="return confirm('Apakah Anda sangat yakin ingin menonaktifkan akun ini?')">
+                    @csrf
+                    @method('PATCH')
+                    <button type="submit"
+                            class="inline-flex items-center gap-2 rounded-2xl border border-red-200 bg-red-50 px-5 py-2.5 text-sm font-bold text-red-600 hover:bg-red-100 transition active:scale-[0.97]">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/>
+                        </svg>
+                        Nonaktifkan Akun
+                    </button>
+                </form>
+            </div>
+            @endif
+
             {{-- Danger Zone --}}
             @if ($user->role !== 'admin')
             <div class="rounded-[2rem] border border-red-100 bg-red-50/50 backdrop-blur-xl p-7 shadow-[0_4px_20px_rgb(0,0,0,0.04)]">

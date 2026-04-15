@@ -114,13 +114,23 @@
                         Kelola Proyek
                     </a>
 
-                    {{-- Always accessible: Edit Profil --}}
+                    {{-- Edit Profil Publik (Premium only) --}}
+                    @if(auth()->user()->isPremium())
                     <a href="{{ route('architect.profile.edit') }}" class="flex items-center gap-3 rounded-2xl bg-white border border-gray-200 text-gray-900 px-4 py-3 text-sm font-bold hover:bg-gray-50 transition active:scale-[0.97]">
                         <span class="flex items-center justify-center w-7 h-7 rounded-full bg-gray-100">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                         </span>
                         Edit Profil Publik
                     </a>
+                    @else
+                    <a href="{{ route('upgrade.index') }}" class="flex items-center gap-3 rounded-2xl bg-gray-50 border border-gray-200 text-gray-400 px-4 py-3 text-sm font-bold hover:bg-gray-100 transition">
+                        <span class="flex items-center justify-center w-7 h-7 rounded-full bg-gray-200">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                        </span>
+                        Edit Profil Publik
+                        <span class="ml-auto text-[10px] font-bold bg-gray-200 text-gray-500 rounded-full px-2 py-0.5">PREMIUM</span>
+                    </a>
+                    @endif
 
                     {{-- Always accessible: Ulasan Klien --}}
                     <a href="{{ route('architect.reviews.index') }}" class="flex items-center gap-3 rounded-2xl bg-white border border-gray-200 text-gray-900 px-4 py-3 text-sm font-bold hover:bg-gray-50 transition active:scale-[0.97]">

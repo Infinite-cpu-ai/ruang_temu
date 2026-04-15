@@ -14,11 +14,18 @@ class ProfileController extends Controller
     public function edit()
     {
         $user = auth()->user();
+
+        if (! $user->isPremium()) {
+            return redirect()->route('upgrade.index')
+                ->with('upgrade_required', 'Upgrade ke Premium untuk mengakses dan mengedit Profil Publik arsitekmu.');
+        }
+
         $profile = $user->architectProfile ?? new ArchitectProfile;
         $specializations = Specialization::all();
         $selectedSpecializations = $profile->exists ? $profile->specializations->pluck('id')->toArray() : [];
+        $portfolios = $profile->exists ? $profile->portfolios()->latest()->get() : collect();
 
-        return view('dashboard.architect.profile.edit', compact('user', 'profile', 'specializations', 'selectedSpecializations'));
+        return view('dashboard.architect.profile.edit', compact('user', 'profile', 'specializations', 'selectedSpecializations', 'portfolios'));
     }
 
     public function update(Request $request)
