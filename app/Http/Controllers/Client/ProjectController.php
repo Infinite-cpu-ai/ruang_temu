@@ -14,7 +14,7 @@ class ProjectController extends Controller
             ->where('user_id', auth()->id())
             ->latest();
 
-        if ($request->has('status') && in_array($request->status, ['pending', 'on_progress', 'completed'])) {
+        if ($request->has('status') && in_array($request->status, ['pending', 'paid', 'on_progress', 'completed', 'cancelled'])) {
             $query->where('status', $request->status);
         }
 
