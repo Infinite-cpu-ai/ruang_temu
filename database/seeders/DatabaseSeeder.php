@@ -40,7 +40,7 @@ class DatabaseSeeder extends Seeder
         foreach ($specNames as $name) {
             $specs->push(Specialization::create([
                 'name' => $name,
-                'description' => 'Fokus spesialisasi dalam bidang '.strtolower($name),
+                'description' => 'Fokus spesialisasi dalam bidang ' . strtolower($name),
             ]));
         }
 
@@ -514,7 +514,7 @@ class DatabaseSeeder extends Seeder
                 'price_per_m2' => $pricePerM2,
                 'total_price' => $pm['area_size'] * $pm['units'] * $pricePerM2,
                 'status' => $pm['status'],
-                'snap_token' => 'dummy-snap-token-'.Str::random(10),
+                'snap_token' => 'dummy-snap-token-' . Str::random(10),
             ]);
 
             if ($pm['rating']) {
