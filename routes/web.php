@@ -153,4 +153,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// Temporary seeder trigger
+Route::get('/run-seeder', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
+        return 'Seeder successfully executed! You can now login.';
+    } catch (\Exception $e) {
+        return 'Error running seeder: ' . $e->getMessage();
+    }
+});
+
 require __DIR__.'/auth.php';
