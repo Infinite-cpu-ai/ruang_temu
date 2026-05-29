@@ -41,6 +41,12 @@ class ProfileController extends Controller
             'profile_image' => 'nullable|image|max:2048',
             'specializations' => 'nullable|array',
             'specializations.*' => 'exists:specializations,id',
+            'bank_accounts' => 'nullable|array',
+            'bank_accounts.*.bank_name' => 'required_with:bank_accounts|string|max:255',
+            'bank_accounts.*.account_number' => 'required_with:bank_accounts|string|max:255',
+            'bank_accounts.*.account_holder' => 'required_with:bank_accounts|string|max:255',
+            'qris_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'remove_qris' => 'nullable|boolean',
         ]);
 
         if ($request->hasFile('profile_image')) {
@@ -48,6 +54,16 @@ class ProfileController extends Controller
                 Storage::disk('public')->delete($profile->profile_image);
             }
             $validated['profile_image'] = $request->file('profile_image')->store('profiles', 'public');
+        }
+
+        if ($request->boolean('remove_qris') && $profile->qris_image) {
+            Storage::disk('public')->delete($profile->qris_image);
+            $validated['qris_image'] = null;
+        } elseif ($request->hasFile('qris_image')) {
+            if ($profile->qris_image) {
+                Storage::disk('public')->delete($profile->qris_image);
+            }
+            $validated['qris_image'] = $request->file('qris_image')->store('qris', 'public');
         }
 
         $profile->fill($validated);

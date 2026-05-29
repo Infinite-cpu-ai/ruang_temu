@@ -129,6 +129,99 @@
                 </div>
             </div>
 
+            {{-- Informasi Pembayaran --}}
+            <div class="rounded-[2rem] border border-white/60 bg-white/70 backdrop-blur-xl p-7 shadow-[0_4px_20px_rgb(0,0,0,0.04)]">
+                <h2 class="text-base font-extrabold text-gray-900 mb-1">Informasi Pembayaran</h2>
+                <p class="text-sm text-gray-400 font-medium mb-5">Detail ini akan ditampilkan kepada klien saat checkout.</p>
+
+                {{-- Rekening Bank --}}
+                <div class="mb-8" x-data="{
+                    accounts: {{ old('bank_accounts') ? json_encode(old('bank_accounts')) : ($profile->bank_accounts ? json_encode($profile->bank_accounts) : '[]') }},
+                    addAccount() {
+                        this.accounts.push({ bank_name: '', account_number: '', account_holder: '' });
+                    },
+                    removeAccount(index) {
+                        this.accounts.splice(index, 1);
+                    }
+                }">
+                    <div class="flex items-center justify-between mb-3">
+                        <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider">Rekening Bank</label>
+                        <button type="button" @click="addAccount" class="inline-flex items-center gap-1 text-xs font-bold text-gray-900 hover:text-gray-600 transition">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                            Tambah Rekening
+                        </button>
+                    </div>
+
+                    <template x-if="accounts.length === 0">
+                        <div class="text-center py-4 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
+                            <p class="text-xs text-gray-400 font-medium">Belum ada rekening bank yang ditambahkan.</p>
+                        </div>
+                    </template>
+
+                    <div class="space-y-3">
+                        <template x-for="(account, index) in accounts" :key="index">
+                            <div class="flex flex-col sm:flex-row gap-3 p-4 bg-gray-50 rounded-2xl border border-gray-100 relative group">
+                                <div class="flex-1">
+                                    <input type="text" x-model="account.bank_name" :name="'bank_accounts['+index+'][bank_name]'" placeholder="Nama Bank (Cth: BCA)" required
+                                           class="w-full bg-white border border-gray-200 rounded-xl py-2 px-3 text-sm text-gray-800 font-medium focus:ring-1 focus:ring-black transition shadow-sm mb-2" />
+                                    <input type="text" x-model="account.account_number" :name="'bank_accounts['+index+'][account_number]'" placeholder="No. Rekening" required
+                                           class="w-full bg-white border border-gray-200 rounded-xl py-2 px-3 text-sm text-gray-800 font-medium focus:ring-1 focus:ring-black transition shadow-sm mb-2" />
+                                    <input type="text" x-model="account.account_holder" :name="'bank_accounts['+index+'][account_holder]'" placeholder="Atas Nama" required
+                                           class="w-full bg-white border border-gray-200 rounded-xl py-2 px-3 text-sm text-gray-800 font-medium focus:ring-1 focus:ring-black transition shadow-sm" />
+                                </div>
+                                <div class="flex items-start sm:items-center justify-end sm:justify-center">
+                                    <button type="button" @click="removeAccount(index)" class="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition" title="Hapus">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+
+                {{-- QRIS --}}
+                <div x-data="{ qrisPreview: '{{ $profile->qris_image ? Storage::url($profile->qris_image) : '' }}', isRemoved: false }">
+                    <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">QRIS Pembayaran</label>
+                    <input type="hidden" name="remove_qris" x-bind:value="isRemoved ? 1 : 0">
+                    
+                    <div class="flex flex-col sm:flex-row items-start gap-5">
+                        <div class="relative">
+                            <div class="w-32 h-40 rounded-2xl overflow-hidden border-2 border-gray-200 shadow-sm bg-gray-50 flex flex-col items-center justify-center">
+                                <template x-if="qrisPreview && !isRemoved">
+                                    <img :src="qrisPreview" class="w-full h-full object-contain bg-white" />
+                                </template>
+                                <template x-if="!qrisPreview || isRemoved">
+                                    <div class="text-center p-3 text-gray-400">
+                                        <svg class="w-8 h-8 mx-auto mb-1 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                                        <span class="text-[10px] font-bold">Belum Ada QRIS</span>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                        
+                        <div class="flex-1">
+                            <input type="file" name="qris_image" id="qris_image" class="hidden" accept="image/png, image/jpeg, image/jpg"
+                                   @change="if($event.target.files.length){ isRemoved=false; const r=new FileReader(); r.onload=e=>qrisPreview=e.target.result; r.readAsDataURL($event.target.files[0]); }">
+                            <div class="flex gap-2">
+                                <button type="button" onclick="document.getElementById('qris_image').click()"
+                                        class="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2 text-xs font-bold text-gray-700 hover:bg-gray-50 transition shadow-sm">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                    Upload QRIS
+                                </button>
+                                <template x-if="qrisPreview && !isRemoved">
+                                    <button type="button" @click="isRemoved = true"
+                                            class="inline-flex items-center gap-2 rounded-xl border border-red-100 bg-red-50 px-4 py-2 text-xs font-bold text-red-600 hover:bg-red-100 transition shadow-sm">
+                                        Hapus
+                                    </button>
+                                </template>
+                            </div>
+                            <p class="mt-2 text-[11px] text-gray-400 font-medium">Format: PNG atau JPG. Maks 2MB.</p>
+                            @error('qris_image')<p class="mt-1 text-xs text-red-500 font-medium">{{ $message }}</p>@enderror
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             {{-- Save --}}
             <div class="flex justify-end">
                 <button type="submit"

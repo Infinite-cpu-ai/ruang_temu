@@ -20,11 +20,14 @@ class ArchitectProfile extends Model
         'portfolio_images',
         'profile_image',
         'timeline',
+        'bank_accounts',
+        'qris_image',
     ];
 
     protected $casts = [
         'project_types' => 'array',
         'portfolio_images' => 'array', // Automatically cast JSON to array
+        'bank_accounts' => 'array',
     ];
 
     public function user(): BelongsTo

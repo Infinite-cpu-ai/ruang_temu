@@ -35,7 +35,42 @@
                         <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
                         Bayar via Midtrans
                     </button>
-                    <a href="{{ route('checkout.finish', $project) }}" class="text-sm font-medium text-gray-400 hover:text-gray-600 underline underline-offset-4 transition">
+
+                    @php
+                        $bankAccounts = data_get($architect->architectProfile, 'bank_accounts', []);
+                        $qrisImage = data_get($architect->architectProfile, 'qris_image');
+                    @endphp
+
+                    @if(!empty($bankAccounts) || $qrisImage)
+                    <div class="w-full max-w-sm mt-4 pt-6 border-t border-gray-100 text-left">
+                        <p class="text-xs uppercase tracking-widest font-bold text-gray-400 mb-4 text-center">Atau Pembayaran Manual</p>
+                        
+                        @if(!empty($bankAccounts))
+                        <div class="space-y-3 mb-5">
+                            @foreach($bankAccounts as $account)
+                            <div class="bg-gray-50 rounded-2xl p-4 border border-gray-100">
+                                <p class="text-[10px] font-bold text-gray-400 uppercase">{{ data_get($account, 'bank_name') }}</p>
+                                <p class="text-lg font-extrabold text-gray-900 tracking-wider">{{ data_get($account, 'account_number') }}</p>
+                                <p class="text-xs font-medium text-gray-600 mt-1">a.n. {{ data_get($account, 'account_holder') }}</p>
+                            </div>
+                            @endforeach
+                        </div>
+                        @endif
+
+                        @if($qrisImage)
+                        <div class="bg-gray-50 rounded-2xl p-4 border border-gray-100 text-center">
+                            <p class="text-[10px] font-bold text-gray-400 uppercase mb-3">Scan QRIS</p>
+                            <img src="{{ Storage::url($qrisImage) }}" alt="QRIS" class="max-w-[200px] mx-auto rounded-xl shadow-sm mix-blend-multiply">
+                        </div>
+                        @endif
+
+                        <p class="text-[11px] text-gray-500 text-center mt-4 font-medium leading-relaxed">
+                            Jika membayar manual, silakan konfirmasi langsung ke arsitek melalui fitur chat setelah mentransfer dana.
+                        </p>
+                    </div>
+                    @endif
+
+                    <a href="{{ route('checkout.finish', $project) }}" class="text-sm font-medium text-gray-400 hover:text-gray-600 underline underline-offset-4 transition mt-4">
                         Batal atau muat ulang halaman
                     </a>
                 </div>
