@@ -3,8 +3,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 1.5rem;
-        margin: 2rem auto;
+        gap: 2rem;
+        margin: 3rem auto;
         position: relative;
     }
 
@@ -26,6 +26,7 @@
         justify-content: center;
         border-radius: 9999px;
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        background-color: #ffffff;
     }
 
     .feature-item.is-active {
@@ -34,45 +35,49 @@
     }
 
     .feature-item.is-active .feature-circle {
-        width: 5rem;
-        height: 5rem;
-        background-color: #0f0f0f;
-        color: #ffffff;
-        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        width: 7.5rem;
+        height: 7.5rem;
+        color: #000000;
+        border: 1.5px solid #000000;
+        box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.2);
     }
     
     .feature-item.is-active .feature-circle svg {
-        width: 2.25rem;
-        height: 2.25rem;
+        width: 3.5rem;
+        height: 3.5rem;
     }
 
     .feature-item.is-side {
-        transform: scale(0.9);
-        opacity: 0.6;
+        transform: scale(1);
+        opacity: 0.8;
     }
 
     .feature-item.is-side:hover {
-        opacity: 0.9;
-        transform: scale(0.95);
+        opacity: 1;
+        transform: scale(1.05);
     }
 
     .feature-item.is-side .feature-circle {
-        width: 3.5rem;
-        height: 3.5rem;
-        background-color: #f3f4f6;
-        color: #6b7280;
-        border: 1px solid #e5e7eb;
+        width: 4.5rem;
+        height: 4.5rem;
+        color: #9ca3af;
+        border: 1.5px solid #d1d5db;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
     }
     
     .feature-item.is-side .feature-circle svg {
-        width: 1.5rem;
-        height: 1.5rem;
+        width: 2rem;
+        height: 2rem;
     }
 
     .ghost-circle {
-        width: 3.5rem;
-        height: 3.5rem;
-        visibility: hidden;
+        width: 3rem;
+        height: 3rem;
+        border-radius: 9999px;
+        background-color: #ffffff;
+        border: 1.5px solid #e5e7eb;
+        visibility: visible;
+        flex-shrink: 0;
     }
 
     .fading {
