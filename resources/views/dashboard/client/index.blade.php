@@ -35,7 +35,10 @@
             <div class="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-white/5 blur-2xl"></div>
             <div class="relative flex items-center justify-between gap-4 flex-wrap">
                 <div>
-                    <h3 class="text-base font-extrabold text-white mb-1">Upgrade ke Premium ✨</h3>
+                    <h3 class="flex items-center gap-1.5 text-base font-extrabold text-white mb-1">
+                        Upgrade ke Premium 
+                        <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+                    </h3>
                     <p class="text-sm text-gray-400 font-medium">Unlock chat langsung, booking arsitek, dan konsultasi privat — hanya Rp 50.000/bulan.</p>
                 </div>
                 <a href="{{ route('upgrade.index') }}"

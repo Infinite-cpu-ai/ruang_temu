@@ -120,7 +120,10 @@
                         @if(auth()->user()->isPremium())
                             <a :href="'/arsitek/' + (answer?.architect_id || '')"
                                class="inline-flex items-center gap-2 text-sm font-bold text-gray-900 hover:underline transition">
-                                Booking Konsultasi Lanjutan ✨
+                                <span class="flex items-center gap-1.5">
+                                    Booking Konsultasi Lanjutan 
+                                    <svg class="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+                                </span>
                             </a>
                         @else
                             <a href="{{ route('upgrade.index') }}"

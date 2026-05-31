@@ -20,7 +20,8 @@
         {{-- Header --}}
         <div class="text-center mb-14">
             <div class="inline-flex items-center gap-2 rounded-full bg-gray-900 px-4 py-1.5 text-xs font-bold text-white mb-5">
-                🏛️ Premium Arsitek
+                <svg class="w-4 h-4 text-amber-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"/></svg>
+                Premium Arsitek
             </div>
             <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-900 leading-tight">
                 Tingkatkan Karir Arsitekmu<br>
@@ -80,7 +81,7 @@
                 {{-- Badge --}}
                 <div class="absolute -top-3 left-1/2 -translate-x-1/2">
                     <span class="inline-flex items-center gap-1.5 rounded-full bg-gray-900 px-4 py-1.5 text-xs font-bold text-white shadow-lg">
-                        ⭐ Rekomendasi Arsitek
+                        <svg class="w-3.5 h-3.5 text-amber-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg> Rekomendasi Arsitek
                     </span>
                 </div>
 
@@ -114,8 +115,9 @@
 
                 @auth
                     @if(auth()->user()->isPremium())
-                        <div class="rounded-2xl bg-emerald-50 border border-emerald-200 px-6 py-3 text-center text-sm font-bold text-emerald-700">
-                            ✅ Kamu sudah Premium!
+                        <div class="flex items-center justify-center gap-2 rounded-2xl bg-emerald-50 border border-emerald-200 px-6 py-3 text-sm font-bold text-emerald-700">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            Kamu sudah Premium!
                         </div>
 
                         @if(auth()->user()->is_subscription_active)
@@ -128,7 +130,10 @@
                             </form>
                         @else
                             <div class="mt-3 rounded-xl bg-orange-50 border border-orange-100 p-3 text-center">
-                                <p class="text-xs text-orange-600 font-bold">⚠️ Langganan Telah Dibatalkan</p>
+                                <p class="flex items-center justify-center gap-1.5 text-xs text-orange-600 font-bold">
+                                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
+                                    Langganan Telah Dibatalkan
+                                </p>
                                 <p class="text-[11px] text-gray-500 font-medium mt-1">Akan kembali ke Free Plan pada {{ auth()->user()->premium_expires_at?->format('d M Y') }}.</p>
                             </div>
                         @endif
@@ -173,7 +178,9 @@
                 {{-- 1. Upgrade ke Premium Profile --}}
                 <div class="rounded-2xl bg-gray-50/80 border border-gray-100 p-5 hover:bg-gray-100/80 transition group">
                     <div class="flex items-center gap-3 mb-3">
-                        <div class="w-10 h-10 rounded-xl bg-gray-900 flex items-center justify-center text-white text-lg shrink-0">👤</div>
+                        <div class="w-10 h-10 rounded-xl bg-gray-900 flex items-center justify-center text-white shrink-0">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                        </div>
                         <h3 class="text-sm font-extrabold text-gray-900">Premium Profile</h3>
                     </div>
                     <p class="text-xs text-gray-400 font-medium leading-relaxed mb-3">Profilmu tampil lebih menonjol dan diprioritaskan dalam pencarian klien.</p>
@@ -192,7 +199,9 @@
                 {{-- 2. Portfolio Showcase --}}
                 <div class="rounded-2xl bg-gray-50/80 border border-gray-100 p-5 hover:bg-gray-100/80 transition group">
                     <div class="flex items-center gap-3 mb-3">
-                        <div class="w-10 h-10 rounded-xl bg-gray-900 flex items-center justify-center text-white text-lg shrink-0">🖼️</div>
+                        <div class="w-10 h-10 rounded-xl bg-gray-900 flex items-center justify-center text-white shrink-0">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                        </div>
                         <h3 class="text-sm font-extrabold text-gray-900">Portfolio Showcase</h3>
                     </div>
                     <p class="text-xs text-gray-400 font-medium leading-relaxed mb-3">Tampilkan karya terbaikmu untuk menarik klien potensial.</p>
@@ -215,7 +224,9 @@
                 {{-- 3. Paid Consultation --}}
                 <div class="rounded-2xl bg-gray-50/80 border border-gray-100 p-5 hover:bg-gray-100/80 transition group">
                     <div class="flex items-center gap-3 mb-3">
-                        <div class="w-10 h-10 rounded-xl bg-gray-900 flex items-center justify-center text-white text-lg shrink-0">💰</div>
+                        <div class="w-10 h-10 rounded-xl bg-gray-900 flex items-center justify-center text-white shrink-0">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </div>
                         <h3 class="text-sm font-extrabold text-gray-900">Paid Consultation</h3>
                     </div>
                     <p class="text-xs text-gray-400 font-medium leading-relaxed mb-3">Tentukan tarif konsultasi dan atur ketersediaanmu sendiri.</p>
@@ -234,7 +245,9 @@
                 {{-- 4. Terima Booking --}}
                 <div class="rounded-2xl bg-gray-50/80 border border-gray-100 p-5 hover:bg-gray-100/80 transition group">
                     <div class="flex items-center gap-3 mb-3">
-                        <div class="w-10 h-10 rounded-xl bg-gray-900 flex items-center justify-center text-white text-lg shrink-0">📋</div>
+                        <div class="w-10 h-10 rounded-xl bg-gray-900 flex items-center justify-center text-white shrink-0">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+                        </div>
                         <h3 class="text-sm font-extrabold text-gray-900">Terima Booking</h3>
                     </div>
                     <p class="text-xs text-gray-400 font-medium leading-relaxed mb-3">Klien bisa langsung memilih dan booking konsultasi denganmu.</p>
@@ -253,7 +266,9 @@
                 {{-- 5. Konsultasi Private --}}
                 <div class="rounded-2xl bg-gray-50/80 border border-gray-100 p-5 hover:bg-gray-100/80 transition group">
                     <div class="flex items-center gap-3 mb-3">
-                        <div class="w-10 h-10 rounded-xl bg-gray-900 flex items-center justify-center text-white text-lg shrink-0">💬</div>
+                        <div class="w-10 h-10 rounded-xl bg-gray-900 flex items-center justify-center text-white shrink-0">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+                        </div>
                         <h3 class="text-sm font-extrabold text-gray-900">Konsultasi Private</h3>
                     </div>
                     <p class="text-xs text-gray-400 font-medium leading-relaxed mb-3">Diskusi mendalam dengan klien via chat atau video call.</p>
@@ -276,7 +291,9 @@
                 {{-- 6. Monetisasi --}}
                 <div class="rounded-2xl bg-gray-50/80 border border-gray-100 p-5 hover:bg-gray-100/80 transition group">
                     <div class="flex items-center gap-3 mb-3">
-                        <div class="w-10 h-10 rounded-xl bg-gray-900 flex items-center justify-center text-white text-lg shrink-0">📈</div>
+                        <div class="w-10 h-10 rounded-xl bg-gray-900 flex items-center justify-center text-white shrink-0">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+                        </div>
                         <h3 class="text-sm font-extrabold text-gray-900">Monetisasi</h3>
                     </div>
                     <p class="text-xs text-gray-400 font-medium leading-relaxed mb-3">Hasilkan pendapatan langsung dari keahlianmu di platform.</p>
