@@ -1,3 +1,90 @@
+<style>
+    .carousel-track {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1.5rem;
+        margin: 2rem auto;
+        position: relative;
+    }
+
+    .feature-item {
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        outline: none;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .feature-circle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 9999px;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .feature-item.is-active {
+        transform: scale(1);
+        z-index: 10;
+    }
+
+    .feature-item.is-active .feature-circle {
+        width: 5rem;
+        height: 5rem;
+        background-color: #0f0f0f;
+        color: #ffffff;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .feature-item.is-active .feature-circle svg {
+        width: 2.25rem;
+        height: 2.25rem;
+    }
+
+    .feature-item.is-side {
+        transform: scale(0.9);
+        opacity: 0.6;
+    }
+
+    .feature-item.is-side:hover {
+        opacity: 0.9;
+        transform: scale(0.95);
+    }
+
+    .feature-item.is-side .feature-circle {
+        width: 3.5rem;
+        height: 3.5rem;
+        background-color: #f3f4f6;
+        color: #6b7280;
+        border: 1px solid #e5e7eb;
+    }
+    
+    .feature-item.is-side .feature-circle svg {
+        width: 1.5rem;
+        height: 1.5rem;
+    }
+
+    .ghost-circle {
+        width: 3.5rem;
+        height: 3.5rem;
+        visibility: hidden;
+    }
+
+    .fading {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    #feature-title, #feature-desc {
+        transition: all 0.3s ease;
+    }
+</style>
+
 <div class="w-full max-w-5xl mx-auto px-6">
     <div class="pt-8 pb-4">
         <div id="feature-carousel" class="carousel-track">
