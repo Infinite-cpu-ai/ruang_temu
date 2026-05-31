@@ -5,7 +5,7 @@
     
     {{-- Logo & Brand --}}
     <div class="text-center mb-10">
-        <img src="{{ asset('images/assets/Logo Ruang Temu.png') }}" alt="Ruang Temu" class="h-32 sm:h-40 mx-auto object-contain">
+        <img src="{{ asset('images/assets/logo-ruang-temu.png') }}" alt="Ruang Temu" class="h-32 sm:h-40 mx-auto object-contain">
     </div>
 
     {{-- Contact Info - Horizontal --}}

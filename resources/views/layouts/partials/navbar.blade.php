@@ -3,7 +3,7 @@
     <div class="max-w-7xl mx-auto px-6 lg:px-10">
         <div class="h-20 flex items-center justify-between gap-4">
             <a href="{{ route('home') }}" class="flex items-center">
-                <img src="{{ asset('images/assets/Logo Ruang Temu.png') }}" alt="Ruang Temu" class="h-10 w-auto object-contain">
+                <img src="{{ asset('images/assets/logo-ruang-temu.png') }}" alt="Ruang Temu" class="h-10 w-auto object-contain">
             </a>
 
             <nav class="hidden md:flex items-center gap-10 text-sm text-gray-500">
