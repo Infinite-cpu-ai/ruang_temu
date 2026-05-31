@@ -3,8 +3,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 2rem;
-        margin: 3rem auto;
+        gap: 1.5rem;
+        margin: 2.5rem auto;
         position: relative;
     }
 
@@ -35,16 +35,16 @@
     }
 
     .feature-item.is-active .feature-circle {
-        width: 7.5rem;
-        height: 7.5rem;
+        width: 6.5rem;
+        height: 6.5rem;
         color: #000000;
         border: 1.5px solid #000000;
-        box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.2);
     }
     
     .feature-item.is-active .feature-circle svg {
-        width: 3.5rem;
-        height: 3.5rem;
+        width: 3rem;
+        height: 3rem;
     }
 
     .feature-item.is-side {
@@ -58,21 +58,21 @@
     }
 
     .feature-item.is-side .feature-circle {
-        width: 4.5rem;
-        height: 4.5rem;
+        width: 4rem;
+        height: 4rem;
         color: #9ca3af;
         border: 1.5px solid #d1d5db;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
     }
     
     .feature-item.is-side .feature-circle svg {
-        width: 2rem;
-        height: 2rem;
+        width: 1.75rem;
+        height: 1.75rem;
     }
 
     .ghost-circle {
-        width: 3rem;
-        height: 3rem;
+        width: 2.5rem;
+        height: 2.5rem;
         border-radius: 9999px;
         background-color: #ffffff;
         border: 1.5px solid #e5e7eb;
