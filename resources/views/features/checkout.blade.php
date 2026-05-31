@@ -4,7 +4,7 @@
 @php
     $defaultPrice = $defaultPricePerM2 ?? 150000;
     $midtransReady = $midtransReady ?? true;
-    $profileImg = data_get($architect, 'profile_image') ? '/storage/'.data_get($architect, 'profile_image') : asset('images/profiles/profile_placeholder.png');
+    $profileImg = $architect->profile_image_url;
 @endphp
 <div class="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
     
@@ -60,7 +60,7 @@
                         @if($qrisImage)
                         <div class="bg-gray-50 rounded-2xl p-4 border border-gray-100 text-center">
                             <p class="text-[10px] font-bold text-gray-400 uppercase mb-3">Scan QRIS</p>
-                            <img src="{{ Storage::url($qrisImage) }}" alt="QRIS" class="max-w-[200px] mx-auto rounded-xl shadow-sm mix-blend-multiply">
+                            <img src="{{ $architect->architectProfile->qris_image_url }}" alt="QRIS" class="max-w-[200px] mx-auto rounded-xl shadow-sm mix-blend-multiply">
                         </div>
                         @endif
 

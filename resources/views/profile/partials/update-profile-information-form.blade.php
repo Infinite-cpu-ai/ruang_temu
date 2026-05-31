@@ -18,7 +18,7 @@
             <div class="relative group">
                 {{-- Current / Preview --}}
                 <div class="w-20 h-20 rounded-full overflow-hidden border-2 border-white shadow-md bg-gray-200" x-show="!photoPreview">
-                    <img src="{{ $user->profile_image ? asset('storage/'.$user->profile_image) : asset('images/profiles/profile_placeholder.png') }}"
+                    <img src="{{ $user->profile_image_url }}"
                          alt="{{ $user->name }}" class="w-full h-full object-cover" />
                 </div>
                 <div class="w-20 h-20 rounded-full overflow-hidden border-2 border-white shadow-md bg-cover bg-center bg-no-repeat"

@@ -11,9 +11,7 @@
     $portfolio = is_array($profile?->portfolio_images) ? $profile->portfolio_images : [];
     $placeholderProfile = asset('images/profiles/profile_placeholder.png');
     $placeholderPortfolio = asset('images/portofolios/portofolio_placeholder.png');
-    $profilePhotoUrl = filled(data_get($profile, 'profile_image'))
-        ? data_get($profile, 'profile_image')
-        : $placeholderProfile;
+    $profilePhotoUrl = $profile->profile_image_url;
     $portfolioItems = collect($portfolio)->filter(fn ($url) => filled($url))->values();
 @endphp
 

@@ -61,7 +61,7 @@
 
                     {{-- Image --}}
                     <div class="h-52 bg-gray-100 overflow-hidden relative">
-                        <img src="{{ Storage::url($portfolio->image) }}"
+                        <img src="{{ $portfolio->image_url }}"
                              alt="{{ $portfolio->title }}"
                              class="w-full h-full object-cover group-hover:scale-105 transition duration-500 ease-out"
                              onerror="this.src='{{ asset('images/portofolios/portofolio_placeholder.png') }}'" />

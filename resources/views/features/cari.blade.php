@@ -123,7 +123,7 @@
                 
                 // Construct storage url if path exists
                 $thumb = filled($firstPortfolio) ? (str_starts_with($firstPortfolio, 'http') ? $firstPortfolio : '/storage/'.$firstPortfolio) : $portfolioPlaceholder;
-                $profileImg = data_get($architect, 'profile_image') ? '/storage/'.data_get($architect, 'profile_image') : asset('images/profiles/profile_placeholder.png');
+                $profileImg = $architect->profile_image_url;
             @endphp
 
             <div class="group relative bg-white rounded-3xl p-4 shadow-[0_2px_15px_rgb(0,0,0,0.04)] border border-gray-100 hover:shadow-[0_20px_40px_rgb(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 ease-out flex flex-col">

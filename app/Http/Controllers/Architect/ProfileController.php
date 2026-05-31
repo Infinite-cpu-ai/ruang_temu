@@ -50,20 +50,30 @@ class ProfileController extends Controller
         ]);
 
         if ($request->hasFile('profile_image')) {
-            if ($profile->profile_image) {
+            if ($profile->profile_image && !str_starts_with($profile->profile_image, 'http')) {
                 Storage::disk('public')->delete($profile->profile_image);
             }
-            $validated['profile_image'] = $request->file('profile_image')->store('profiles', 'public');
+            $cloudinary = new \Cloudinary\Cloudinary(env('CLOUDINARY_URL'));
+            $upload = $cloudinary->uploadApi()->upload($request->file('profile_image')->getRealPath(), [
+                'folder' => 'ruang_temu/profiles'
+            ]);
+            $validated['profile_image'] = $upload['secure_url'];
         }
 
         if ($request->boolean('remove_qris') && $profile->qris_image) {
-            Storage::disk('public')->delete($profile->qris_image);
-            $validated['qris_image'] = null;
-        } elseif ($request->hasFile('qris_image')) {
-            if ($profile->qris_image) {
+            if (!str_starts_with($profile->qris_image, 'http')) {
                 Storage::disk('public')->delete($profile->qris_image);
             }
-            $validated['qris_image'] = $request->file('qris_image')->store('qris', 'public');
+            $validated['qris_image'] = null;
+        } elseif ($request->hasFile('qris_image')) {
+            if ($profile->qris_image && !str_starts_with($profile->qris_image, 'http')) {
+                Storage::disk('public')->delete($profile->qris_image);
+            }
+            $cloudinary = new \Cloudinary\Cloudinary(env('CLOUDINARY_URL'));
+            $upload = $cloudinary->uploadApi()->upload($request->file('qris_image')->getRealPath(), [
+                'folder' => 'ruang_temu/qris'
+            ]);
+            $validated['qris_image'] = $upload['secure_url'];
         }
 
         $profile->fill($validated);

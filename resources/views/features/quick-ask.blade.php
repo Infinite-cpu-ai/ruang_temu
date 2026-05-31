@@ -59,8 +59,8 @@
                     {{-- Answer --}}
                     <div x-show="answer" x-cloak class="flex items-start gap-3">
                         <div class="w-9 h-9 rounded-full overflow-hidden bg-gray-200 shrink-0">
-                            <img :src="answer?.architect?.profile_image ? '/storage/'+answer.architect.profile_image : '/images/profiles/profile_placeholder.png'"
-                                 class="w-full h-full object-cover" />
+                            <img :src="answer?.architect?.profile_image ? (answer.architect.profile_image.startsWith('http') ? answer.architect.profile_image : '/storage/'+answer.architect.profile_image) : '/images/profiles/profile_placeholder.png'"
+                                 class="w-full h-full object-cover">
                         </div>
                         <div class="rounded-2xl bg-gray-50 border border-gray-100 px-4 py-3 max-w-md shadow-sm">
                             <p class="text-[10px] font-bold text-gray-900 uppercase tracking-wider mb-1.5 pb-1.5 border-b border-gray-100"

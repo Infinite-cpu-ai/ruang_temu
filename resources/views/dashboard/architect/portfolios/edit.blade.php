@@ -375,7 +375,7 @@
 
                         <!-- Preview gambar saat ini -->
                         <div class="image-preview-wrap">
-                            <img src="{{ Storage::url($portfolio->image) }}" alt="Gambar saat ini">
+                            <img src="{{ $portfolio->image_url }}" alt="Gambar saat ini">
                             <span class="image-preview-badge">Gambar saat ini</span>
                         </div>
 

@@ -13,4 +13,21 @@ class Portfolio extends Model
     {
         return $this->belongsTo(ArchitectProfile::class);
     }
+
+    protected function imageUrl(): \Illuminate\Database\Eloquent\Casts\Attribute
+    {
+        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+            get: function () {
+                if (!$this->image) {
+                    return '';
+                }
+                
+                if (str_starts_with($this->image, 'http')) {
+                    return $this->image;
+                }
+                
+                return \Illuminate\Support\Facades\Storage::url($this->image);
+            }
+        );
+    }
 }

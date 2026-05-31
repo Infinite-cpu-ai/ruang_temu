@@ -30,8 +30,10 @@
                     @foreach($followedArchitects as $architect)
                         @php
                             $avatar = asset('images/profiles/profile_placeholder.png');
-                            if (filled(data_get($architect->architectProfile, 'profile_image'))) {
-                                $avatar = $architect->architectProfile->profile_image;
+                            if ($architect->role == 'architect' && $architect->architectProfile) {
+                                $avatar = $architect->architectProfile->profile_image_url;
+                            } else {
+                                $avatar = $architect->profile_image_url;
                             }
                         @endphp
                         <li class="flex items-center gap-4 p-4 rounded-2xl bg-gray-50/80 border border-gray-100 hover:bg-gray-100/80 transition">

@@ -33,17 +33,22 @@
                 <h2 class="text-base font-extrabold text-gray-900 mb-5">Foto & Info Akun</h2>
 
                 {{-- Avatar --}}
-                <div class="flex items-center gap-5 mb-6" x-data="{ preview: null }">
+                <div class="flex items-center gap-5 mb-6" x-data="{ photoPreview: null }">
                     <div class="relative">
                         <div class="w-20 h-20 rounded-full overflow-hidden border-2 border-white shadow-md bg-gray-200">
-                            <img id="avatar-preview"
-                                 src="{{ $profile->profile_image ? Storage::url($profile->profile_image) : asset('images/profiles/profile_placeholder.png') }}"
-                                 class="w-full h-full object-cover" />
+                            <div class="w-full h-full" x-show="!photoPreview">
+                                <img id="profile_img_preview" 
+                                 src="{{ $profile->profile_image_url }}" 
+                                 alt="Profile" class="w-full h-full object-cover">
+                            </div>
+                            <div class="w-full h-full" x-show="photoPreview" style="display: none;">
+                                <span class="block w-full h-full bg-cover bg-no-repeat bg-center" x-bind:style="'background-image: url(\'' + photoPreview + '\');'"></span>
+                            </div>
                         </div>
                     </div>
                     <div>
                         <input type="file" name="profile_image" id="profile_image" class="hidden" accept="image/*"
-                               onchange="previewAvatar(this)" />
+                               x-on:change="let file = $event.target.files[0]; if(file) { let reader = new FileReader(); reader.onload = (e) => photoPreview = e.target.result; reader.readAsDataURL(file); }" />
                         <button type="button" onclick="document.getElementById('profile_image').click()"
                                 class="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2 text-xs font-bold text-gray-700 hover:bg-gray-50 transition shadow-sm">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -180,7 +185,7 @@
                 </div>
 
                 {{-- QRIS --}}
-                <div x-data="{ qrisPreview: '{{ $profile->qris_image ? Storage::url($profile->qris_image) : '' }}', isRemoved: false }">
+                <div x-data="{ qrisPreview: '{{ $profile->qris_image_url }}', isRemoved: false }">
                     <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">QRIS Pembayaran</label>
                     <input type="hidden" name="remove_qris" x-bind:value="isRemoved ? 1 : 0">
                     
@@ -263,7 +268,7 @@
                     @foreach($portfolios as $portfolio)
                     <div class="group rounded-2xl border border-gray-100 bg-gray-50/80 overflow-hidden hover:shadow-md transition">
                         <div class="h-32 bg-gray-200 overflow-hidden">
-                            <img src="{{ Storage::url($portfolio->image) }}"
+                            <img src="{{ $portfolio->image_url }}"
                                  alt="{{ $portfolio->title }}"
                                  class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
                                  onerror="this.src='{{ asset('images/portofolios/portofolio_placeholder.png') }}'" />

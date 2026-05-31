@@ -37,7 +37,11 @@ class PortfolioController extends Controller
             'image' => 'required|image|max:5120', // 5MB Max
         ]);
 
-        $validated['image'] = $request->file('image')->store('portfolios', 'public');
+        $cloudinary = new \Cloudinary\Cloudinary(env('CLOUDINARY_URL'));
+        $upload = $cloudinary->uploadApi()->upload($request->file('image')->getRealPath(), [
+            'folder' => 'ruang_temu/portfolios'
+        ]);
+        $validated['image'] = $upload['secure_url'];
 
         $profile->portfolios()->create($validated);
 
@@ -67,10 +71,14 @@ class PortfolioController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            if ($portfolio->image) {
+            if ($portfolio->image && !str_starts_with($portfolio->image, 'http')) {
                 Storage::disk('public')->delete($portfolio->image);
             }
-            $validated['image'] = $request->file('image')->store('portfolios', 'public');
+            $cloudinary = new \Cloudinary\Cloudinary(env('CLOUDINARY_URL'));
+            $upload = $cloudinary->uploadApi()->upload($request->file('image')->getRealPath(), [
+                'folder' => 'ruang_temu/portfolios'
+            ]);
+            $validated['image'] = $upload['secure_url'];
         }
 
         $portfolio->update($validated);
@@ -84,7 +92,7 @@ class PortfolioController extends Controller
             abort(403);
         }
 
-        if ($portfolio->image) {
+        if ($portfolio->image && !str_starts_with($portfolio->image, 'http')) {
             Storage::disk('public')->delete($portfolio->image);
         }
 

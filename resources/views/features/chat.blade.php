@@ -12,10 +12,9 @@
             <div class="flex-1 overflow-y-auto">
                 @forelse($contacts as $contact)
                     @php
-                        $contactAvatar = asset('images/profiles/profile_placeholder.png');
-                        if (filled(data_get($contact->architectProfile, 'profile_image'))) {
-                            $contactAvatar = $contact->architectProfile->profile_image;
-                        }
+                        $contactAvatar = $contact->role == 'architect' && $contact->architectProfile 
+                            ? $contact->architectProfile->profile_image_url 
+                            : $contact->profile_image_url;
                         $isActive = $targetUser?->id === $contact->id;
                     @endphp
                     <a
@@ -46,10 +45,9 @@
         <div class="flex-1 flex flex-col bg-white min-w-0">
             @if($targetUser)
             @php
-                $headerAvatar = asset('images/profiles/profile_placeholder.png');
-                if (filled(data_get($targetUser->architectProfile, 'profile_image'))) {
-                    $headerAvatar = $targetUser->architectProfile->profile_image;
-                }
+                $headerAvatar = $targetUser->role == 'architect' && $targetUser->architectProfile 
+                    ? $targetUser->architectProfile->profile_image_url 
+                    : $targetUser->profile_image_url;
             @endphp
             <div class="px-4 py-3 border-b border-gray-100 flex items-center justify-between gap-3 bg-white">
                 <div class="flex items-center gap-3 min-w-0">

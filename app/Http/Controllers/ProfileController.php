@@ -41,10 +41,16 @@ class ProfileController extends Controller
         $validated = $request->validated();
 
         if ($request->hasFile('profile_image')) {
-            if ($user->profile_image) {
+            if ($user->profile_image && !str_starts_with($user->profile_image, 'http')) {
                 Storage::disk('public')->delete($user->profile_image);
             }
-            $validated['profile_image'] = $request->file('profile_image')->store('profiles', 'public');
+            
+            $cloudinary = new \Cloudinary\Cloudinary(env('CLOUDINARY_URL'));
+            $upload = $cloudinary->uploadApi()->upload($request->file('profile_image')->getRealPath(), [
+                'folder' => 'ruang_temu/profiles'
+            ]);
+            
+            $validated['profile_image'] = $upload['secure_url'];
         }
 
         $user->fill($validated);

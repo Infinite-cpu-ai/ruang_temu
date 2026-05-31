@@ -112,4 +112,21 @@ class User extends Authenticatable
             'user_id'
         )->withTimestamps();
     }
+
+    protected function profileImageUrl(): \Illuminate\Database\Eloquent\Casts\Attribute
+    {
+        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+            get: function () {
+                if (!$this->profile_image) {
+                    return asset('images/profiles/profile_placeholder.png');
+                }
+                
+                if (str_starts_with($this->profile_image, 'http')) {
+                    return $this->profile_image;
+                }
+                
+                return \Illuminate\Support\Facades\Storage::url($this->profile_image);
+            }
+        );
+    }
 }
