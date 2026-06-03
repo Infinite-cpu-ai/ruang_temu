@@ -13,7 +13,7 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('styles/style.css') }}">
-    <link rel="icon" type="image/png" href="{{ asset('images/assets/logo-ruang-temu.png') }}">
+    <link rel="icon" type="image/png" href="{{ asset('images/assets/favicon-rounded.png') }}">
 </head>
 <body class="bg-[#FAFAFA] text-gray-900 antialiased relative overflow-x-hidden min-h-screen">
     <!-- Premium Global Decorative Blobs -->
