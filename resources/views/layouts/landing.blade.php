@@ -15,6 +15,7 @@
         [x-cloak] { display: none !important; }
     </style>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link rel="icon" type="image/png" href="{{ asset('images/assets/logo-ruang-temu.png') }}">
 </head>
 <body class="bg-white text-gray-900 antialiased">
     <div class="min-h-screen flex flex-col">
