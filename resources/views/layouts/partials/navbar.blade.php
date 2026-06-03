@@ -7,12 +7,12 @@
             </a>
 
             <nav class="hidden md:flex items-center gap-10 text-sm text-gray-500">
-                <a href="{{ route('home') }}" class="hover:text-gray-900 transition">Home</a>
-                <a href="{{ route('needs') }}" class="hover:text-gray-900 transition">Features</a>
+                <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'text-gray-900 font-semibold' : 'hover:text-gray-900' }} transition">Home</a>
+                <a href="{{ route('needs') }}" class="{{ request()->routeIs('needs') ? 'text-gray-900 font-semibold' : 'hover:text-gray-900' }} transition">Features</a>
                 <a href="{{ route('quick-ask.index') }}"
-                    class="hover:text-black-900 text-gray-900 font-semibold transition">Tanya Arsitek (Live)</a>
-                <a href="{{ route('about') }}" class="hover:text-gray-900 transition">About Us</a>
-                <a href="{{ route('contact') }}" class="hover:text-gray-900 transition">Contact</a>
+                    class="{{ request()->routeIs('quick-ask.*') ? 'text-gray-900 font-semibold' : 'hover:text-gray-900' }} transition">Tanya Arsitek (Live)</a>
+                <a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'text-gray-900 font-semibold' : 'hover:text-gray-900' }} transition">About Us</a>
+                <a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'text-gray-900 font-semibold' : 'hover:text-gray-900' }} transition">Contact</a>
             </nav>
 
             <div class="flex items-center gap-3">
