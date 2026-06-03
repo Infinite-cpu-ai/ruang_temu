@@ -139,10 +139,10 @@
         <p id="feature-desc" class="mt-4 text-xs sm:text-sm text-gray-400 max-w-2xl mx-auto">
             Penjelasan Features: Portofolio, spesialisasi, harga per m2, Rating Arsitek
         </p>
-        <a id="feature-primary" href="{{ route('features.followed') }}" class="hidden"></a>
+        <a id="feature-primary" href="{{ route('features.cari') }}" class="hidden"></a>
 
         <div class="mt-10 flex flex-col items-center gap-3">
-            <a id="feature-get-started" href="{{ route('features.followed') }}"
+            <a id="feature-get-started" href="{{ route('features.cari') }}"
                 class="inline-flex items-center gap-3 bg-black text-white text-sm font-medium px-6 py-3 rounded-full hover:bg-gray-800 transition-colors">
                 <span class="w-7 h-7 rounded-full border-2 border-white flex items-center justify-center">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none"
@@ -185,7 +185,7 @@
             profil: {
                 title: 'Profil Arsitek',
                 desc: 'Penjelasan Features: Portofolio, spesialisasi, harga per m2, Rating Arsitek',
-                href: @json(route('features.followed')),
+                href: @json(route('features.cari')),
             },
             pricing: {
                 title: 'Pricing',
