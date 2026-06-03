@@ -80,43 +80,59 @@
                     $thumb = filled($firstPortfolio) ? $firstPortfolio : $portfolioPlaceholder;
                 @endphp
 
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition">
-                    <div class="h-48 bg-gray-100 overflow-hidden">
-                        <img src="{{ $thumb }}" alt="Portofolio {{ $architect->name }}" class="w-full h-full object-cover" />
+                <div class="group relative bg-white rounded-[2rem] p-3 shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 ease-out flex flex-col">
+                    <!-- Profile Image Cover -->
+                    <div class="h-[280px] rounded-[1.5rem] bg-gray-100 overflow-hidden relative">
+                        <img src="{{ $architect->profile_image_url }}" alt="Profil {{ $architect->name }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 ease-out" />
                     </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-extrabold text-gray-900 mb-1">{{ $architect->name }}</h3>
-                        <p class="text-sm text-gray-500 mb-4">
-                            <span class="font-semibold text-gray-900">Spesialisasi:</span> {{ $specialization }}
-                        </p>
 
-                        <div class="flex flex-wrap items-center gap-2 text-xs text-gray-600 mb-4">
-                            <span class="rounded-full border border-gray-200 px-3 py-1 bg-white">{{ $location }}</span>
-                            <span class="rounded-full border border-gray-200 px-3 py-1 bg-white">{{ $style }}</span>
-                        </div>
-
-                        <div class="flex justify-between items-center text-sm text-gray-500 mb-6">
-                            <span class="flex items-center gap-1 font-semibold text-gray-900">
-                                <span class="text-gray-900">★</span>
-                                <span class="text-gray-700">{{ number_format($rating, 1) }} <span class="text-gray-300 font-semibold">/ 5.0</span></span>
-                            </span>
-                            <span class="font-semibold text-gray-900">
-                                Rp {{ number_format($pricePerM2, 0, ',', '.') }} <span class="text-gray-400 font-medium">/ m²</span>
-                            </span>
-                        </div>
-
-                        <div class="flex gap-2">
-                            <a href="{{ route('features.profil', $architect->id) }}" class="flex-1 text-center rounded-full bg-black text-white font-medium py-2.5 text-sm hover:bg-gray-900 transition">
-                                Lihat Profil
-                            </a>
-                            <form action="{{ route('features.unfollow', $architect->id) }}" method="POST" class="flex-shrink-0">
-                                @csrf
-                                <button type="submit" class="rounded-full border border-gray-200 text-gray-600 font-medium py-2.5 px-4 text-sm hover:bg-gray-50 hover:text-red-600 hover:border-red-200 transition" title="Berhenti mengikuti">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    <div class="pt-5 pb-3 px-2 flex-col flex-1 flex justify-between">
+                        <div>
+                            <!-- Head -->
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="flex items-center gap-2">
+                                    <h3 class="text-xl font-extrabold text-gray-900 leading-tight">{{ $architect->name }}</h3>
+                                    <!-- Verified Badge -->
+                                    <svg class="w-5 h-5 text-green-500" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                                     </svg>
-                                </button>
-                            </form>
+                                </div>
+                                
+                                <!-- Unfollow Action (only in followed page) -->
+                                <form action="{{ route('features.unfollow', $architect->id) }}" method="POST" class="flex-shrink-0 relative z-10">
+                                    @csrf
+                                    <button type="submit" class="text-gray-400 hover:text-red-500 transition p-1" title="Berhenti mengikuti">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                    </button>
+                                </form>
+                            </div>
+
+                            <!-- Specialization -->
+                            <p class="text-[13px] font-medium text-gray-500 leading-relaxed line-clamp-2">
+                                {{ $specialization }}
+                            </p>
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="mt-6 flex items-center justify-between">
+                            <!-- Stats -->
+                            <div class="flex items-center gap-4 text-[13px] font-bold text-gray-700">
+                                <!-- Rating -->
+                                <div class="flex items-center gap-1.5">
+                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                    <span>{{ number_format($rating, 1) }}</span>
+                                </div>
+                                <!-- Portfolio Count -->
+                                <div class="flex items-center gap-1.5">
+                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                    <span>{{ is_array($portfolio) ? count($portfolio) : 0 }}</span>
+                                </div>
+                            </div>
+
+                            <!-- CTA Button -->
+                            <a href="{{ route('features.profil', $architect->id) }}" class="inline-flex items-center gap-1 bg-gray-100 text-gray-900 font-bold text-sm px-5 py-2.5 rounded-full hover:bg-gray-200 transition-colors">
+                                Lihat <span class="text-gray-500 font-normal ml-0.5">+</span>
+                            </a>
                         </div>
                     </div>
                 </div>

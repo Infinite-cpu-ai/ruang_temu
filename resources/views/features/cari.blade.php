@@ -126,51 +126,48 @@
                 $profileImg = $architect->profile_image_url;
             @endphp
 
-            <div class="group relative bg-white rounded-3xl p-4 shadow-[0_2px_15px_rgb(0,0,0,0.04)] border border-gray-100 hover:shadow-[0_20px_40px_rgb(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-300 ease-out flex flex-col">
-                <!-- Portfolio Image -->
-                <div class="h-56 rounded-2xl bg-gray-100 overflow-hidden relative">
-                    <img src="{{ $thumb }}" alt="Portofolio {{ $name }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 ease-out" onerror="this.src='{{ $portfolioPlaceholder }}'" />
-                    
-                    <div class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm flex items-center gap-1.5 border border-white/50">
-                        <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-                        <span class="text-xs font-bold text-gray-900">{{ number_format($rating, 1) }}</span>
-                    </div>
+            <div class="group relative bg-white rounded-[2rem] p-3 shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 ease-out flex flex-col">
+                <!-- Profile Image Cover -->
+                <div class="h-[280px] rounded-[1.5rem] bg-gray-100 overflow-hidden relative">
+                    <img src="{{ $profileImg }}" alt="Profil {{ $name }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 ease-out" />
                 </div>
 
-                <div class="pt-5 pb-2 px-2 flex-col flex-1 flex justify-between">
+                <div class="pt-5 pb-3 px-2 flex-col flex-1 flex justify-between">
                     <div>
                         <!-- Head -->
-                        <div class="flex items-center gap-3 mb-3">
-                            <div class="w-10 h-10 rounded-full bg-gray-200 overflow-hidden flex-shrink-0 border-2 border-white shadow-sm">
-                                <img src="{{ $profileImg }}" class="w-full h-full object-cover">
-                            </div>
-                            <div>
-                                <h3 class="font-extrabold text-gray-900 leading-tight">{{ $name }}</h3>
-                                <p class="text-xs font-medium text-gray-500 line-clamp-1 truncate">{{ $specialization }}</p>
-                            </div>
+                        <div class="flex items-center gap-2 mb-2">
+                            <h3 class="text-xl font-extrabold text-gray-900 leading-tight">{{ $name }}</h3>
+                            <!-- Verified Badge -->
+                            <svg class="w-5 h-5 text-green-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                            </svg>
                         </div>
 
-                        <!-- Info Pills -->
-                        <div class="flex flex-wrap items-center gap-1.5 mb-5 mt-4">
-                            <span class="inline-flex items-center px-2.5 py-1 rounded-full bg-gray-50 border border-gray-100 text-[11px] font-semibold text-gray-600">
-                                <svg class="w-3 h-3 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                                {{ $location }}
-                            </span>
-                            <span class="inline-flex items-center px-2.5 py-1 rounded-full bg-gray-50 border border-gray-100 text-[11px] font-semibold text-gray-600">
-                                <svg class="w-3 h-3 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path></svg>
-                                {{ $style }}
-                            </span>
-                        </div>
+                        <!-- Specialization -->
+                        <p class="text-[13px] font-medium text-gray-500 leading-relaxed line-clamp-2">
+                            {{ $specialization }}
+                        </p>
                     </div>
 
-                    <!-- Price & CTA -->
-                    <div class="border-t border-gray-100 pt-4 flex items-center justify-between">
-                        <div>
-                            <p class="text-[10px] uppercase tracking-wider font-bold text-gray-400">Harga per m²</p>
-                            <p class="font-extrabold text-gray-900 text-sm">Rp {{ number_format($pricePerM2, 0, ',', '.') }}</p>
+                    <!-- Footer -->
+                    <div class="mt-6 flex items-center justify-between">
+                        <!-- Stats -->
+                        <div class="flex items-center gap-4 text-[13px] font-bold text-gray-700">
+                            <!-- Rating -->
+                            <div class="flex items-center gap-1.5">
+                                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                <span>{{ number_format($rating, 1) }}</span>
+                            </div>
+                            <!-- Portfolio Count -->
+                            <div class="flex items-center gap-1.5">
+                                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                <span>{{ is_array($portfolio) ? count($portfolio) : 0 }}</span>
+                            </div>
                         </div>
-                        <a href="{{ route('features.profil', $id) }}" class="inline-flex items-center justify-center rounded-xl bg-black px-4 py-2 text-xs font-bold text-white transition hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 mt-1">
-                            Lihat Profil
+
+                        <!-- CTA Button -->
+                        <a href="{{ route('features.profil', $id) }}" class="inline-flex items-center gap-1 bg-gray-100 text-gray-900 font-bold text-sm px-5 py-2.5 rounded-full hover:bg-gray-200 transition-colors">
+                            Lihat <span class="text-gray-500 font-normal ml-0.5">+</span>
                         </a>
                     </div>
                 </div>
