@@ -1,12 +1,12 @@
 <header
     class="w-full border-b border-gray-100 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80 sticky top-0 z-40">
     <div class="max-w-7xl mx-auto px-6 lg:px-10">
-        <div class="h-20 flex items-center justify-between gap-4">
-            <a href="{{ route('home') }}" class="flex items-center">
+        <div class="h-20 relative flex items-center justify-between gap-4">
+            <a href="{{ route('home') }}" class="flex items-center relative z-10">
                 <img src="{{ asset('images/assets/logo-ruang-temu.png') }}" alt="Ruang Temu" class="h-10 w-auto object-contain">
             </a>
 
-            <nav class="hidden md:flex items-center gap-10 text-sm text-gray-500">
+            <nav class="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-10 text-sm text-gray-500 z-0 w-max">
                 <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'text-gray-900 font-semibold' : 'hover:text-gray-900' }} transition">Home</a>
                 <a href="{{ route('needs') }}" class="{{ request()->routeIs('needs') ? 'text-gray-900 font-semibold' : 'hover:text-gray-900' }} transition">Features</a>
                 <a href="{{ route('quick-ask.index') }}"
@@ -15,7 +15,7 @@
                 <a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'text-gray-900 font-semibold' : 'hover:text-gray-900' }} transition">Contact</a>
             </nav>
 
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-3 relative z-10">
                 @guest
                     <a href="{{ route('login') }}" class="text-sm text-gray-500 hover:text-gray-900 transition">
                         Login
