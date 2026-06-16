@@ -7,6 +7,8 @@ use App\Services\MidtransPaymentService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Midtrans\Config;
+use Midtrans\Transaction;
 
 class UpgradeController extends Controller
 {
@@ -75,10 +77,50 @@ class UpgradeController extends Controller
     /**
      * Finish callback after Snap payment completed.
      */
-    public function finish(Request $request): RedirectResponse
+    public function finish(Request $request, MidtransPaymentService $midtrans): RedirectResponse
     {
-        // Midtrans notification handler will update the user's premium status.
-        // This is just a redirect for the user after the Snap popup closes.
+        /** @var User $user */
+        $user = $request->user();
+        $orderId = $request->query('order_id');
+
+        // Poll Midtrans status directly if order_id is present (fallback if webhook fails/delayed in local dev)
+        if ($orderId && $midtrans->hasCredentials() && $midtrans->isPremiumOrder($orderId) && ! $user->isPremium()) {
+            try {
+                Config::$serverKey = config('midtrans.server_key');
+                Config::$isProduction = config('midtrans.is_production');
+
+                $statusPayload = Transaction::status($orderId);
+
+                $transactionStatus = data_get($statusPayload, 'transaction_status');
+                $fraudStatus = data_get($statusPayload, 'fraud_status');
+                $paymentType = data_get($statusPayload, 'payment_type');
+
+                $shouldMarkPaid = false;
+                if ($transactionStatus === 'settlement') {
+                    $shouldMarkPaid = true;
+                } elseif ($transactionStatus === 'capture') {
+                    if ($paymentType === 'credit_card' && $fraudStatus === 'challenge') {
+                        $shouldMarkPaid = false;
+                    } else {
+                        $shouldMarkPaid = true;
+                    }
+                }
+
+                if ($shouldMarkPaid) {
+                    $user->update([
+                        'is_premium' => true,
+                        'is_subscription_active' => true,
+                        'premium_expires_at' => now()->addMonth(),
+                    ]);
+
+                    return redirect()->route('dashboard')
+                        ->with('success', 'Selamat! Pembayaran berhasil dan status Premium kamu sudah aktif 🎉');
+                }
+            } catch (\Throwable $e) {
+                report($e);
+            }
+        }
+
         return redirect()->route('dashboard')
             ->with('success', 'Pembayaran sedang diproses. Status Premium akan aktif setelah pembayaran dikonfirmasi.');
     }

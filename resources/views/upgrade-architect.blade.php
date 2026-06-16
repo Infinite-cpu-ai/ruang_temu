@@ -325,10 +325,10 @@
     window.addEventListener('DOMContentLoaded', function () {
         snap.pay('{{ $snapToken }}', {
             onSuccess: function (result) {
-                window.location.href = '{{ route("upgrade.finish") }}';
+                window.location.href = '{{ route("upgrade.finish") }}?order_id=' + result.order_id;
             },
             onPending: function (result) {
-                window.location.href = '{{ route("upgrade.finish") }}';
+                window.location.href = '{{ route("upgrade.finish") }}?order_id=' + result.order_id;
             },
             onError: function (result) {
                 alert('Pembayaran gagal. Silakan coba lagi.');
