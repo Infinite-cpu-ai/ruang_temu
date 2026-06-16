@@ -22,6 +22,7 @@ use App\Http\Controllers\MidtransNotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuickAskController;
 use App\Http\Controllers\UpgradeController;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 // Public Static Pages
@@ -144,6 +145,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/chat/send', [ChatController::class, 'sendMessage'])->name('chat.send');
         Route::post('/chat/receipt/delivered', [ChatController::class, 'markDelivered'])->name('chat.receipt.delivered');
         Route::get('/chat/messages/{receiverId}', [ChatController::class, 'fetchMessages'])->name('chat.fetch');
+        Route::delete('/chat/messages', [ChatController::class, 'deleteMessages'])->name('chat.delete');
         Route::get('/chat/{architect_id?}', [ChatController::class, 'index'])->name('chat.index');
     });
 
@@ -156,10 +158,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 // Temporary seeder trigger
 Route::get('/run-seeder', function () {
     try {
-        \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
+        Artisan::call('db:seed', ['--force' => true]);
+
         return 'Seeder successfully executed! You can now login.';
-    } catch (\Exception $e) {
-        return 'Error running seeder: ' . $e->getMessage();
+    } catch (Exception $e) {
+        return 'Error running seeder: '.$e->getMessage();
     }
 });
 

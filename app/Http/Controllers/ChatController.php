@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Events\MessageReceiptUpdated;
+use App\Events\MessagesDeleted;
 use App\Events\MessageSent;
 use App\Http\Requests\MarkMessageDeliveredRequest;
 use App\Http\Requests\SendChatMessageRequest;
 use App\Models\Message;
 use App\Models\Project;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ChatController extends Controller
@@ -178,5 +180,40 @@ class ChatController extends Controller
                 broadcast(new MessageReceiptUpdated($message));
             }
         }
+    }
+
+    public function deleteMessages(Request $request)
+    {
+        $request->validate([
+            'message_ids' => 'required|array',
+            'message_ids.*' => 'integer',
+        ]);
+
+        $userId = Auth::id();
+        $messageIds = $request->input('message_ids');
+
+        // Fetch the messages before deleting to know the receivers
+        $messages = Message::query()
+            ->whereIn('id', $messageIds)
+            ->where('sender_id', $userId)
+            ->get();
+
+        if ($messages->isEmpty()) {
+            return response()->json(['status' => 'success']);
+        }
+
+        // Group by receiver to broadcast to the right private channels
+        $receivers = $messages->pluck('receiver_id')->unique();
+        $deletedIds = $messages->pluck('id')->toArray();
+
+        // Delete from DB
+        Message::query()->whereIn('id', $deletedIds)->delete();
+
+        // Broadcast to receivers
+        foreach ($receivers as $receiverId) {
+            broadcast(new MessagesDeleted($deletedIds, $receiverId))->toOthers();
+        }
+
+        return response()->json(['status' => 'success', 'deleted_ids' => $deletedIds]);
     }
 }
