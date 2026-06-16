@@ -136,9 +136,7 @@
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
+@push('scripts')
 <script>
 document.addEventListener('alpine:init', () => {
     Alpine.data('chatComponent', () => ({
@@ -253,4 +251,5 @@ document.addEventListener('alpine:init', () => {
     }));
 });
 </script>
+@endpush
 @endsection
